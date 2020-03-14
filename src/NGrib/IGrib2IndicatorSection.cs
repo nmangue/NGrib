@@ -21,9 +21,8 @@ namespace NGrib
 {
     public interface IGrib2IndicatorSection
     {
-        int Discipline { get; }
-        string DisciplineName { get; }
+        byte DisciplineNumber { get; }
         int GribEdition { get; }
-        long GribLength { get; }
+        long TotalLength { get; }
     }
 }

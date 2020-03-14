@@ -17,99 +17,54 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 using System;
+using System.IO;
 
 namespace NGrib
 {
-	
-	/// <summary> A class that represents the IndicatorSection of a GRIB record.
-	/// 
+	/// <summary>
+	/// Represents the IndicatorSection (Section 0) of a GRIB record.
 	/// </summary>
 	public sealed class Grib2IndicatorSection : IGrib2IndicatorSection
 	{
-		/// <summary> Get the byte length of this GRIB record.
-		/// 
+		/// <summary>
+		/// Length in bytes of IndicatorSection.
 		/// </summary>
-		/// <returns> length in bytes of GRIB record
-		/// </returns>
-		public long GribLength
-		{
-			get
-			{
-				return gribLength;
-			}
-			
-		}
-		/// <summary> Discipline - GRIB Master Table Number.</summary>
-		/// <returns> discipline number
-		/// </returns>
-		public int Discipline
-		{
-			get
-			{
-				return discipline;
-			}
-			
-		}
-		/// <summary> Discipline - GRIB Master Table Name.</summary>
-		/// <returns> disciplineName
-		/// </returns>
-		public System.String DisciplineName
-		{
-			get
-			{
-				switch (discipline)
-				{
-					
-					
-					case 0:  return "Meteorological products";
-					
-					case 1:  return "Hydrological products";
-					
-					case 2:  return "Land surface products";
-					
-					case 3:  return "Space products";
-					
-					case 10:  return "Oceanographic products";
-					
-					default:  return "Unknown";
-					
-				}
-			}
-			
-		}
-		/// <summary> Get the edition of the GRIB specification used.
-		/// 
+		public int Length { get; }
+
+		/// <summary>
+		/// Discipline - GRIB Master Table Number.
 		/// </summary>
-		/// <returns> edition number of GRIB specification
-		/// </returns>
-		public int GribEdition
+		public byte DisciplineNumber { get; }
+
+		/// <summary>
+		/// Discipline from the GRIB Code Table 0.0.
+		/// </summary>
+		public Discipline? Discipline { get; }
+		
+		/// <summary>
+		/// GRIB Edition Number.
+		/// </summary>
+		public int GribEdition { get; }
+
+		/// <summary>
+		/// Total length of GRIB message in octets (including Section 0).
+		/// </summary>
+		public long TotalLength { get; }
+		
+		public Grib2IndicatorSection(int length, byte disciplineNumber, int gribEdition, long totalLength)
 		{
-			get
+			Length = length;
+			DisciplineNumber = disciplineNumber;
+
+			if (Enum.IsDefined(typeof(Discipline), disciplineNumber))
 			{
-				return edition;
+				Discipline = (Discipline) disciplineNumber;
 			}
 			
+			GribEdition = gribEdition;
+			TotalLength = totalLength;
 		}
-		
-		/// <summary> Length in bytes of GRIB record.</summary>
-		private long gribLength;
-		
-		/// <summary> Length in bytes of IndicatorSection.
-		/// Section length differs between GRIB editions 1 and 2
-		/// Currently only GRIB edition 2 supported - length is 16 octets/bytes.
-		/// </summary>
-		private int length;
-		
-		/// <summary> Discipline - GRIB Master Table Number.</summary>
-		private int discipline;
-		
-		/// <summary> Edition of GRIB specification used.</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'edition '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private int edition;
-		
-		
-		// *** constructors *******************************************************
-		
+
 		/// <summary> Constructs a <tt>Grib2IndicatorSection</tt> object from a byteBuffer.
 		/// 
 		/// </summary>
@@ -117,57 +72,28 @@ namespace NGrib
 		/// 
 		/// </param>
 		/// <throws>  IOException  if raf contains no valid GRIB file </throws>
-		//UPGRADE_TODO: Class 'java.io.RandomAccessFile' was converted to 'System.IO.FileStream' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioRandomAccessFile'"
-		public Grib2IndicatorSection(System.IO.FileStream raf)
+		public Grib2IndicatorSection(Stream raf)
 		{
-			
 			//if Grib edition 1, get bytes for the gribLength
 			int[] data = new int[3];
 			for (int i = 0; i < 3; i++)
 			{
 				data[i] = raf.ReadByte();
 			}
-			//System.out.println( "data[]=" + data[0] +", "+ data[1]+", "+data[2] ) ;
 			
 			// edition of GRIB specification
-			edition = raf.ReadByte();
-			//System.out.println( "edition=" + edition ) ;
-			if (edition == 1)
+			GribEdition = raf.ReadByte();
+			if (GribEdition == 2)
 			{
 				// length of GRIB record
-                // Reset to beginning, then read 3 bytes
-                raf.Position = 0;
-				gribLength = (long) GribNumbers.uint3(raf);
-                // Skip next byte, edition already read
-                raf.ReadByte();
-				//System.out.println( "edition 1 gribLength=" + gribLength ) ;
-				length = 8;
-			}
-			else if (edition == 2)
-			{
-				// length of GRIB record
-				discipline = data[2];
-				//System.out.println( "discipline=" + discipline) ;
-				gribLength = GribNumbers.int8(raf);
-				//System.out.println( "editon 2 gribLength=" + gribLength) ;
-				length = 16;
+				DisciplineNumber = (byte) data[2];
+				TotalLength = GribNumbers.int8(raf);
+				Length = 16;
 			}
 			else
 			{
-				throw new NotSupportedException("GRIB edition " + edition + " is not yet supported");
+				throw new NotSupportedException("GRIB edition " + GribEdition + " is not yet supported");
 			}
-		} // end Grib2IndicatorSection
-		
-		// --Commented out by Inspection START (11/21/05 1:18 PM):
-		//   /**
-		//    * Get the byte length of the IndicatorSection0 section.
-		//    *
-		//    * @return length in bytes of IndicatorSection0 section
-		//    */
-		//   public final int getLength()
-		//   {
-		//      return length;
-		//   }
-		// --Commented out by Inspection STOP (11/21/05 1:18 PM)
+		}
 	}
 }

@@ -25,7 +25,7 @@ namespace NGrib
 	/// </summary>
 	public sealed class Grib2Product : IGrib2Product
 	{
-		/// <summary> Discipline number for this record.</summary>
+		/// <summary> DisciplineNumber number for this record.</summary>
 		/// <returns> discipline
 		/// </returns>
 		public int Discipline
@@ -118,7 +118,7 @@ namespace NGrib
 		{
 			
 			this.header = header;
-			this.discipline = is_Renamed.Discipline;
+			this.discipline = is_Renamed.DisciplineNumber;
 			this.id = id;
 			this.referenceTime = id.ReferenceTime;
 			this.gdsKey = gdsKey;
