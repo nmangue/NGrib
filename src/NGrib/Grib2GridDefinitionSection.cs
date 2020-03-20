@@ -895,7 +895,7 @@ namespace NGrib
 					}
 					else
 					{
-						ratio = angle / subdivisionsangle;
+						ratio = angle / (float) subdivisionsangle;
 					}
 					//System.out.println( "ratio =" + ratio );
 					la1 = (float) (GribNumbers.int4(raf) * ratio);
