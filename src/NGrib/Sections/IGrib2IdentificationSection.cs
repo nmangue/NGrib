@@ -21,21 +21,21 @@ using System;
 
 namespace NGrib.Sections
 {
-    public interface IGrib2IdentificationSection
-    {
-        DateTime RefTime { get; }
-        int Center_id { get; }
-        string Center_idName { get; }
-        int Local_table_version { get; }
-        int Master_table_version { get; }
-        int ProductStatus { get; }
-        string ProductStatusName { get; }
-        int ProductType { get; }
-        string ProductTypeName { get; }
-        string ReferenceTime { get; }
-        int SignificanceOfRT { get; }
-        string SignificanceOfRTName { get; }
-        int Subcenter_id { get; }
-        int RefTimeT { get; }
-    }
+	public interface IGrib2IdentificationSection
+	{
+		DateTime RefTime { get; }
+		int Center_id { get; }
+		string Center_idName { get; }
+		int Local_table_version { get; }
+		int Master_table_version { get; }
+		int ProductStatus { get; }
+		string ProductStatusName { get; }
+		int ProductType { get; }
+		string ProductTypeName { get; }
+		string ReferenceTime { get; }
+		int SignificanceOfRT { get; }
+		string SignificanceOfRTName { get; }
+		int Subcenter_id { get; }
+		int RefTimeT { get; }
+	}
 }

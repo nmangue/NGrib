@@ -19,30 +19,30 @@
 
 namespace NGrib.Sections
 {
-    public interface IGrib2DataRepresentationSection
-    {
-        int BinaryScaleFactor { get; }
-        int BitsGroupWidths { get; }
-        int BitsScaledGroupLength { get; }
-        int CompressionMethod { get; }
-        int CompressionRatio { get; }
-        int DataPoints { get; }
-        int DataTemplateNumber { get; }
-        int DecimalScaleFactor { get; }
-        int DescriptorSpatial { get; }
-        int Length { get; }
-        int LengthIncrement { get; }
-        int LengthLastGroup { get; }
-        int MissingValueManagement { get; }
-        int NumberOfBits { get; }
-        int NumberOfGroups { get; }
-        int OrderSpatial { get; }
-        int OriginalType { get; }
-        float PrimaryMissingValue { get; }
-        int ReferenceGroupLength { get; }
-        int ReferenceGroupWidths { get; }
-        float ReferenceValue { get; }
-        float SecondaryMissingValue { get; }
-        int SplittingMethod { get; }
-    }
+	public interface IGrib2DataRepresentationSection
+	{
+		int BinaryScaleFactor { get; }
+		int BitsGroupWidths { get; }
+		int BitsScaledGroupLength { get; }
+		int CompressionMethod { get; }
+		int CompressionRatio { get; }
+		int DataPoints { get; }
+		int DataTemplateNumber { get; }
+		int DecimalScaleFactor { get; }
+		int DescriptorSpatial { get; }
+		int Length { get; }
+		int LengthIncrement { get; }
+		int LengthLastGroup { get; }
+		int MissingValueManagement { get; }
+		int NumberOfBits { get; }
+		int NumberOfGroups { get; }
+		int OrderSpatial { get; }
+		int OriginalType { get; }
+		float PrimaryMissingValue { get; }
+		int ReferenceGroupLength { get; }
+		int ReferenceGroupWidths { get; }
+		float ReferenceValue { get; }
+		float SecondaryMissingValue { get; }
+		int SplittingMethod { get; }
+	}
 }

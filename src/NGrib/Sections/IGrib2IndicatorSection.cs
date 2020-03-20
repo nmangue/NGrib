@@ -19,10 +19,10 @@
 
 namespace NGrib.Sections
 {
-    public interface IGrib2IndicatorSection
-    {
-        byte DisciplineNumber { get; }
-        int GribEdition { get; }
-        long TotalLength { get; }
-    }
+	public interface IGrib2IndicatorSection
+	{
+		byte DisciplineNumber { get; }
+		int GribEdition { get; }
+		long TotalLength { get; }
+	}
 }

@@ -21,8 +21,6 @@ using System.IO;
 
 namespace NGrib.Sections
 {
-	
-	
 	/// <summary> A class that represents the BitMapSection of a GRIB product.
 	/// 
 	/// </summary>
@@ -38,17 +36,17 @@ namespace NGrib.Sections
 		/// <summary> Length in bytes of BitMapSection section.</summary>
 		//UPGRADE_NOTE: Final was removed from the declaration of 'length '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 		private readonly int length;
-		
+
 		/// <summary> Number of this section, should be 6.</summary>
 		//UPGRADE_NOTE: Final was removed from the declaration of 'section '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 		private int section;
-		
+
 		/// <summary> Bit-map indicator (see Code Table 6.0 and Note (1))</summary>
 		//UPGRADE_NOTE: Final was removed from the declaration of 'bitMapIndicator '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 		private readonly int bitMapIndicator;
 
 		// *** constructors *******************************************************
-		
+
 		/// <summary> Constructs a <tt>Grib2BitMapSection</tt> object from a byteBuffer.
 		/// 
 		/// </summary>
@@ -60,35 +58,35 @@ namespace NGrib.Sections
 		//UPGRADE_TODO: Class 'java.io.RandomAccessFile' was converted to 'System.IO.FileStream' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioRandomAccessFile'"
 		public Grib2BitMapSection(FileStream raf, Grib2GridDefinitionSection gds)
 		{
-			int[] bitmask = new int[]{128, 64, 32, 16, 8, 4, 2, 1};
-			
+			int[] bitmask = new int[] {128, 64, 32, 16, 8, 4, 2, 1};
+
 			// octets 1-4 (Length of BMS)
 			length = GribNumbers.int4(raf);
 			//System.out.println( "BMS length=" + length );
-			
+
 			section = raf.ReadByte();
 			//System.out.println( "BMS is 6, section=" + section );
-			
+
 			bitMapIndicator = raf.ReadByte();
 			//System.out.println( "BMS bitMapIndicator=" + bitMapIndicator );
-			
+
 			// no bitMap
 			if (bitMapIndicator != 0)
-				return ;
-			
+				return;
+
 			sbyte[] data = new sbyte[length - 6];
 			SupportClass.ReadInput(raf, data, 0, data.Length);
-			
+
 			// create new bit map, octet 4 contains number of unused bits at the end
 			Bitmap = new bool[gds.NumberPoints];
 			//System.out.println( "BMS GDS NumberPoints = " + gds.getNumberPoints() );
 			//System.out.println( "BMS bitmap.length = " + this.bitmap.length );
-			
+
 			// fill bit map
 			for (int i = 0; i < Bitmap.Length; i++)
 				Bitmap[i] = (data[i / 8] & bitmask[i % 8]) != 0;
 		}
-		
+
 		// --Commented out by Inspection START (12/8/05 1:12 PM):
 		//   /**
 		//    * Get the byte length of the BitMapSection section.

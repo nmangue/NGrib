@@ -19,10 +19,10 @@
 
 namespace NGrib.Sections
 {
-    public interface IGrib2LocalUseSection
-    {
-        byte[] getBytes();
-        int getLength();
-        int getSection();
-    }
+	public interface IGrib2LocalUseSection
+	{
+		byte[] getBytes();
+		int getLength();
+		int getSection();
+	}
 }

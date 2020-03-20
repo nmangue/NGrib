@@ -19,26 +19,26 @@
 
 namespace NGrib.Sections
 {
-    public interface IGrib2ProductDefinitionSection
-    {
-        int AnalysisGenProcess { get; }
-        int BackGenProcess { get; }
-        int Coordinates { get; }
-        int ForecastTime { get; }
-        string getProductDefinitionName();
-        string getTimeRangeUnitName();
-        int HoursAfter { get; }
-        int MinutesAfter { get; }
-        int ParameterCategory { get; }
-        int ParameterNumber { get; }
-        int ProductDefinition { get; }
-        int TimeRangeUnit { get; }
-        int TypeFirstFixedSurface { get; }
-        string TypeFirstFixedSurfaceName { get; }
-        int TypeGenProcess { get; }
-        int TypeSecondFixedSurface { get; }
-        string TypeSecondFixedSurfaceName { get; }
-        float ValueFirstFixedSurface { get; }
-        float ValueSecondFixedSurface { get; }
-    }
+	public interface IGrib2ProductDefinitionSection
+	{
+		int AnalysisGenProcess { get; }
+		int BackGenProcess { get; }
+		int Coordinates { get; }
+		int ForecastTime { get; }
+		string getProductDefinitionName();
+		string getTimeRangeUnitName();
+		int HoursAfter { get; }
+		int MinutesAfter { get; }
+		int ParameterCategory { get; }
+		int ParameterNumber { get; }
+		int ProductDefinition { get; }
+		int TimeRangeUnit { get; }
+		int TypeFirstFixedSurface { get; }
+		string TypeFirstFixedSurfaceName { get; }
+		int TypeGenProcess { get; }
+		int TypeSecondFixedSurface { get; }
+		string TypeSecondFixedSurfaceName { get; }
+		float ValueFirstFixedSurface { get; }
+		float ValueSecondFixedSurface { get; }
+	}
 }

@@ -22,18 +22,17 @@ using System.IO;
 
 namespace NGrib.Sections
 {
-	
-	
 	/// <summary> A class that represents the DataRepresentationSection of a GRIB product.
 	/// 
 	/// </summary>
-    public sealed class Grib2DataRepresentationSection : IGrib2DataRepresentationSection
+	public sealed class Grib2DataRepresentationSection : IGrib2DataRepresentationSection
 	{
-		private void  InitBlock()
+		private void InitBlock()
 		{
 			PrimaryMissingValue = GribNumbers.UNDEFINED;
 			SecondaryMissingValue = GribNumbers.UNDEFINED;
 		}
+
 		/// <summary> Get the byte length of the Section DRS section.
 		/// 
 		/// </summary>
@@ -168,7 +167,7 @@ namespace NGrib.Sections
 		private int section;
 
 		// *** constructors *******************************************************
-		
+
 		/// <summary> Constructs a <tt>Grib2DataRepresentationSection</tt> object from a raf.
 		/// 
 		/// </summary>
@@ -182,43 +181,42 @@ namespace NGrib.Sections
 			// octets 1-4 (Length of DRS)
 			Length = GribNumbers.int4(raf);
 			//System.out.println( "DRS length=" + length );
-			
+
 			section = raf.ReadByte();
 			//System.out.println( "DRS is 5 section=" + section );
-			
+
 			DataPoints = GribNumbers.int4(raf);
 			//System.out.println( "DRS dataPoints=" + dataPoints );
-			
-			DataTemplateNumber = (int)GribNumbers.uint2(raf);
+
+			DataTemplateNumber = (int) GribNumbers.uint2(raf);
 			//System.out.println( "DRS dataTemplate=" + dataTemplate );
-			
+
 			switch (DataTemplateNumber)
 			{
-				
 				// Data Template Number
-				case 0: 
-				case 1:  // 0 - Grid point data - simple packing 
+				case 0:
+				case 1: // 0 - Grid point data - simple packing 
 					// 1 - Matrix values - simple packing
 					//System.out.println( "DRS dataTemplate=" + dataTemplate );
-                    ReferenceValue = GribNumbers.IEEEfloat4(raf);
+					ReferenceValue = GribNumbers.IEEEfloat4(raf);
 					BinaryScaleFactor = GribNumbers.int2(raf);
 					DecimalScaleFactor = GribNumbers.int2(raf);
 					NumberOfBits = raf.ReadByte();
 					//System.out.println( "DRS numberOfBits=" + numberOfBits );
 					OriginalType = raf.ReadByte();
 					//System.out.println( "DRS originalType=" + originalType );
-					
+
 					if (DataTemplateNumber == 0)
 						break;
 					// case 1 not implememted
 					Console.Out.WriteLine("DRS dataTemplate=1 not implemented yet");
 					break;
-				
-				case 2: 
-				case 3:  // Grid point data - complex packing
+
+				case 2:
+				case 3: // Grid point data - complex packing
 					//System.out.println( "DRS dataTemplate=" + dataTemplate );
 					// octet 12 - 15
-                    ReferenceValue = GribNumbers.IEEEfloat4(raf);
+					ReferenceValue = GribNumbers.IEEEfloat4(raf);
 					// octet 16 - 17
 					BinaryScaleFactor = GribNumbers.int2(raf);
 					// octet 18 - 19
@@ -238,9 +236,9 @@ namespace NGrib.Sections
 					//System.out.println( "DRS missingValueManagement=" + 
 					//     missingValueManagement );
 					// octet 24 - 27
-                    PrimaryMissingValue = GribNumbers.IEEEfloat4(raf);
+					PrimaryMissingValue = GribNumbers.IEEEfloat4(raf);
 					// octet 28 - 31
-                    SecondaryMissingValue = GribNumbers.IEEEfloat4(raf);
+					SecondaryMissingValue = GribNumbers.IEEEfloat4(raf);
 					// octet 32 - 35
 					NumberOfGroups = GribNumbers.int4(raf);
 					//System.out.println( "DRS numberOfGroups=" + 
@@ -273,20 +271,20 @@ namespace NGrib.Sections
 					//     bitsScaledGroupLength );
 					if (DataTemplateNumber == 2)
 						break;
-					
+
 					// case 3 // complex packing & spatial differencing
 					OrderSpatial = raf.ReadByte();
 					//System.out.println( "DRS orderSpatial=" + orderSpatial);
 					DescriptorSpatial = raf.ReadByte();
 					//System.out.println( "DRS descriptorSpatial=" + descriptorSpatial);
 					break;
-				
-				
-				case 40: 
-				case 40000:  // Grid point data - JPEG 2000 Code Stream Format
+
+
+				case 40:
+				case 40000: // Grid point data - JPEG 2000 Code Stream Format
 					//System.out.println( "DRS dataTemplate=" + dataTemplate );
 
-                    ReferenceValue = GribNumbers.IEEEfloat4(raf);
+					ReferenceValue = GribNumbers.IEEEfloat4(raf);
 					BinaryScaleFactor = GribNumbers.int2(raf);
 					DecimalScaleFactor = GribNumbers.int2(raf);
 					NumberOfBits = raf.ReadByte();
@@ -298,10 +296,9 @@ namespace NGrib.Sections
 					CompressionRatio = raf.ReadByte();
 					//System.out.println( "DRS compressionRatio=" + compressionRatio );
 					break;
-				
-				default: 
+
+				default:
 					break;
-				
 			}
 		} // end of Grib2DataRepresentationSection
 	}

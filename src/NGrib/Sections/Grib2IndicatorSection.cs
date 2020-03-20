@@ -41,7 +41,7 @@ namespace NGrib.Sections
 		/// Discipline from the GRIB Code Table 0.0.
 		/// </summary>
 		public Discipline? Discipline { get; }
-		
+
 		/// <summary>
 		/// GRIB Edition Number.
 		/// </summary>
@@ -51,7 +51,7 @@ namespace NGrib.Sections
 		/// Total length of GRIB message in octets (including Section 0).
 		/// </summary>
 		public long TotalLength { get; }
-		
+
 		public Grib2IndicatorSection(int length, byte disciplineNumber, int gribEdition, long totalLength)
 		{
 			Length = length;
@@ -61,7 +61,7 @@ namespace NGrib.Sections
 			{
 				Discipline = (Discipline) disciplineNumber;
 			}
-			
+
 			GribEdition = gribEdition;
 			TotalLength = totalLength;
 		}
@@ -81,7 +81,7 @@ namespace NGrib.Sections
 			{
 				data[i] = raf.ReadByte();
 			}
-			
+
 			// edition of GRIB specification
 			GribEdition = raf.ReadByte();
 			if (GribEdition == 2)

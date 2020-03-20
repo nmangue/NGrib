@@ -22,7 +22,6 @@ using System.IO;
 
 namespace NGrib.Sections
 {
-	
 	/// <summary> A class that represents the grid definition section (GDS) of a GRIB product.
 	/// 
 	/// </summary>
@@ -225,12 +224,9 @@ namespace NGrib.Sections
 		/// </returns>
 		public float Factor
 		{
-			get
-			{
-				return factor;
-			}
-			
+			get { return factor; }
 		}
+
 		/// <summary> .</summary>
 		/// <returns> N as a int
 		/// 
@@ -273,24 +269,18 @@ namespace NGrib.Sections
 		/// </returns>
 		public float Lap
 		{
-			get
-			{
-				return lap;
-			}
-			
+			get { return lap; }
 		}
+
 		/// <summary> .</summary>
 		/// <returns> Lop as a float
 		/// 
 		/// </returns>
 		public float Lop
 		{
-			get
-			{
-				return lop;
-			}
-			
+			get { return lop; }
 		}
+
 		/// <summary> .</summary>
 		/// <returns> Xp as a float
 		/// 
@@ -309,36 +299,27 @@ namespace NGrib.Sections
 		/// </returns>
 		public float Xo
 		{
-			get
-			{
-				return xo;
-			}
-			
+			get { return xo; }
 		}
+
 		/// <summary> .</summary>
 		/// <returns> Yo as a float
 		/// 
 		/// </returns>
 		public float Yo
 		{
-			get
-			{
-				return yo;
-			}
-			
+			get { return yo; }
 		}
+
 		/// <summary> .</summary>
 		/// <returns> Altitude as a float
 		/// 
 		/// </returns>
 		public float Altitude
 		{
-			get
-			{
-				return altitude;
-			}
-			
+			get { return altitude; }
 		}
+
 		/// <summary> .</summary>
 		/// <returns> N2 as a int
 		/// 
@@ -402,13 +383,14 @@ namespace NGrib.Sections
 		/// <summary>  scale factor for Lat/Lon variables in degrees.</summary>
 		//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
 		private static readonly float tenToNegSix = (float) SupportClass.Identity((1 / 1000000.0));
+
 		//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
 		private static readonly float tenToNegThree = (float) SupportClass.Identity((1 / 1000.0));
-		
+
 		/// <summary> Length in bytes of this section.</summary>
 		//UPGRADE_NOTE: Final was removed from the declaration of 'length '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 		private int length;
-		
+
 		/// <summary> section number should be 3.</summary>
 		//UPGRADE_NOTE: Final was removed from the declaration of 'section '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 		private int section;
@@ -422,7 +404,7 @@ namespace NGrib.Sections
 		private readonly int altitude;
 
 		// *** constructors *******************************************************
-		
+
 		/// <summary> Constructs a <tt>Grib2GridDefinitionSection</tt> object from a raf.
 		/// 
 		/// </summary>
@@ -440,62 +422,61 @@ namespace NGrib.Sections
 			int scaledvaluemajor = 0;
 			int scalefactorminor = 0;
 			int scaledvalueminor = 0;
-			
+
 			// octets 1-4 (Length of GDS)
 			length = GribNumbers.int4(raf);
 			//System.out.println( "GDS length=" + length );
-			
+
 			if (doCheckSum)
 			{
-                /*
-				// get byte array for this gds, then reset raf to same position
-				// calculate checksum for this gds via the byte array
-				long mark = raf.Position;
-				sbyte[] dst = new sbyte[length - 4];
-				SupportClass.ReadInput(raf, dst, 0, dst.Length);
-				raf.Seek(mark, System.IO.SeekOrigin.Begin);
-				//UPGRADE_ISSUE: Class 'java.util.zip.CRC32' was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1000_javautilzipCRC32'"
-				//UPGRADE_ISSUE: Constructor 'java.util.zip.CRC32.CRC32' was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1000_javautilzipCRC32'"
-				CRC32 cs = new CRC32();
-				//UPGRADE_ISSUE: Method 'java.util.zip.CRC32.update' was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1000_javautilzipCRC32'"
-				cs.update(dst);
-				//UPGRADE_ISSUE: Method 'java.util.zip.CRC32.getValue' was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1000_javautilzipCRC32'"
-				checksum = System.Convert.ToString(cs.getValue());
-				//System.out.println( "GDS checksum =" + checksum );
-                */ 
-                // TODO Check this
+				/*
+// get byte array for this gds, then reset raf to same position
+// calculate checksum for this gds via the byte array
+long mark = raf.Position;
+sbyte[] dst = new sbyte[length - 4];
+SupportClass.ReadInput(raf, dst, 0, dst.Length);
+raf.Seek(mark, System.IO.SeekOrigin.Begin);
+//UPGRADE_ISSUE: Class 'java.util.zip.CRC32' was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1000_javautilzipCRC32'"
+//UPGRADE_ISSUE: Constructor 'java.util.zip.CRC32.CRC32' was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1000_javautilzipCRC32'"
+CRC32 cs = new CRC32();
+//UPGRADE_ISSUE: Method 'java.util.zip.CRC32.update' was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1000_javautilzipCRC32'"
+cs.update(dst);
+//UPGRADE_ISSUE: Method 'java.util.zip.CRC32.getValue' was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1000_javautilzipCRC32'"
+checksum = System.Convert.ToString(cs.getValue());
+//System.out.println( "GDS checksum =" + checksum );
+				*/
+				// TODO Check this
 			}
-			
+
 			section = raf.ReadByte(); // This is section 3
 			//System.out.println( "GDS is 3, section=" + section );
-			
+
 			Source = raf.ReadByte();
 			//System.out.println( "GDS source=" + source );
-			
+
 			NumberPoints = GribNumbers.int4(raf);
 			//System.out.println( "GDS numberPoints=" + numberPoints );
-			
+
 			Olon = raf.ReadByte();
 			//System.out.println( "GDS olon=" + olon );
-			
+
 			Iolon = raf.ReadByte();
 			//System.out.println( "GDS iolon=" + iolon );
-			
+
 			Gdtn = GribNumbers.int2(raf);
 			//System.out.println( "GDS gdtn=" + gdtn );
-			
+
 			Name = getGridName(Gdtn);
-			
+
 			float ratio;
-			
+
 			switch (Gdtn)
 			{
-				
 				// Grid Definition Template Number
-				case 0: 
-				case 1: 
-				case 2: 
-				case 3:  // Latitude/Longitude Grid
+				case 0:
+				case 1:
+				case 2:
+				case 3: // Latitude/Longitude Grid
 					Shape = raf.ReadByte();
 					//System.out.println( "shape=" + shape );
 					scalefactorradius = raf.ReadByte();
@@ -518,6 +499,7 @@ namespace NGrib.Sections
 					{
 						ratio = Angle / (float) Subdivisionsangle;
 					}
+
 					//System.out.println( "ratio =" + ratio );
 					La1 = (float) (GribNumbers.int4(raf) * ratio);
 					Lo1 = (float) (GribNumbers.int4(raf) * ratio);
@@ -527,14 +509,14 @@ namespace NGrib.Sections
 					Dx = (float) (GribNumbers.int4(raf) * ratio);
 					Dy = (float) (GribNumbers.int4(raf) * ratio);
 					ScanMode = raf.ReadByte();
-					
+
 					//  1, 2, and 3 needs checked
 					if (Gdtn == 1)
 					{
 						//Rotated Latitude/longitude
 						SpLat = GribNumbers.int4(raf) * tenToNegSix;
 						SpLon = GribNumbers.int4(raf) * tenToNegSix;
-                        Rotationangle = GribNumbers.IEEEfloat4(raf);
+						Rotationangle = GribNumbers.IEEEfloat4(raf);
 					}
 					else if (Gdtn == 2)
 					{
@@ -549,15 +531,16 @@ namespace NGrib.Sections
 						// Latitude/longitude
 						SpLat = GribNumbers.int4(raf) * tenToNegSix;
 						SpLon = GribNumbers.int4(raf) * tenToNegSix;
-                        Rotationangle = GribNumbers.IEEEfloat4(raf);
+						Rotationangle = GribNumbers.IEEEfloat4(raf);
 						PoleLat = GribNumbers.int4(raf) * tenToNegSix;
 						PoleLon = GribNumbers.int4(raf) * tenToNegSix;
 						factor = GribNumbers.int4(raf);
 					}
+
 					break;
-				
-				
-				case 10:  // Mercator
+
+
+				case 10: // Mercator
 					// la1, lo1, lad, la2, and lo2 need checked
 					Shape = raf.ReadByte();
 					//System.out.println( "shape=" + shape );
@@ -581,11 +564,11 @@ namespace NGrib.Sections
 					Angle = GribNumbers.int4(raf);
 					Dx = (float) (GribNumbers.int4(raf) * tenToNegThree);
 					Dy = (float) (GribNumbers.int4(raf) * tenToNegThree);
-					
+
 					break;
-				
-				
-				case 20:  // Polar stereographic projection
+
+
+				case 20: // Polar stereographic projection
 					// la1, lo1, lad, and lov need checked
 					Shape = raf.ReadByte();
 					//System.out.println( "shape=" + shape );
@@ -608,11 +591,11 @@ namespace NGrib.Sections
 					Dy = (float) (GribNumbers.int4(raf) * tenToNegThree);
 					ProjectionCenter = raf.ReadByte();
 					ScanMode = raf.ReadByte();
-					
+
 					break;
-				
-				
-				case 30:  // Lambert Conformal
+
+
+				case 30: // Lambert Conformal
 					Shape = raf.ReadByte();
 					//System.out.println( "shape=" + shape );
 					scalefactorradius = raf.ReadByte();
@@ -644,11 +627,11 @@ namespace NGrib.Sections
 					SpLon = (float) (GribNumbers.int4(raf) * tenToNegSix);
 					//System.out.println( "spLat=" + spLat);
 					//System.out.println( "spLon=" + spLon);
-					
+
 					break;
-				
-				
-				case 31:  // Albers Equal Area
+
+
+				case 31: // Albers Equal Area
 					// la1, lo1, lad, and lov need checked
 					Shape = raf.ReadByte();
 					//System.out.println( "shape=" + shape );
@@ -681,14 +664,14 @@ namespace NGrib.Sections
 					SpLon = GribNumbers.int4(raf) * tenToNegSix;
 					//System.out.println( "spLat=" + spLat);
 					//System.out.println( "spLon=" + spLon);
-					
+
 					break;
-				
-				
-				case 40: 
-				case 41: 
-				case 42: 
-				case 43:  // Gaussian latitude/longitude
+
+
+				case 40:
+				case 41:
+				case 42:
+				case 43: // Gaussian latitude/longitude
 					Shape = raf.ReadByte();
 					//System.out.println( "shape=" + shape );
 					scalefactorradius = raf.ReadByte();
@@ -711,6 +694,7 @@ namespace NGrib.Sections
 					{
 						ratio = Angle / Subdivisionsangle;
 					}
+
 					//System.out.println( "ratio =" + ratio );
 					La1 = (float) (GribNumbers.int4(raf) * ratio);
 					Lo1 = (float) (GribNumbers.int4(raf) * ratio);
@@ -720,20 +704,20 @@ namespace NGrib.Sections
 					Dx = (float) (GribNumbers.int4(raf) * ratio);
 					N = raf.ReadByte();
 					ScanMode = raf.ReadByte();
-					
+
 					if (Gdtn == 41)
 					{
 						//Rotated Gaussian Latitude/longitude
-						
+
 						SpLat = GribNumbers.int4(raf) * ratio;
 						SpLon = GribNumbers.int4(raf) * ratio;
-                        Rotationangle = GribNumbers.IEEEfloat4(raf);
+						Rotationangle = GribNumbers.IEEEfloat4(raf);
 					}
 					else if (Gdtn == 42)
 					{
 						//Stretched Gaussian 
 						// Latitude/longitude
-						
+
 						PoleLat = GribNumbers.int4(raf) * ratio;
 						PoleLon = GribNumbers.int4(raf) * ratio;
 						factor = GribNumbers.int4(raf);
@@ -742,40 +726,41 @@ namespace NGrib.Sections
 					{
 						//Stretched and Rotated Gaussian  
 						// Latitude/longitude
-						
+
 						SpLat = GribNumbers.int4(raf) * ratio;
 						SpLon = GribNumbers.int4(raf) * ratio;
-                        Rotationangle = GribNumbers.IEEEfloat4(raf);
+						Rotationangle = GribNumbers.IEEEfloat4(raf);
 						PoleLat = GribNumbers.int4(raf) * ratio;
 						PoleLon = GribNumbers.int4(raf) * ratio;
 						factor = GribNumbers.int4(raf);
 					}
-					break;
-				
-				
-				case 50: 
-				case 51: 
-				case 52: 
-				case 53:  // Spherical harmonic coefficients
 
-                    J = GribNumbers.IEEEfloat4(raf);
-                    K = GribNumbers.IEEEfloat4(raf);
-                    M = GribNumbers.IEEEfloat4(raf);
+					break;
+
+
+				case 50:
+				case 51:
+				case 52:
+				case 53: // Spherical harmonic coefficients
+
+					J = GribNumbers.IEEEfloat4(raf);
+					K = GribNumbers.IEEEfloat4(raf);
+					M = GribNumbers.IEEEfloat4(raf);
 					Method = raf.ReadByte();
 					Mode = raf.ReadByte();
 					if (Gdtn == 51)
 					{
 						//Rotated Spherical harmonic coefficients
-						
+
 						SpLat = GribNumbers.int4(raf) * tenToNegSix;
 						SpLon = GribNumbers.int4(raf) * tenToNegSix;
-                        Rotationangle = GribNumbers.IEEEfloat4(raf);
+						Rotationangle = GribNumbers.IEEEfloat4(raf);
 					}
 					else if (Gdtn == 52)
 					{
 						//Stretched Spherical 
 						// harmonic coefficients
-						
+
 						PoleLat = GribNumbers.int4(raf) * tenToNegSix;
 						PoleLon = GribNumbers.int4(raf) * tenToNegSix;
 						factor = GribNumbers.int4(raf);
@@ -784,18 +769,19 @@ namespace NGrib.Sections
 					{
 						//Stretched and Rotated 
 						// Spherical harmonic coefficients
-						
+
 						SpLat = GribNumbers.int4(raf) * tenToNegSix;
 						SpLon = GribNumbers.int4(raf) * tenToNegSix;
-                        Rotationangle = GribNumbers.IEEEfloat4(raf);
+						Rotationangle = GribNumbers.IEEEfloat4(raf);
 						PoleLat = GribNumbers.int4(raf) * tenToNegSix;
 						PoleLon = GribNumbers.int4(raf) * tenToNegSix;
 						factor = GribNumbers.int4(raf);
 					}
+
 					break;
-				
-				
-				case 90:  // Space view perspective or orthographic
+
+
+				case 90: // Space view perspective or orthographic
 					Shape = raf.ReadByte();
 					//System.out.println( "shape=" + shape );
 					scalefactorradius = raf.ReadByte();
@@ -820,12 +806,12 @@ namespace NGrib.Sections
 					altitude = GribNumbers.int4(raf) * 1000000;
 					xo = GribNumbers.int4(raf);
 					yo = GribNumbers.int4(raf);
-					
+
 					break;
-				
-				
-				case 100:  // Triangular grid based on an icosahedron
-					
+
+
+				case 100: // Triangular grid based on an icosahedron
+
 					N2 = raf.ReadByte();
 					N3 = raf.ReadByte();
 					Ni = GribNumbers.int2(raf);
@@ -838,9 +824,9 @@ namespace NGrib.Sections
 					ScanMode = raf.ReadByte();
 					N = GribNumbers.int4(raf);
 					break;
-				
-				
-				case 110:  // Equatorial azimuthal equidistant projection
+
+
+				case 110: // Equatorial azimuthal equidistant projection
 					Shape = raf.ReadByte();
 					//System.out.println( "shape=" + shape );
 					scalefactorradius = raf.ReadByte();
@@ -860,34 +846,34 @@ namespace NGrib.Sections
 					Dy = (float) (GribNumbers.int4(raf) * tenToNegThree);
 					ProjectionCenter = raf.ReadByte();
 					ScanMode = raf.ReadByte();
-					
+
 					break;
-				
-				
-				case 120:  // Azimuth-range Projection
+
+
+				case 120: // Azimuth-range Projection
 					Nb = GribNumbers.int4(raf);
 					Nr = GribNumbers.int4(raf);
 					La1 = GribNumbers.int4(raf);
 					Lo1 = GribNumbers.int4(raf);
 					Dx = GribNumbers.int4(raf);
-                    Dstart = GribNumbers.IEEEfloat4(raf);
+					Dstart = GribNumbers.IEEEfloat4(raf);
 					ScanMode = raf.ReadByte();
 					for (int i = 0; i < Nr; i++)
 					{
 						// get azi (33+4(Nr-1))-(34+4(Nr-1))
 						// get adelta (35+4(Nr-1))-(36+4(Nr-1))
 					}
+
 					Console.Out.WriteLine("need code to get azi and adelta");
-					
+
 					break;
-				
-				
-				default: 
+
+
+				default:
 					Console.Out.WriteLine("Unknown Grid Type " + Convert.ToString(Gdtn));
 					break;
-				
 			} // end switch
-			
+
 			// calculate earth radius
 			if ((Gdtn < 50 || Gdtn > 53) && Gdtn != 100 && Gdtn != 120)
 			{
@@ -914,7 +900,7 @@ namespace NGrib.Sections
 					//System.out.println( "majorAxisScale =" + scalefactormajor );
 					//System.out.println( "majorAxisiValue =" + scaledvaluemajor );
 					MajorAxis = (float) (MajorAxis / Math.Pow(10, scalefactormajor));
-					
+
 					MinorAxis = scaledvalueminor;
 					//System.out.println( "minorAxisScale =" + scalefactorminor );
 					//System.out.println( "minorAxisValue =" + scaledvalueminor );
@@ -932,7 +918,7 @@ namespace NGrib.Sections
 				}
 			}
 		} // end of Grib2GridDefinitionSection
-		
+
 		/// <summary> .</summary>
 		/// <param name="gdtn"> Grid definition template number same as type of grid
 		/// </param>
@@ -943,54 +929,52 @@ namespace NGrib.Sections
 		{
 			switch (gdtn)
 			{
-				
 				// code table 3.2
-				case 0:  return "Latitude/Longitude";
-				
-				case 1:  return "Rotated Latitude/Longitude";
-				
-				case 2:  return "Stretched Latitude/Longitude";
-				
-				case 3:  return "iStretched and Rotated Latitude/Longitude";
-				
-				case 10:  return "Mercator";
-				
-				case 20:  return "Polar stereographic";
-				
-				case 30:  return "Lambert Conformal";
-				
-				case 31:  return "Albers Equal Area";
-				
-				case 40:  return "Gaussian latitude/longitude";
-				
-				case 41:  return "Rotated Gaussian Latitude/longitude";
-				
-				case 42:  return "Stretched Gaussian Latitude/longitude";
-				
-				case 43:  return "Stretched and Rotated Gaussian Latitude/longitude";
-				
-				case 50:  return "Spherical harmonic coefficients";
-				
-				case 51:  return "Rotated Spherical harmonic coefficients";
-				
-				case 52:  return "Stretched Spherical harmonic coefficients";
-				
-				case 53:  return "Stretched and Rotated Spherical harmonic coefficients";
-				
-				case 90:  return "Space View Perspective or Orthographic";
-				
-				case 100:  return "Triangular Grid Based on an Icosahedron";
-				
-				case 110:  return "Equatorial Azimuthal Equidistant";
-				
-				case 120:  return "Azimuth-Range";
-				
-				
-				default:  return "Unknown projection" + gdtn;
-				
+				case 0: return "Latitude/Longitude";
+
+				case 1: return "Rotated Latitude/Longitude";
+
+				case 2: return "Stretched Latitude/Longitude";
+
+				case 3: return "iStretched and Rotated Latitude/Longitude";
+
+				case 10: return "Mercator";
+
+				case 20: return "Polar stereographic";
+
+				case 30: return "Lambert Conformal";
+
+				case 31: return "Albers Equal Area";
+
+				case 40: return "Gaussian latitude/longitude";
+
+				case 41: return "Rotated Gaussian Latitude/longitude";
+
+				case 42: return "Stretched Gaussian Latitude/longitude";
+
+				case 43: return "Stretched and Rotated Gaussian Latitude/longitude";
+
+				case 50: return "Spherical harmonic coefficients";
+
+				case 51: return "Rotated Spherical harmonic coefficients";
+
+				case 52: return "Stretched Spherical harmonic coefficients";
+
+				case 53: return "Stretched and Rotated Spherical harmonic coefficients";
+
+				case 90: return "Space View Perspective or Orthographic";
+
+				case 100: return "Triangular Grid Based on an Icosahedron";
+
+				case 110: return "Equatorial Azimuthal Equidistant";
+
+				case 120: return "Azimuth-Range";
+
+
+				default: return "Unknown projection" + gdtn;
 			}
 		} // end getGridName
-		
+
 		// --Commented out by Inspection START (11/21/05 12:34 PM):
 		//   /**
 		//    * Get length in bytes of this section.
@@ -1002,7 +986,7 @@ namespace NGrib.Sections
 		//      return length;
 		//   }
 		// --Commented out by Inspection STOP (11/21/05 12:34 PM)
-		
+
 		// --Commented out by Inspection START (12/1/05 3:04 PM):
 		//   /**
 		//    * Number of this section, should be 3
@@ -1012,7 +996,7 @@ namespace NGrib.Sections
 		//      return section;
 		//   }
 		// --Commented out by Inspection STOP (12/1/05 3:04 PM)
-		
+
 		/// <summary> .</summary>
 		/// <returns> shapeName as a String
 		/// 
@@ -1021,7 +1005,7 @@ namespace NGrib.Sections
 		{
 			return getShapeName(Shape);
 		}
-		
+
 		/// <summary> .</summary>
 		/// <param name="shape">
 		/// </param>
@@ -1032,24 +1016,22 @@ namespace NGrib.Sections
 		{
 			switch (shape)
 			{
-				
 				// code table 3.2
-				case 0:  return "Earth spherical with radius = 6367470 m";
-				
-				case 1:  return "Earth spherical with radius specified by producer";
-				
-				case 2:  return "Earth oblate spheroid with major axis = 6378160.0 m and minor axis = 6356775.0 m";
-				
-				case 3:  return "Earth oblate spheroid with axes specified by producer";
-				
-				case 4:  return "Earth oblate spheroid with major axis = 6378137.0 m and minor axis = 6356752.314 m";
-				
-				case 5:  return "Earth represent by WGS84";
-				
-				case 6:  return "Earth spherical with radius of 6371229.0 m";
-				
-				default:  return "Unknown Earth Shape";
-				
+				case 0: return "Earth spherical with radius = 6367470 m";
+
+				case 1: return "Earth spherical with radius specified by producer";
+
+				case 2: return "Earth oblate spheroid with major axis = 6378160.0 m and minor axis = 6356775.0 m";
+
+				case 3: return "Earth oblate spheroid with axes specified by producer";
+
+				case 4: return "Earth oblate spheroid with major axis = 6378137.0 m and minor axis = 6356752.314 m";
+
+				case 5: return "Earth represent by WGS84";
+
+				case 6: return "Earth spherical with radius of 6371229.0 m";
+
+				default: return "Unknown Earth Shape";
 			}
 		}
 	} // end Grib2GridDefinitionSection

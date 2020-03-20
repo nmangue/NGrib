@@ -21,8 +21,6 @@ using System.IO;
 
 namespace NGrib.Sections
 {
-	
-	
 	/// <summary> A class that represents the EndSection of a GRIB2 product.
 	/// 
 	/// </summary>
@@ -56,9 +54,9 @@ namespace NGrib.Sections
 		* how long was the ending, should be 4 bytes
 		*/
 		private int length = 0;
-		
+
 		// *** constructors *******************************************************
-		
+
 		/// <summary> Constructs a <tt>Grib2EndSection</tt> object from a byteBuffer.
 		/// 
 		/// </summary>
@@ -86,6 +84,7 @@ namespace NGrib.Sections
 					//System.out.println( "c=" + (char) c );
 					match = 0; /* Needed to protect against bad ending case. */
 				}
+
 				if (match == 4)
 				{
 					EndFound = true;
