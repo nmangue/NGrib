@@ -72,23 +72,21 @@ namespace NGrib.Sections
 			{
 				// code must be "7" "7" "7" "7"
 				sbyte c = (sbyte) raf.ReadByte();
-				//System.out.println( "c=" + (char) c );
+
 				length++;
 				if (c == '7')
 				{
 					match += 1;
-					//System.out.println( "seekEnd raf.getFilePointer()=" + raf.getFilePointer() );
 				}
 				else
 				{
-					//System.out.println( "c=" + (char) c );
 					match = 0; /* Needed to protect against bad ending case. */
 				}
 
 				if (match == 4)
 				{
 					EndFound = true;
-					//System.out.println( "7777 ending found" );
+
 					break;
 				}
 			}

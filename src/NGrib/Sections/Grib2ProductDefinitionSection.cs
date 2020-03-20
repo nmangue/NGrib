@@ -135,19 +135,15 @@ namespace NGrib.Sections
 		{
 			// octets 1-4 (Length of PDS)
 			length = GribNumbers.int4(raf);
-			//System.out.println( "PDS length=" + length );
 
 			// octet 5
 			section = raf.ReadByte();
-			//System.out.println( "PDS is 4, section=" + section );
 
 			// octet 6-7
 			Coordinates = GribNumbers.int2(raf);
-			//System.out.println( "PDS coordinates=" + coordinates );
 
 			// octet 8-9
 			ProductDefinition = GribNumbers.int2(raf);
-			//System.out.println( "PDS productDefinition=" + productDefinition );
 
 			switch (ProductDefinition)
 			{
@@ -165,55 +161,48 @@ namespace NGrib.Sections
 				{
 					// octet 10
 					ParameterCategory = raf.ReadByte();
-					//System.out.println( "PDS parameterCategory=" + 
+
 					//parameterCategory );
 
 					// octet 11
 					ParameterNumber = raf.ReadByte();
-					//System.out.println( "PDS parameterNumber=" + parameterNumber );
 
 					// octet 12
 					TypeGenProcess = raf.ReadByte();
-					//System.out.println( "PDS typeGenProcess=" + typeGenProcess );
 
 					// octet 13
 					BackGenProcess = raf.ReadByte();
-					//System.out.println( "PDS backGenProcess=" + backGenProcess );
 
 					// octet 14
 					AnalysisGenProcess = raf.ReadByte();
-					//System.out.println( "PDS analysisGenProcess=" + 
+
 					//analysisGenProcess );
 
 					// octet 15-16
 					HoursAfter = GribNumbers.int2(raf);
-					//System.out.println( "PDS hoursAfter=" + hoursAfter );
 
 					// octet 17
 					MinutesAfter = raf.ReadByte();
-					//System.out.println( "PDS minutesAfter=" + minutesAfter );
 
 					// octet 18
 					TimeRangeUnit = raf.ReadByte();
-					//System.out.println( "PDS timeRangeUnit=" + timeRangeUnit );
 
 					// octet 19-22
 					ForecastTime = GribNumbers.int4(raf);
-					//System.out.println( "PDS forecastTime=" + forecastTime );
 
 					// octet 23
 					TypeFirstFixedSurface = raf.ReadByte();
-					//System.out.println( "PDS typeFirstFixedSurface=" + 
+
 					//     typeFirstFixedSurface );
 
 					// octet 24
 					int scaleFirstFixedSurface = raf.ReadByte();
-					//System.out.println( "PDS scaleFirstFixedSurface=" + 
+
 					//     scaleFirstFixedSurface );
 
 					// octet 25-28
 					int valueFirstFixedSurface = GribNumbers.int4(raf);
-					//System.out.println( "PDS valueFirstFixedSurface=" + 
+
 					//     valueFirstFixedSurface );
 
 					//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
@@ -223,24 +212,23 @@ namespace NGrib.Sections
 
 					// octet 29
 					TypeSecondFixedSurface = raf.ReadByte();
-					//System.out.println( "PDS typeSecondFixedSurface=" + 
+
 					//typeSecondFixedSurface );
 
 					// octet 30
 					int scaleSecondFixedSurface = raf.ReadByte();
-					//System.out.println( "PDS scaleSecondFixedSurface=" + 
+
 					//scaleSecondFixedSurface );
 
 					// octet 31-34
 					int valueSecondFixedSurface = GribNumbers.int4(raf);
-					//System.out.println( "PDS valueSecondFixedSurface=" + 
+
 					//valueSecondFixedSurface );
 
 					//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
 					ValueSecondFixedSurface = (float) ((scaleSecondFixedSurface == 0 || valueSecondFixedSurface == 0)
 						? valueSecondFixedSurface
 						: Math.Pow(valueSecondFixedSurface, -scaleSecondFixedSurface));
-
 
 					// Individual ensemble forecast, control and perturbed, at a
 					// horizontal level or in a horizontal layer at a point in time
@@ -298,7 +286,6 @@ namespace NGrib.Sections
 					}
 					else if (ProductDefinition == 8)
 					{
-						//System.out.println( "PDS productDefinition == 8 " );
 						//  35-41 bytes
 						int year = GribNumbers.int2(raf);
 						int month = (raf.ReadByte()) - 1;
@@ -306,38 +293,33 @@ namespace NGrib.Sections
 						int hour = raf.ReadByte();
 						int minute = raf.ReadByte();
 						int second = raf.ReadByte();
-						//System.out.println( "PDS date:" + year +":" + month +
+
 						//":" + day + ":" + hour +":" + minute +":" + second );
 
 						// 42 - 46
 						int timeRanges = raf.ReadByte();
-						//System.out.println( "PDS timeRanges=" + timeRanges ) ;
+
 						int missingDataValues = GribNumbers.int4(raf);
-						//System.out.println( "PDS missingDataValues=" + missingDataValues ) ;
+
 						// 47 - 48
 						int outmostTimeRange = raf.ReadByte();
-						//System.out.println( "PDS outmostTimeRange=" + outmostTimeRange )
+
 						;
 						int missing = raf.ReadByte();
-						//System.out.println( "PDS missing=" + missing ) ;
+
 						// 49 - 53
 						int statisticalProcess = raf.ReadByte();
-						//System.out.println( "PDS statisticalProcess=" + statisticalProcess ) ;
+
 						int timeIncrement = GribNumbers.int4(raf);
-						//System.out.println( "PDS timeIncrement=" + timeIncrement ) ;
 
 						// 54 - 58
 						int indicatorTR = raf.ReadByte();
-						//System.out.println( "PDS indicatorTR=" + indicatorTR ) ;
 
 						int lengthTR = GribNumbers.int4(raf);
-						//System.out.println( "PDS lengthTR=" + lengthTR ) ;
 
 						//int indicatorSF = raf.read();
-						//System.out.println( "PDS indicatorSF=" + indicatorSF ) ;
 
 						//int incrementSF = GribNumbers.int4( raf );
-						//System.out.println( "PDS incrementSF=" + incrementSF ) ;
 					}
 
 					break;
@@ -348,29 +330,22 @@ namespace NGrib.Sections
 				case 20:
 				{
 					ParameterCategory = raf.ReadByte();
-					//System.out.println( "PDS parameterCategory=" + 
+
 					//parameterCategory );
 
 					ParameterNumber = raf.ReadByte();
-					//System.out.println( "PDS parameterNumber=" + parameterNumber );
 
 					TypeGenProcess = raf.ReadByte();
-					//System.out.println( "PDS typeGenProcess=" + typeGenProcess );
 
 					BackGenProcess = raf.ReadByte();
-					//System.out.println( "PDS backGenProcess=" + backGenProcess );
 
 					HoursAfter = GribNumbers.int2(raf);
-					//System.out.println( "PDS hoursAfter=" + hoursAfter );
 
 					MinutesAfter = raf.ReadByte();
-					//System.out.println( "PDS minutesAfter=" + minutesAfter );
 
 					TimeRangeUnit = raf.ReadByte();
-					//System.out.println( "PDS timeRangeUnit=" + timeRangeUnit );
 
 					ForecastTime = GribNumbers.int4(raf);
-					//System.out.println( "PDS forecastTime=" + forecastTime );
 
 					break;
 				} // case 20
@@ -380,19 +355,15 @@ namespace NGrib.Sections
 				case 30:
 				{
 					ParameterCategory = raf.ReadByte();
-					//System.out.println( "PDS parameterCategory=" + parameterCategory );
 
 					ParameterNumber = raf.ReadByte();
-					//System.out.println( "PDS parameterNumber=" + parameterNumber );
 
 					TypeGenProcess = raf.ReadByte();
-					//System.out.println( "PDS typeGenProcess=" + typeGenProcess );
 
 					BackGenProcess = raf.ReadByte();
-					//System.out.println( "PDS backGenProcess=" + backGenProcess );
 
 					nb = raf.ReadByte();
-					//System.out.println( "PDS nb =" + nb );
+
 					for (int j = 0; j < nb; j++)
 						SupportClass.Skip(raf, 10);
 					break;
@@ -403,18 +374,16 @@ namespace NGrib.Sections
 				case 254:
 				{
 					ParameterCategory = raf.ReadByte();
-					//System.out.println( "PDS parameterCategory=" + 
+
 					//parameterCategory );
 
 					ParameterNumber = raf.ReadByte();
-					//System.out.println( "PDS parameterNumber=" + parameterNumber );
 
 					//numberOfChars = GribNumbers.int4( raf );
-					//System.out.println( "PDS numberOfChars=" + 
+
 					//numberOfChars );
 					break;
 				} // case 254
-
 
 				default:
 					break;
@@ -486,7 +455,6 @@ namespace NGrib.Sections
 				case 30: return "Satellite product";
 
 				case 254: return "CCITTIA5 character string";
-
 
 				default: return "Unknown";
 			}
@@ -785,7 +753,6 @@ namespace NGrib.Sections
 
 				case 255: return "";
 
-
 				default: return "Unknown" + id;
 			}
 		} // end getTypeSurfaceNameShort
@@ -826,7 +793,6 @@ namespace NGrib.Sections
 				case 237: return "m";
 
 				case 238: return "m";
-
 
 				default: return "";
 			}

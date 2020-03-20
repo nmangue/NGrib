@@ -178,7 +178,6 @@ namespace NGrib.Sections
 
 					case 254: return "EUMETSAT Operation Centre";
 
-
 					default: return "Unknown";
 				}
 			}
@@ -221,7 +220,6 @@ namespace NGrib.Sections
 
 					case 3: return "Observation time";
 
-
 					default: return "Unknown";
 				}
 			}
@@ -261,7 +259,6 @@ namespace NGrib.Sections
 
 					case 3: return "Re-analysis products";
 
-
 					default: return "Unknown";
 				}
 			}
@@ -296,7 +293,6 @@ namespace NGrib.Sections
 					case 6: return "Processed satellite observations";
 
 					case 7: return "Processed radar observations";
-
 
 					default: return "Unknown";
 				}
@@ -350,30 +346,22 @@ namespace NGrib.Sections
 			// section 1 octet 1-4 (length of section)
 			length = GribNumbers.int4(raf);
 
-			//System.out.println( "IdentificationSection1 length=" + length );
-
 			section = raf.ReadByte();
-			//System.out.println( "Section number=" + section );
 
 			// Center  octet 6-7
 			Center_id = GribNumbers.int2(raf);
-			//System.out.println( "center_id=" + center_id );
 
 			// Center  octet 8-9
 			Subcenter_id = GribNumbers.int2(raf);
-			//System.out.println( "subcenter_id=" + subcenter_id );
 
 			// Paramter master table octet 10
 			Master_table_version = raf.ReadByte();
-			//System.out.println( "master tbl=" + master_table_version );
 
 			// Paramter local table octet 11
 			Local_table_version = raf.ReadByte();
-			//System.out.println( "local tbl=" + local_table_version );
 
 			// significanceOfRT octet 12
 			SignificanceOfRT = raf.ReadByte();
-			//System.out.println( "significanceOfRT=" + significanceOfRT );
 
 			// octets 13-19 (base time of forecast)
 			{
@@ -390,10 +378,8 @@ namespace NGrib.Sections
 			}
 
 			ProductStatus = raf.ReadByte();
-			//System.out.println( "productStatus=" + productStatus );
 
 			ProductType = raf.ReadByte();
-			//System.out.println( "productType=" + productType );
 		} // end if Grib2IdentificationSection
 
 

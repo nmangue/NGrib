@@ -425,7 +425,6 @@ namespace NGrib.Sections
 
 			// octets 1-4 (Length of GDS)
 			length = GribNumbers.int4(raf);
-			//System.out.println( "GDS length=" + length );
 
 			if (doCheckSum)
 			{
@@ -449,22 +448,16 @@ checksum = System.Convert.ToString(cs.getValue());
 			}
 
 			section = raf.ReadByte(); // This is section 3
-			//System.out.println( "GDS is 3, section=" + section );
 
 			Source = raf.ReadByte();
-			//System.out.println( "GDS source=" + source );
 
 			NumberPoints = GribNumbers.int4(raf);
-			//System.out.println( "GDS numberPoints=" + numberPoints );
 
 			Olon = raf.ReadByte();
-			//System.out.println( "GDS olon=" + olon );
 
 			Iolon = raf.ReadByte();
-			//System.out.println( "GDS iolon=" + iolon );
 
 			Gdtn = GribNumbers.int2(raf);
-			//System.out.println( "GDS gdtn=" + gdtn );
 
 			Name = getGridName(Gdtn);
 
@@ -478,7 +471,7 @@ checksum = System.Convert.ToString(cs.getValue());
 				case 2:
 				case 3: // Latitude/Longitude Grid
 					Shape = raf.ReadByte();
-					//System.out.println( "shape=" + shape );
+
 					scalefactorradius = raf.ReadByte();
 					scaledvalueradius = GribNumbers.int4(raf);
 					scalefactormajor = raf.ReadByte();
@@ -486,9 +479,9 @@ checksum = System.Convert.ToString(cs.getValue());
 					scalefactorminor = raf.ReadByte();
 					scaledvalueminor = GribNumbers.int4(raf);
 					Nx = GribNumbers.int4(raf);
-					//System.out.println( "nx=" + nx);
+
 					Ny = GribNumbers.int4(raf);
-					//System.out.println( "ny=" + ny);
+
 					Angle = GribNumbers.int4(raf);
 					Subdivisionsangle = GribNumbers.int4(raf);
 					if (Angle == 0)
@@ -500,7 +493,6 @@ checksum = System.Convert.ToString(cs.getValue());
 						ratio = Angle / (float) Subdivisionsangle;
 					}
 
-					//System.out.println( "ratio =" + ratio );
 					La1 = (float) (GribNumbers.int4(raf) * ratio);
 					Lo1 = (float) (GribNumbers.int4(raf) * ratio);
 					Resolution = raf.ReadByte();
@@ -539,11 +531,10 @@ checksum = System.Convert.ToString(cs.getValue());
 
 					break;
 
-
 				case 10: // Mercator
 					// la1, lo1, lad, la2, and lo2 need checked
 					Shape = raf.ReadByte();
-					//System.out.println( "shape=" + shape );
+
 					scalefactorradius = raf.ReadByte();
 					scaledvalueradius = GribNumbers.int4(raf);
 					scalefactormajor = raf.ReadByte();
@@ -551,9 +542,9 @@ checksum = System.Convert.ToString(cs.getValue());
 					scalefactorminor = raf.ReadByte();
 					scaledvalueminor = GribNumbers.int4(raf);
 					Nx = GribNumbers.int4(raf);
-					//System.out.println( "nx=" + nx);
+
 					Ny = GribNumbers.int4(raf);
-					//System.out.println( "ny=" + ny);
+
 					La1 = GribNumbers.int4(raf) * tenToNegSix;
 					Lo1 = GribNumbers.int4(raf) * tenToNegSix;
 					Resolution = raf.ReadByte();
@@ -567,11 +558,10 @@ checksum = System.Convert.ToString(cs.getValue());
 
 					break;
 
-
 				case 20: // Polar stereographic projection
 					// la1, lo1, lad, and lov need checked
 					Shape = raf.ReadByte();
-					//System.out.println( "shape=" + shape );
+
 					scalefactorradius = raf.ReadByte();
 					scaledvalueradius = GribNumbers.int4(raf);
 					scalefactormajor = raf.ReadByte();
@@ -579,9 +569,9 @@ checksum = System.Convert.ToString(cs.getValue());
 					scalefactorminor = raf.ReadByte();
 					scaledvalueminor = GribNumbers.int4(raf);
 					Nx = GribNumbers.int4(raf);
-					//System.out.println( "nx=" + nx);
+
 					Ny = GribNumbers.int4(raf);
-					//System.out.println( "ny=" + ny);
+
 					La1 = GribNumbers.int4(raf) * tenToNegSix;
 					Lo1 = GribNumbers.int4(raf) * tenToNegSix;
 					Resolution = raf.ReadByte();
@@ -594,10 +584,9 @@ checksum = System.Convert.ToString(cs.getValue());
 
 					break;
 
-
 				case 30: // Lambert Conformal
 					Shape = raf.ReadByte();
-					//System.out.println( "shape=" + shape );
+
 					scalefactorradius = raf.ReadByte();
 					scaledvalueradius = GribNumbers.int4(raf);
 					scalefactormajor = raf.ReadByte();
@@ -605,13 +594,13 @@ checksum = System.Convert.ToString(cs.getValue());
 					scalefactorminor = raf.ReadByte();
 					scaledvalueminor = GribNumbers.int4(raf);
 					Nx = GribNumbers.int4(raf);
-					//System.out.println( "nx=" + nx);
+
 					Ny = GribNumbers.int4(raf);
-					//System.out.println( "ny=" + ny);
+
 					La1 = (float) (GribNumbers.int4(raf) * tenToNegSix);
-					//System.out.println( "la1=" + la1 );
+
 					Lo1 = (float) (GribNumbers.int4(raf) * tenToNegSix);
-					//System.out.println( "lo1=" + lo1);
+
 					Resolution = raf.ReadByte();
 					Lad = (float) (GribNumbers.int4(raf) * tenToNegSix);
 					Lov = (float) (GribNumbers.int4(raf) * tenToNegSix);
@@ -621,20 +610,16 @@ checksum = System.Convert.ToString(cs.getValue());
 					ScanMode = raf.ReadByte();
 					Latin1 = (float) (GribNumbers.int4(raf) * tenToNegSix);
 					Latin2 = (float) (GribNumbers.int4(raf) * tenToNegSix);
-					//System.out.println( "latin1=" + latin1);
-					//System.out.println( "latin2=" + latin2);
+
 					SpLat = (float) (GribNumbers.int4(raf) * tenToNegSix);
 					SpLon = (float) (GribNumbers.int4(raf) * tenToNegSix);
-					//System.out.println( "spLat=" + spLat);
-					//System.out.println( "spLon=" + spLon);
 
 					break;
-
 
 				case 31: // Albers Equal Area
 					// la1, lo1, lad, and lov need checked
 					Shape = raf.ReadByte();
-					//System.out.println( "shape=" + shape );
+
 					scalefactorradius = raf.ReadByte();
 					scaledvalueradius = GribNumbers.int4(raf);
 					scalefactormajor = raf.ReadByte();
@@ -642,13 +627,13 @@ checksum = System.Convert.ToString(cs.getValue());
 					scalefactorminor = raf.ReadByte();
 					scaledvalueminor = GribNumbers.int4(raf);
 					Nx = GribNumbers.int4(raf);
-					//System.out.println( "nx=" + nx);
+
 					Ny = GribNumbers.int4(raf);
-					//System.out.println( "ny=" + ny);
+
 					La1 = GribNumbers.int4(raf) * tenToNegSix;
-					//System.out.println( "la1=" + la1 );
+
 					Lo1 = GribNumbers.int4(raf) * tenToNegSix;
-					//System.out.println( "lo1=" + lo1);
+
 					Resolution = raf.ReadByte();
 					Lad = GribNumbers.int4(raf) * tenToNegSix;
 					Lov = GribNumbers.int4(raf) * tenToNegSix;
@@ -658,22 +643,18 @@ checksum = System.Convert.ToString(cs.getValue());
 					ScanMode = raf.ReadByte();
 					Latin1 = GribNumbers.int4(raf) * tenToNegSix;
 					Latin2 = GribNumbers.int4(raf) * tenToNegSix;
-					//System.out.println( "latin1=" + latin1);
-					//System.out.println( "latin2=" + latin2);
+
 					SpLat = GribNumbers.int4(raf) * tenToNegSix;
 					SpLon = GribNumbers.int4(raf) * tenToNegSix;
-					//System.out.println( "spLat=" + spLat);
-					//System.out.println( "spLon=" + spLon);
 
 					break;
-
 
 				case 40:
 				case 41:
 				case 42:
 				case 43: // Gaussian latitude/longitude
 					Shape = raf.ReadByte();
-					//System.out.println( "shape=" + shape );
+
 					scalefactorradius = raf.ReadByte();
 					scaledvalueradius = GribNumbers.int4(raf);
 					scalefactormajor = raf.ReadByte();
@@ -681,9 +662,9 @@ checksum = System.Convert.ToString(cs.getValue());
 					scalefactorminor = raf.ReadByte();
 					scaledvalueminor = GribNumbers.int4(raf);
 					Nx = GribNumbers.int4(raf);
-					//System.out.println( "nx=" + nx);
+
 					Ny = GribNumbers.int4(raf);
-					//System.out.println( "ny=" + ny);
+
 					Angle = GribNumbers.int4(raf);
 					Subdivisionsangle = GribNumbers.int4(raf);
 					if (Angle == 0)
@@ -695,7 +676,6 @@ checksum = System.Convert.ToString(cs.getValue());
 						ratio = Angle / Subdivisionsangle;
 					}
 
-					//System.out.println( "ratio =" + ratio );
 					La1 = (float) (GribNumbers.int4(raf) * ratio);
 					Lo1 = (float) (GribNumbers.int4(raf) * ratio);
 					Resolution = raf.ReadByte();
@@ -736,7 +716,6 @@ checksum = System.Convert.ToString(cs.getValue());
 					}
 
 					break;
-
 
 				case 50:
 				case 51:
@@ -780,10 +759,9 @@ checksum = System.Convert.ToString(cs.getValue());
 
 					break;
 
-
 				case 90: // Space view perspective or orthographic
 					Shape = raf.ReadByte();
-					//System.out.println( "shape=" + shape );
+
 					scalefactorradius = raf.ReadByte();
 					scaledvalueradius = GribNumbers.int4(raf);
 					scalefactormajor = raf.ReadByte();
@@ -791,9 +769,9 @@ checksum = System.Convert.ToString(cs.getValue());
 					scalefactorminor = raf.ReadByte();
 					scaledvalueminor = GribNumbers.int4(raf);
 					Nx = GribNumbers.int4(raf);
-					//System.out.println( "nx=" + nx);
+
 					Ny = GribNumbers.int4(raf);
-					//System.out.println( "ny=" + ny);
+
 					lap = GribNumbers.int4(raf);
 					lop = GribNumbers.int4(raf);
 					Resolution = raf.ReadByte();
@@ -808,7 +786,6 @@ checksum = System.Convert.ToString(cs.getValue());
 					yo = GribNumbers.int4(raf);
 
 					break;
-
 
 				case 100: // Triangular grid based on an icosahedron
 
@@ -825,10 +802,9 @@ checksum = System.Convert.ToString(cs.getValue());
 					N = GribNumbers.int4(raf);
 					break;
 
-
 				case 110: // Equatorial azimuthal equidistant projection
 					Shape = raf.ReadByte();
-					//System.out.println( "shape=" + shape );
+
 					scalefactorradius = raf.ReadByte();
 					scaledvalueradius = GribNumbers.int4(raf);
 					scalefactormajor = raf.ReadByte();
@@ -836,9 +812,9 @@ checksum = System.Convert.ToString(cs.getValue());
 					scalefactorminor = raf.ReadByte();
 					scaledvalueminor = GribNumbers.int4(raf);
 					Nx = GribNumbers.int4(raf);
-					//System.out.println( "nx=" + nx);
+
 					Ny = GribNumbers.int4(raf);
-					//System.out.println( "ny=" + ny);
+
 					La1 = GribNumbers.int4(raf) * tenToNegSix;
 					Lo1 = GribNumbers.int4(raf) * tenToNegSix;
 					Resolution = raf.ReadByte();
@@ -848,7 +824,6 @@ checksum = System.Convert.ToString(cs.getValue());
 					ScanMode = raf.ReadByte();
 
 					break;
-
 
 				case 120: // Azimuth-range Projection
 					Nb = GribNumbers.int4(raf);
@@ -867,7 +842,6 @@ checksum = System.Convert.ToString(cs.getValue());
 					Console.Out.WriteLine("need code to get azi and adelta");
 
 					break;
-
 
 				default:
 					Console.Out.WriteLine("Unknown Grid Type " + Convert.ToString(Gdtn));
@@ -897,13 +871,11 @@ checksum = System.Convert.ToString(cs.getValue());
 				else if (Shape == 3)
 				{
 					MajorAxis = scaledvaluemajor;
-					//System.out.println( "majorAxisScale =" + scalefactormajor );
-					//System.out.println( "majorAxisiValue =" + scaledvaluemajor );
+
 					MajorAxis = (float) (MajorAxis / Math.Pow(10, scalefactormajor));
 
 					MinorAxis = scaledvalueminor;
-					//System.out.println( "minorAxisScale =" + scalefactorminor );
-					//System.out.println( "minorAxisValue =" + scaledvalueminor );
+
 					MinorAxis = (float) (MinorAxis / Math.Pow(10, scalefactorminor));
 				}
 				else if (Shape == 4)
@@ -969,7 +941,6 @@ checksum = System.Convert.ToString(cs.getValue());
 				case 110: return "Equatorial Azimuthal Equidistant";
 
 				case 120: return "Azimuth-Range";
-
 
 				default: return "Unknown projection" + gdtn;
 			}

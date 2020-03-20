@@ -47,10 +47,8 @@ namespace NGrib.Sections
 		{
 			// octets 1-4 (Length of GDS)
 			length = GribNumbers.int4(raf);
-			//System.out.println( "LUS length=" + length );
 
 			section = raf.ReadByte(); // This is section 2
-			//System.out.println( "LUS Local Use is 2, section=" + section );
 
 			if (section != 2)
 			{

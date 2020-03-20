@@ -67,36 +67,31 @@ namespace NGrib.Sections
 		public Grib2DataSection(bool getData, FileStream raf, Grib2GridDefinitionSection gds,
 			Grib2DataRepresentationSection drs, Grib2BitMapSection bms)
 		{
-			//System.out.println( "raf.FilePointer=" + raf.FilePointer() );
 			// octets 1-4 (Length of DS)
 			length = GribNumbers.int4(raf);
-			//System.out.println( "DS length=" + length );
-			//System.out.println( "DS calculated end=" + ( raf.getFilePointer() + length -4 ));
+
 			// octet 5  section 7
 			section = raf.ReadByte();
-			//System.out.println( "DS is 7, section=" + section );
+
 			if (!getData)
 			{
 				// skip data read
-				//System.out.println( "raf.position before reposition="+raf.getFilePointer());
-				//System.out.println( "raf.length=" + raf.length() );
+
 				// sanity check for erronous ds length
 				if (length > 0 && length < raf.Length)
 				{
 					SupportClass.Skip(raf, length - 5);
-					//System.out.println( "raf.skipBytes = " + (length -5) );
 				}
 				else
 				{
 					length = 5; // only read length and section
 				}
 
-				//System.out.println( "raf.position after skip=" + raf.getFilePointer() );
 				return;
 			}
 
 			int dtn = drs.DataTemplateNumber;
-			//System.out.println( "DS dtn=" + dtn );
+
 			if (dtn == 0 || dtn == 1)
 			{
 				// 0: Grid point data - simple packing
@@ -136,7 +131,6 @@ namespace NGrib.Sections
 			Grib2BitMapSection bms)
 		{
 			int dtn = drs.DataTemplateNumber;
-			//System.out.println( "DS dtn=" + dtn );
 
 			if (dtn == 1)
 			{
@@ -148,26 +142,25 @@ namespace NGrib.Sections
 			// dataPoints are number of points encoded, it could be less than the
 			// numberPoints in the grid record if bitMap is used, otherwise equal
 			int dataPoints = drs.DataPoints;
-			//System.out.println( "DS DRS dataPoints=" + drs.getDataPoints() );
+
 			float pmv = drs.PrimaryMissingValue;
-			//System.out.println( "DS pmv=" + pmv );
+
 			int nb = drs.NumberOfBits;
-			//System.out.println( "DS nb=" + nb );
+
 			int D = drs.DecimalScaleFactor;
-			//System.out.println( "DS D=" + D );
+
 			//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
 			float DD = (float) Math.Pow((double) 10, (double) D);
-			//System.out.println( "DS DD=" + DD );
+
 			float R = drs.ReferenceValue;
-			//System.out.println( "DS R=" + R );
+
 			int E = drs.BinaryScaleFactor;
-			//System.out.println( "DS E=" + E );
+
 			//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
 			float EE = (float) Math.Pow((double) 2.0, (double) E);
-			//System.out.println( "DS EE=" + EE );
 
 			int numberPoints = gds.NumberPoints;
-			//System.out.println( "DS GDS NumberPoints=" +  gds.getNumberPoints() );
+
 			Data = new float[numberPoints];
 
 			bool[] bitmap = bms.Bitmap;
@@ -223,36 +216,31 @@ namespace NGrib.Sections
 		private void complexUnpacking(FileStream raf, Grib2GridDefinitionSection gds, Grib2DataRepresentationSection drs)
 		{
 			int mvm = drs.MissingValueManagement;
-			//System.out.println( "DS mvm=" + mvm );
 
 			float pmv = drs.PrimaryMissingValue;
-			//System.out.println( "DS pmv=" + pmv );
 
 			int NG = drs.NumberOfGroups;
-			//System.out.println( "DS NG=" + NG );
 
 			// 6-xx  Get reference values for groups (X1's)
 			int[] X1 = new int[NG];
 			int nb = drs.NumberOfBits;
-			//System.out.println( "DS nb=" + nb );
+
 			bitPos = 0;
 			bitBuf = 0;
 			for (int i = 0; i < NG; i++)
 			{
 				X1[i] = bits2UInt(nb, raf);
-				//System.out.println( "DS X1[ i ]=" + X1[ i ] );
 			}
 
 			// [xx +1 ]-yy Get number of bits used to encode each group
 			int[] NB = new int[NG];
 			nb = drs.BitsGroupWidths;
-			//System.out.println( "DS nb=" + nb );
+
 			bitPos = 0;
 			bitBuf = 0;
 			for (int i = 0; i < NG; i++)
 			{
 				NB[i] = bits2UInt(nb, raf);
-				//System.out.println( "DS NB[ i ]=" + NB[ i ] );
 			}
 
 			// [yy +1 ]-zz Get the scaled group lengths using formula
@@ -262,42 +250,38 @@ namespace NGrib.Sections
 			int[] L = new int[NG];
 			int countL = 0;
 			int ref_Renamed = drs.ReferenceGroupLength;
-			//System.out.println( "DS ref=" + ref );
+
 			int len_inc = drs.LengthIncrement;
-			//System.out.println( "DS len_inc=" + len_inc );
+
 			nb = drs.BitsScaledGroupLength;
-			//System.out.println( "DS nb=" + nb );
+
 			bitPos = 0;
 			bitBuf = 0;
 			for (int i = 0; i < NG; i++)
 			{
 				// NG
 				L[i] = ref_Renamed + (bits2UInt(nb, raf) * len_inc);
-				//System.out.println( "DS L[ i ]=" + L[ i ] );
+
 				countL += L[i];
 			}
-			//System.out.println( "DS countL=" + countL );
 
 			// [zz +1 ]-nn get X2 values and calculate the results Y using formula
 			//                Y * 10**D = R + (X1 + X2) * 2**E
 
 			int D = drs.DecimalScaleFactor;
-			//System.out.println( "DS D=" + D );
+
 			//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
 			float DD = (float) Math.Pow((double) 10, (double) D);
-			//System.out.println( "DS DD=" + DD );
 
 			float R = drs.ReferenceValue;
-			//System.out.println( "DS R=" + R );
 
 			int E = drs.BinaryScaleFactor;
-			//System.out.println( "DS E=" + E );
+
 			//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
 			float EE = (float) Math.Pow((double) 2.0, (double) E);
-			//System.out.println( "DS EE=" + EE );
 
 			Data = new float[countL];
-			//System.out.println( "DS countL=" + countL + " dataPoints=" +
+
 			//gds.getNumberPoints() );
 			count = 0;
 			Xlength = gds.Nx; // needs some smarts for different type Grids
@@ -311,8 +295,6 @@ namespace NGrib.Sections
 				//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
 				bitsmv1[i] = (int) Math.Pow((double) 2, (double) i) - 1;
 				//bitsmv2[ i ] = (int) java.lang.Math.pow( (double)2, (double)i +1) -2;
-				//System.out.println( "DS bitsmv1[ "+ i +" ] =" + bitsmv1[ i ] );
-				//System.out.println( "DS bitsmv2[ "+ i +" ] =" + bitsmv2[ i ] );
 			}
 
 			int X2;
@@ -320,9 +302,6 @@ namespace NGrib.Sections
 			bitBuf = 0;
 			for (int i = 0; i < NG - 1; i++)
 			{
-				//System.out.println( "DS NB[ i ]=" + NB[ i ] );
-				//System.out.println( "DS L[ i ]=" + L[ i ] );
-				//System.out.println( "DS X1[ i ]=" + X1[ i ] );
 				for (int j = 0; j < L[i]; j++)
 				{
 					if (NB[i] == 0)
@@ -356,19 +335,13 @@ namespace NGrib.Sections
 								Data[count++] = (R + (X1[i] + X2) * EE) / DD;
 							}
 						}
-
-						//System.out.println( "DS count=" + count );
-						//System.out.println( "DS NB[ "+ i +" ]=" + NB[ i ] );
-						//System.out.println( "DS X1[ "+ i +" ]=" + X1[ i ] );
-						//System.out.println( "DS X2 =" +X2 );
-						//System.out.println( "DS X1[ i ] + X2 ="+(X1[ i ]+X2) );
 					}
 				} // end for j
 			} // end for i
 
 			// process last group
 			int last = drs.LengthLastGroup;
-			//System.out.println( "DS last=" + last );
+
 			for (int j = 0; j < last; j++)
 			{
 				// last group
@@ -408,7 +381,6 @@ namespace NGrib.Sections
 
 			scanMode = gds.ScanMode;
 			scanningModeCheck();
-			//System.out.println( "DS true end =" + raf.position() );
 		} // end complexUnpacking
 
 		/// <summary> complex unpacking method for spatial data.</summary>
@@ -424,19 +396,16 @@ namespace NGrib.Sections
 			Grib2DataRepresentationSection drs)
 		{
 			int mvm = drs.MissingValueManagement;
-			//System.out.println( "DS mvm=" + mvm );
 
 			float pmv = drs.PrimaryMissingValue;
-			//System.out.println( "DS pmv=" + pmv );
 
 			int NG = drs.NumberOfGroups;
-			//System.out.println( "DS NG=" + NG );
 
 			int g1 = 0, gMin = 0, h1 = 0, h2 = 0, hMin = 0;
 			// [6-ww]   1st values of undifferenced scaled values and minimums
 			int os = drs.OrderSpatial;
 			int ds = drs.DescriptorSpatial;
-			//System.out.println( "DS os=" + os +" ds =" + ds );
+
 			bitPos = 0;
 			bitBuf = 0;
 			int sign;
@@ -482,8 +451,6 @@ namespace NGrib.Sections
 				{
 					hMin *= (-1);
 				}
-
-				//System.out.println( "DS ds ="+ ds +" h1=" + h1 +" h2 =" + h2 + " hMin=" + hMin );
 			}
 			else
 			{
@@ -494,25 +461,23 @@ namespace NGrib.Sections
 			// [ww +1]-xx  Get reference values for groups (X1's)
 			int[] X1 = new int[NG];
 			int nb = drs.NumberOfBits;
-			//System.out.println( "DS nb=" + nb );
+
 			bitPos = 0;
 			bitBuf = 0;
 			for (int i = 0; i < NG; i++)
 			{
 				X1[i] = bits2UInt(nb, raf);
-				//System.out.println( "DS X1[ i ]=" + X1[ i ] );
 			}
 
 			// [xx +1 ]-yy Get number of bits used to encode each group
 			int[] NB = new int[NG];
 			nb = drs.BitsGroupWidths;
-			//System.out.println( "DS nb=" + nb );
+
 			bitPos = 0;
 			bitBuf = 0;
 			for (int i = 0; i < NG; i++)
 			{
 				NB[i] = bits2UInt(nb, raf);
-				//System.out.println( "DS NB[ i ]=" + NB[ i ] );
 			}
 
 			// [yy +1 ]-zz Get the scaled group lengths using formula
@@ -522,26 +487,25 @@ namespace NGrib.Sections
 			int[] L = new int[NG];
 			int countL = 0;
 			int ref_Renamed = drs.ReferenceGroupLength;
-			//System.out.println( "DS ref=" + ref );
+
 			int len_inc = drs.LengthIncrement;
-			//System.out.println( "DS len_inc=" + len_inc );
+
 			nb = drs.BitsScaledGroupLength;
-			//System.out.println( "DS nb=" + nb );
+
 			bitPos = 0;
 			bitBuf = 0;
 			for (int i = 0; i < NG; i++)
 			{
 				// NG
 				L[i] = ref_Renamed + (bits2UInt(nb, raf) * len_inc);
-				//System.out.println( "DS L[ i ]=" + L[ i ] );
+
 				countL += L[i];
 			}
-			//System.out.println( "DS countL=" + countL );
 
 			// [zz +1 ]-nn get X2 values and add X1[ i ] + X2
 
 			Data = new float[countL];
-			//System.out.println( "DS countL=" + countL + " dataPoints=" +
+
 			//gds.getNumberPoints() );
 			// used to check missing values when X2 is packed with all 1's
 			int[] bitsmv1 = new int[31];
@@ -553,8 +517,6 @@ namespace NGrib.Sections
 				//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
 				bitsmv1[i] = (int) Math.Pow((double) 2, (double) i) - 1;
 				//bitsmv2[ i ] = (int) java.lang.Math.pow( (double)2, (double)i +1) -2;
-				//System.out.println( "DS bitsmv1[ "+ i +" ] =" + bitsmv1[ i ] );
-				//System.out.println( "DS bitsmv2[ "+ i +" ] =" + bitsmv2[ i ] );
 			}
 
 			count = 0;
@@ -564,12 +526,6 @@ namespace NGrib.Sections
 			bitBuf = 0;
 			for (int i = 0; i < NG - 1; i++)
 			{
-				//System.out.println( "DS pmv=" + pmv );
-				//System.out.println( "DS count=" + count );
-				//System.out.println( "DS L[ "+ i +" ]=" + L[ i ] );
-				//System.out.println( "DS NB[ "+ i +" ]=" + NB[ i ] );
-				//System.out.println( "DS X1[ "+ i +" ]=" + X1[ i ] );
-				//System.out.println( "DS cumlative L[i] =" + (count + L[ i ]) );
 				for (int j = 0; j < L[i]; j++)
 				{
 					if (NB[i] == 0)
@@ -618,7 +574,7 @@ namespace NGrib.Sections
 
 			// process last group
 			int last = drs.LengthLastGroup;
-			//System.out.println( "DS last=" + last );
+
 			for (int j = 0; j < last; j++)
 			{
 				// last group
@@ -656,8 +612,6 @@ namespace NGrib.Sections
 				}
 			} // end for j
 
-
-			//System.out.println( "DS mvm =" + mvm );
 			if (os == 1)
 			{
 				// g1 and gMin this coding is a sort of guess, no doc
@@ -701,7 +655,6 @@ namespace NGrib.Sections
 						}
 					}
 
-					//System.out.println( "DS data[ 0 ] ="+ data[ 0 ] );
 					if (lastOne == pmv)
 					{
 						Console.Out.WriteLine("DS bad spatial differencing data");
@@ -712,11 +665,9 @@ namespace NGrib.Sections
 					{
 						if (Data[i] != pmv)
 						{
-							//System.out.println( "DS i=" + i + " sum =" + sum );
 							sum += Data[i];
 							Data[i] = lastOne + sum;
 							lastOne = Data[i];
-							//System.out.println( "DS data[ "+ i +" ] =" + data[ i ] );
 						}
 					}
 				}
@@ -786,12 +737,10 @@ namespace NGrib.Sections
 					{
 						if (Data[i] != pmv)
 						{
-							//System.out.println( "DS i=" + i + " sum =" + sum );
 							sum += Data[i];
-							//System.out.println( "DS before data[ "+ i +" ] =" + data[ i ] );
+
 							Data[i] = lastOne + sum;
 							lastOne = Data[i];
-							//System.out.println( "DS after data[ "+ i +" ] =" + data[ i ] );
 						}
 					}
 				}
@@ -800,19 +749,16 @@ namespace NGrib.Sections
 			// formula used to create values,  Y * 10**D = R + (X1 + X2) * 2**E
 
 			int D = drs.DecimalScaleFactor;
-			//System.out.println( "DS D=" + D );
+
 			//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
 			float DD = (float) Math.Pow((double) 10, (double) D);
-			//System.out.println( "DS DD=" + DD );
 
 			float R = drs.ReferenceValue;
-			//System.out.println( "DS R=" + R );
 
 			int E = drs.BinaryScaleFactor;
-			//System.out.println( "DS E=" + E );
+
 			//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
 			float EE = (float) Math.Pow((double) 2.0, (double) E);
-			//System.out.println( "DS EE=" + EE );
 
 			if (mvm == 0)
 			{
@@ -836,7 +782,6 @@ namespace NGrib.Sections
 
 			scanMode = gds.ScanMode;
 			scanningModeCheck();
-			//System.out.println( "DS true end =" + raf.position() );
 		} // end complexUnpackingWithSpatial
 
 		/// <summary> Jpeg2000 unpacking method for Grib2 data.</summary>
@@ -857,28 +802,22 @@ namespace NGrib.Sections
 			// dataPoints are number of points encoded, it could be less than the
 			// numberPoints in the grid record if bitMap is used, otherwise equal
 			int dataPoints = drs.DataPoints;
-			//System.out.println( "DS DRS dataPoints=" + drs.getDataPoints() );
-			//System.out.println( "DS length=" + length );
 
 			float pmv = drs.PrimaryMissingValue;
-			//System.out.println( "DS pmv=" + pmv );
+
 			int nb = drs.NumberOfBits;
-			//System.out.println( "DS nb = " + nb );
 
 			int D = drs.DecimalScaleFactor;
-			//System.out.println( "DS D=" + D );
+
 			//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
 			float DD = (float) Math.Pow((double) 10, (double) D);
-			//System.out.println( "DS DD=" + DD );
 
 			float R = drs.ReferenceValue;
-			//System.out.println( "DS R=" + R );
 
 			int E = drs.BinaryScaleFactor;
-			//System.out.println( "DS E=" + E );
+
 			//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
 			float EE = (float) Math.Pow((double) 2.0, (double) E);
-			//System.out.println( "DS EE=" + EE );
 
 			/*Grib2JpegDecoder g2j = null;
 			if (nb != 0)
@@ -914,7 +853,7 @@ namespace NGrib.Sections
 			}
 
 			int numberPoints = gds.NumberPoints;
-			//System.out.println( "DS GDS NumberPoints=" +  gds.getNumberPoints() );
+
 			Data = new float[numberPoints];
 			bool[] bitmap = bms.Bitmap;
 
@@ -930,7 +869,6 @@ namespace NGrib.Sections
 				}
 				else
 				{
-					//System.out.println( "DS jpeg data length ="+ g2j.data.length );
 					// record has missing bitmap
 					if (values.Length != numberPoints)
 					{
@@ -942,7 +880,6 @@ namespace NGrib.Sections
 					{
 						//Y = (R + ( 0 + X2) * EE)/DD ;
 						Data[i] = (R + values[i] * EE) / DD;
-						//System.out.println( "DS data[ " + i +"  ]=" + data[ i ] );
 					}
 				}
 			}
@@ -1029,7 +966,7 @@ namespace NGrib.Sections
 			{
 				float tmp;
 				int mid = (int) Xlength / 2;
-				//System.out.println( "Xlength =" +Xlength +" mid ="+ mid );
+
 				for (int index = 0; index < Data.Length; index += Xlength)
 				{
 					for (int idx = 0; idx < mid; idx++)
@@ -1037,7 +974,7 @@ namespace NGrib.Sections
 						tmp = Data[index + idx];
 						Data[index + idx] = Data[index + Xlength - idx - 1];
 						Data[index + Xlength - idx - 1] = tmp;
-						//System.out.println( "switch " + (index + idx) + " " +
+
 						//(index + Xlength -idx -1) );
 					}
 				}
@@ -1049,7 +986,7 @@ namespace NGrib.Sections
 			// scanMode == 16, 80, 144, 208 adjacent rows scan opposite dir
 			float tmp2;
 			int mid2 = (int) Xlength / 2;
-			//System.out.println( "Xlength =" +Xlength +" mid ="+ mid );
+
 			for (int index = 0; index < Data.Length; index += Xlength)
 			{
 				int row = (int) index / Xlength;
@@ -1061,7 +998,7 @@ namespace NGrib.Sections
 						tmp2 = Data[index + idx];
 						Data[index + idx] = Data[index + Xlength - idx - 1];
 						Data[index + Xlength - idx - 1] = tmp2;
-						//System.out.println( "switch " + (index + idx) + " " +
+
 						//(index + Xlength -idx -1) );
 					}
 				}

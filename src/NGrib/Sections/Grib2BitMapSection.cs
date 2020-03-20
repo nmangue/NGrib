@@ -62,13 +62,10 @@ namespace NGrib.Sections
 
 			// octets 1-4 (Length of BMS)
 			length = GribNumbers.int4(raf);
-			//System.out.println( "BMS length=" + length );
 
 			section = raf.ReadByte();
-			//System.out.println( "BMS is 6, section=" + section );
 
 			bitMapIndicator = raf.ReadByte();
-			//System.out.println( "BMS bitMapIndicator=" + bitMapIndicator );
 
 			// no bitMap
 			if (bitMapIndicator != 0)
@@ -79,8 +76,6 @@ namespace NGrib.Sections
 
 			// create new bit map, octet 4 contains number of unused bits at the end
 			Bitmap = new bool[gds.NumberPoints];
-			//System.out.println( "BMS GDS NumberPoints = " + gds.getNumberPoints() );
-			//System.out.println( "BMS bitmap.length = " + this.bitmap.length );
 
 			// fill bit map
 			for (int i = 0; i < Bitmap.Length; i++)

@@ -202,9 +202,9 @@ namespace NGrib
 					// ending found somewhere in file
                     throw new NoValidGribException("Grib2Input.scan failed to find end of record");
 				}
-				//System.out.println( "Scan succeeded to find end of record");
+
 			}
-			//System.out.println("Scan file pointer =" + raf.getFilePointer()); 
+
 			long GdsOffset = 0; // GDS offset from start of file
 			bool startAtHeader = true; // otherwise skip to GDS
 			bool processGDS = true;
@@ -215,13 +215,13 @@ namespace NGrib
 					// begining of record
 					if (!seekHeader(raf, raf.Length))
 					{
-						//System.out.println( "Scan seekHeader failed" );
+
                         throw new NoValidGribException("Grib2Input.scan failed to find header");
 					}
 					
 					// Read Section 0 Indicator Section
 					is_Renamed = new Grib2IndicatorSection(raf); // section 0
-					//System.out.println( "Grib record length=" + is.getGribLength());
+
 					
 					// Read other Sections
 					id = new Grib2IdentificationSection(raf); // Section 1
@@ -236,7 +236,7 @@ namespace NGrib
 					
 					// Section 3
 					gds = new Grib2GridDefinitionSection(raf, getProductsOnly);
-					//System.out.println( "GDS length=" + gds.getLength() );
+
 				} // end processGDS
 				
 				// obtain PDS offset in the file for this record
@@ -277,7 +277,7 @@ namespace NGrib
 				
 				// EndSection processing section 8
 				int ending = GribNumbers.int4(raf);
-				//System.out.println( "ending = " + ending );
+
 				if (ending == 926365495)
 				{
 					// record ending string 7777 as a number
@@ -287,7 +287,7 @@ namespace NGrib
 				else
 				{
 					int section = raf.ReadByte(); // check if GDS or PDS section, 3 or 4
-					//System.out.println( "section = " + section );
+
 					//reset back to begining of section
 					raf.Seek(raf.Position - 5, System.IO.SeekOrigin.Begin);
 					
@@ -320,10 +320,9 @@ namespace NGrib
 						}
 					}
 				}
-				//System.out.println( "raf.getFilePointer=" + raf.getFilePointer() );
-				//System.out.println( "raf.length()=" + raf.length() );
+
 			} // end raf.getFilePointer() < raf.length()
-			//System.out.println("GribInput: processed in " +
+
 			//   (System.currentTimeMillis()- start) + " milliseconds");
 			return true;
 		} // end scan
