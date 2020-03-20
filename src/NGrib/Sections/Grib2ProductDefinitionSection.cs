@@ -17,7 +17,7 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace NGrib
+namespace NGrib.Sections
 {
 	
 	/// <summary> A class representing the product definition section (PDS) of a GRIB product.</summary>

@@ -16,10 +16,11 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 using System;
 using System.IO;
 
-namespace NGrib
+namespace NGrib.Sections
 {
 	/// <summary>
 	/// Represents the IndicatorSection (Section 0) of a GRIB record.

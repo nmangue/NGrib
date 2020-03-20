@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
+
+using NGrib.Sections;
+
 namespace NGrib
 {
     public interface IGrib2LocalUseAdapter

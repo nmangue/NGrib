@@ -17,6 +17,8 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using NGrib.Sections;
+
 namespace NGrib
 {
     public interface IGrib2Product

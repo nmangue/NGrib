@@ -16,9 +16,10 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 using System;
 
-namespace NGrib
+namespace NGrib.Sections
 {
 	
 	/// <summary> A class that represents the DataSection of a GRIB product.

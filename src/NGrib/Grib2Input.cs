@@ -17,6 +17,7 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 using System;
+using NGrib.Sections;
 
 namespace NGrib
 {

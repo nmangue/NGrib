@@ -17,7 +17,7 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace NGrib
+namespace NGrib.Sections
 {
 	
 	/// <summary> A class that represents the grid definition section (GDS) of a GRIB product.
