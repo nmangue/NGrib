@@ -25,7 +25,7 @@ namespace NGrib.Sections
 	/// <summary>
 	/// Represents the IndicatorSection (Section 0) of a GRIB record.
 	/// </summary>
-	public sealed class Grib2IndicatorSection : IGrib2IndicatorSection
+	public sealed class Grib2IndicatorSection
 	{
 		/// <summary>
 		/// Length in bytes of IndicatorSection.

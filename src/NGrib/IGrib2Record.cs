@@ -23,13 +23,13 @@ namespace NGrib
 {
     public interface IGrib2Record
     {
-        IGrib2DataRepresentationSection DRS { get; }
-        IGrib2GridDefinitionSection GDS { get; }
+        Grib2DataRepresentationSection DRS { get; }
+        Grib2GridDefinitionSection GDS { get; }
         long getGdsOffset();
         long getPdsOffset();
         string Header { get; }
-        IGrib2IdentificationSection ID { get; }
-        IGrib2IndicatorSection Is { get; }
-        IGrib2ProductDefinitionSection PDS { get; }
+        Grib2IdentificationSection ID { get; }
+        Grib2IndicatorSection Is { get; }
+        Grib2ProductDefinitionSection PDS { get; }
     }
 }

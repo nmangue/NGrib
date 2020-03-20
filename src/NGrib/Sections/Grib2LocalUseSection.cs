@@ -24,7 +24,7 @@ namespace NGrib.Sections
 	/// <summary> A class that represents the local use section (LUS) of a GRIB product.
 	/// 
 	/// </summary>
-	public sealed class Grib2LocalUseSection : IGrib2LocalUseSection
+	public sealed class Grib2LocalUseSection
 	{
 		/// <summary> Length in bytes of this section.</summary>
 		//UPGRADE_NOTE: Final was removed from the declaration of 'length '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"

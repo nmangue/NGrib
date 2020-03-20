@@ -25,7 +25,7 @@ namespace NGrib.Sections
 	/// <summary> A class that represents the grid definition section (GDS) of a GRIB product.
 	/// 
 	/// </summary>
-	public sealed class Grib2GridDefinitionSection : IGrib2GridDefinitionSection
+	public sealed class Grib2GridDefinitionSection
 	{
 		/// <summary> source of grid definition.</summary>
 		/// <returns> source

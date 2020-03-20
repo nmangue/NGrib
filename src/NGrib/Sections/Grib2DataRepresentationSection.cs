@@ -25,7 +25,7 @@ namespace NGrib.Sections
 	/// <summary> A class that represents the DataRepresentationSection of a GRIB product.
 	/// 
 	/// </summary>
-	public sealed class Grib2DataRepresentationSection : IGrib2DataRepresentationSection
+	public sealed class Grib2DataRepresentationSection
 	{
 		private void InitBlock()
 		{

@@ -27,8 +27,8 @@ namespace NGrib
         string GDSkey { get; }
         long getGdsOffset();
         long getPdsOffset();
-        IGrib2IdentificationSection ID { get; }
-        IGrib2ProductDefinitionSection PDS { get; }
+        Grib2IdentificationSection ID { get; }
+        Grib2ProductDefinitionSection PDS { get; }
         string ReferenceTime { get; }
     }
 }

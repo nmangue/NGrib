@@ -27,7 +27,7 @@ namespace NGrib
         /// Connects this adapter to a Grib2LocalUseSection object
         /// </summary>
         /// <param name="source">Grib2LocalUseSection object</param>
-        void Connect(IGrib2LocalUseSection source);
+        void Connect(Grib2LocalUseSection source);
 
         /// <summary>
         /// Reads a string using the specified encoding from the local use section buffer

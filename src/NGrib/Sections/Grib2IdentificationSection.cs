@@ -26,7 +26,7 @@ namespace NGrib.Sections
 	/// <summary> A class representing the IdentificationSection section 1 of a GRIB record.
 	/// 
 	/// </summary>
-	public sealed class Grib2IdentificationSection : IGrib2IdentificationSection
+	public sealed class Grib2IdentificationSection
 	{
 		/// <summary> Identification of center.</summary>
 		/// <returns> center id as int

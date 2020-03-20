@@ -30,7 +30,7 @@ namespace NGrib
 
         #region IGrib2LocalUseAdapter Members
 
-        public void Connect(IGrib2LocalUseSection source)
+        public void Connect(Grib2LocalUseSection source)
         {
             if (source == null)
             {

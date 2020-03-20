@@ -23,7 +23,7 @@ using System.IO;
 namespace NGrib.Sections
 {
 	/// <summary> A class representing the product definition section (PDS) of a GRIB product.</summary>
-	public sealed class Grib2ProductDefinitionSection : IGrib2ProductDefinitionSection
+	public sealed class Grib2ProductDefinitionSection
 	{
 		/// <summary> Number of this coordinates.</summary>
 		/// <returns>  Coordinates number

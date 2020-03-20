@@ -39,7 +39,7 @@ namespace NGrib
 		/// <summary> returns Inofrmation Section of record.</summary>
 		/// <returns> is
 		/// </returns>
-		public IGrib2IndicatorSection Is
+		public Grib2IndicatorSection Is
 		{
 			get
 			{
@@ -50,7 +50,7 @@ namespace NGrib
 		/// <summary> returns IdentificationSection.</summary>
 		/// <returns> IdentificationSection
 		/// </returns>
-		public IGrib2IdentificationSection ID
+		public Grib2IdentificationSection ID
 		{
 			get
 			{
@@ -61,7 +61,7 @@ namespace NGrib
 		/// <summary> returns GDS of record.</summary>
 		/// <returns> gds
 		/// </returns>
-		public IGrib2GridDefinitionSection GDS
+		public Grib2GridDefinitionSection GDS
 		{
 			get
 			{
@@ -72,7 +72,7 @@ namespace NGrib
 		/// <summary> returns PDS.</summary>
 		/// <returns> pds
 		/// </returns>
-		public IGrib2ProductDefinitionSection PDS
+		public Grib2ProductDefinitionSection PDS
 		{
 			get
 			{
@@ -83,7 +83,7 @@ namespace NGrib
 		/// <summary> returns Data Representation Section.</summary>
 		/// <returns> DataRepresentationSection
 		/// </returns>
-		public IGrib2DataRepresentationSection DRS
+		public Grib2DataRepresentationSection DRS
 		{
 			get
 			{
@@ -94,7 +94,7 @@ namespace NGrib
         /// <summary> returns Local Use Section.</summary>
         /// <returns> DataRepresentationSection
         /// </returns>
-        public IGrib2LocalUseSection LUS
+        public Grib2LocalUseSection LUS
         {
             get
             {

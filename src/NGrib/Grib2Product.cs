@@ -63,7 +63,7 @@ namespace NGrib
 		/// <summary> Actual PDS of this record.</summary>
 		/// <returns> pds
 		/// </returns>
-		public IGrib2ProductDefinitionSection PDS
+		public Grib2ProductDefinitionSection PDS
 		{
 			get
 			{
@@ -74,7 +74,7 @@ namespace NGrib
 		/// <summary> ID of this record.</summary>
 		/// <returns> id
 		/// </returns>
-		public IGrib2IdentificationSection ID
+		public Grib2IdentificationSection ID
 		{
 			get
 			{
