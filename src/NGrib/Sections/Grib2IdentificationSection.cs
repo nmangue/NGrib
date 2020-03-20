@@ -18,6 +18,8 @@
  */
 
 using System;
+using System.Globalization;
+using System.IO;
 
 namespace NGrib.Sections
 {
@@ -31,22 +33,16 @@ namespace NGrib.Sections
 		/// <summary> Identification of center.</summary>
 		/// <returns> center id as int
 		/// </returns>
-		public int Center_id
-		{
-			get
-			{
-				return center_id;
-			}
-			
-		}
+		public int Center_id { get; }
+
 		/// <summary> Name of Identification of center.</summary>
 		/// <returns> center Identification Name
 		/// </returns>
-		public System.String Center_idName
+		public string Center_idName
 		{
 			get
 			{
-				switch (center_id)
+				switch (Center_id)
 				{
 					
 					case 0:  return "WMO Secretariat";
@@ -195,55 +191,31 @@ namespace NGrib.Sections
 		/// <summary> Identification of subcenter.</summary>
 		/// <returns> subcenter as int
 		/// </returns>
-		public int Subcenter_id
-		{
-			get
-			{
-				return subcenter_id;
-			}
-			
-		}
+		public int Subcenter_id { get; }
+
 		/// <summary> Parameter Table Version number.</summary>
 		/// <returns>  master_table_version as int
 		/// </returns>
-		public int Master_table_version
-		{
-			get
-			{
-				return master_table_version;
-			}
-			
-		}
+		public int Master_table_version { get; }
+
 		/// <summary> local table version number.</summary>
 		/// <returns> local_table_version as int
 		/// </returns>
-		public int Local_table_version
-		{
-			get
-			{
-				return local_table_version;
-			}
-			
-		}
+		public int Local_table_version { get; }
+
 		/// <summary> Model Run/Analysis/Reference time.</summary>
 		/// <returns> significanceOfRT as int
 		/// </returns>
-		public int SignificanceOfRT
-		{
-			get
-			{
-				return significanceOfRT;
-			}
-			
-		}
+		public int SignificanceOfRT { get; }
+
 		/// <summary> Model Run/Analysis/Reference time.</summary>
 		/// <returns> significanceOfRT Name
 		/// </returns>
-		public System.String SignificanceOfRTName
+		public string SignificanceOfRTName
 		{
 			get
 			{
-				switch (significanceOfRT)
+				switch (SignificanceOfRT)
 				{
 					
 					case 0:  return "Analysis";
@@ -264,46 +236,28 @@ namespace NGrib.Sections
 		/// <summary> return reference time of product.</summary>
 		/// <returns> referenceTime
 		/// </returns>
-		public System.String ReferenceTime
-		{
-			get
-			{
-				return referenceTime.ToString();
-			}
-			
-		}
+		public string ReferenceTime { get; }
+
 		/// <summary> reference time as Calendar.</summary>
 		/// <returns> baseTime
 		/// </returns>
-		public System.DateTime BaseTime
-		{
-			get
-			{
-				return baseTime;
-			}
-			
-		}
+		public DateTime BaseTime { get; }
+
 		/// <summary> productStatus
 		/// values are operational, test, research, etc.
 		/// </summary>
 		/// <returns> productStatus as int
 		/// </returns>
-		public int ProductStatus
-		{
-			get
-			{
-				return productStatus;
-			}
-			
-		}
+		public int ProductStatus { get; }
+
 		/// <summary> productStatusName.</summary>
 		/// <returns> productStatus name
 		/// </returns>
-		public System.String ProductStatusName
+		public string ProductStatusName
 		{
 			get
 			{
-				switch (productStatus)
+				switch (ProductStatus)
 				{
 					
 					case 0:  return "Operational products";
@@ -324,22 +278,16 @@ namespace NGrib.Sections
 		/// <summary> Product type.</summary>
 		/// <returns> productType as int
 		/// </returns>
-		public int ProductType
-		{
-			get
-			{
-				return productType;
-			}
-			
-		}
+		public int ProductType { get; }
+
 		/// <summary> Product type name.</summary>
 		/// <returns> productType name
 		/// </returns>
-		public System.String ProductTypeName
+		public string ProductTypeName
 		{
 			get
 			{
-				switch (productType)
+				switch (ProductType)
 				{
 					
 					case 0:  return "Analysis products";
@@ -367,13 +315,7 @@ namespace NGrib.Sections
 		}
 
         /// <summary> Reference time as System.DateTime.</summary>
-        public System.DateTime RefTime
-        {
-            get
-            {
-                return refTime;
-            }
-        }
+        public DateTime RefTime { get; }
 
         /// <summary> Reference time as C type time_t.</summary>
         public int RefTimeT
@@ -381,13 +323,13 @@ namespace NGrib.Sections
             get
             {
                 DateTime startTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-                TimeSpan rt = refTime - startTime;
+                TimeSpan rt = RefTime - startTime;
                 int t = Convert.ToInt32(rt.TotalSeconds);
                 return t;
             }
         }
 
-		private static System.Globalization.DateTimeFormatInfo dateFormat;
+		private static readonly DateTimeFormatInfo dateFormat;
 		
 		/// <summary> Length in bytes of this IdentificationSection.</summary>
 		//UPGRADE_NOTE: Final was removed from the declaration of 'length '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
@@ -396,43 +338,15 @@ namespace NGrib.Sections
 		/// <summary> Number of this section, should be 1.</summary>
 		//UPGRADE_NOTE: Final was removed from the declaration of 'section '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 		private int section;
-		
-		/// <summary> Identification of center.</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'center_id '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private int center_id;
-		
-		/// <summary> Identification of subcenter .</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'subcenter_id '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private int subcenter_id;
-		
-		/// <summary> Parameter Table Version number.</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'master_table_version '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private int master_table_version;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'local_table_version '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private int local_table_version;
-		
-		/// <summary> Model Run/Analysis/Reference time.
-		/// 
-		/// </summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'significanceOfRT '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private int significanceOfRT;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'referenceTime '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.String referenceTime;
 
-        private System.DateTime refTime;
+		//UPGRADE_NOTE: Final was removed from the declaration of 'local_table_version '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
+
+		//UPGRADE_NOTE: Final was removed from the declaration of 'referenceTime '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
+
 		//UPGRADE_NOTE: Final was removed from the declaration of 'baseTime '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
         // TODO Why baseTime???
-        private System.DateTime baseTime;
-		
-		/// <summary> Product status. operational, test, research, etc.</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'productStatus '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private int productStatus;
-		
-		/// <summary> Product type. forecast, analysis, etc.</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'productType '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private int productType;
-		
-		// *** constructors *******************************************************
+
+        // *** constructors *******************************************************
 		
 		/// <summary> Constructs a <tt>Grib2IdentificationSection</tt> object from a RandomAccessFile.
 		/// 
@@ -442,7 +356,7 @@ namespace NGrib.Sections
 		/// </param>
 		/// <throws>  IOException  if raf contains no valid GRIB file </throws>
 		//UPGRADE_TODO: Class 'java.io.RandomAccessFile' was converted to 'System.IO.FileStream' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioRandomAccessFile'"
-		public Grib2IdentificationSection(System.IO.FileStream raf)
+		public Grib2IdentificationSection(FileStream raf)
 		{
 			// section 1 octet 1-4 (length of section)
 			length = GribNumbers.int4(raf);
@@ -453,23 +367,23 @@ namespace NGrib.Sections
 			//System.out.println( "Section number=" + section );
 			
 			// Center  octet 6-7
-			center_id = GribNumbers.int2(raf);
+			Center_id = GribNumbers.int2(raf);
 			//System.out.println( "center_id=" + center_id );
 			
 			// Center  octet 8-9
-			subcenter_id = GribNumbers.int2(raf);
+			Subcenter_id = GribNumbers.int2(raf);
 			//System.out.println( "subcenter_id=" + subcenter_id );
 			
 			// Paramter master table octet 10
-			master_table_version = raf.ReadByte();
+			Master_table_version = raf.ReadByte();
 			//System.out.println( "master tbl=" + master_table_version );
 			
 			// Paramter local table octet 11
-			local_table_version = raf.ReadByte();
+			Local_table_version = raf.ReadByte();
 			//System.out.println( "local tbl=" + local_table_version );
 			
 			// significanceOfRT octet 12
-			significanceOfRT = raf.ReadByte();
+			SignificanceOfRT = raf.ReadByte();
 			//System.out.println( "significanceOfRT=" + significanceOfRT );
 			
 			// octets 13-19 (base time of forecast)
@@ -481,15 +395,15 @@ namespace NGrib.Sections
 				int minute = raf.ReadByte();
 				int second = raf.ReadByte();
 
-                refTime = new DateTime(year, month, day, hour, minute, second, DateTimeKind.Utc);
-                baseTime = refTime;
-                referenceTime = refTime.ToString(dateFormat);
+                RefTime = new DateTime(year, month, day, hour, minute, second, DateTimeKind.Utc);
+                BaseTime = RefTime;
+                ReferenceTime = RefTime.ToString(dateFormat);
 			}
 			
-			productStatus = raf.ReadByte();
+			ProductStatus = raf.ReadByte();
 			//System.out.println( "productStatus=" + productStatus );
 			
-			productType = raf.ReadByte();
+			ProductType = raf.ReadByte();
 			//System.out.println( "productType=" + productType );
 		} // end if Grib2IdentificationSection
 		
@@ -519,7 +433,7 @@ namespace NGrib.Sections
 		{
 			{
 				//UPGRADE_ISSUE: Constructor 'java.text.SimpleDateFormat.SimpleDateFormat' was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1000_javatextSimpleDateFormat'"
-				dateFormat = new System.Globalization.DateTimeFormatInfo();
+				dateFormat = new DateTimeFormatInfo();
 			}
 		}
 	}

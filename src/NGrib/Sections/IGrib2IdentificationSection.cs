@@ -17,11 +17,13 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using System;
+
 namespace NGrib.Sections
 {
     public interface IGrib2IdentificationSection
     {
-        System.DateTime RefTime { get; }
+        DateTime RefTime { get; }
         int Center_id { get; }
         string Center_idName { get; }
         int Local_table_version { get; }

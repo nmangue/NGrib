@@ -17,6 +17,8 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using System.IO;
+
 namespace NGrib.Sections
 {
 	
@@ -33,11 +35,8 @@ namespace NGrib.Sections
 		/// </returns>
 		public bool EndFound
 		{
-			get
-			{
-				return endFound;
-			}
-			
+			get;
+
 			// --Commented out by Inspection START (11/21/05 12:32 PM):
 			//   /*
 			//    * how long was the ending, should be 4 bytes
@@ -47,13 +46,12 @@ namespace NGrib.Sections
 			//      return length;
 			//   }
 			// --Commented out by Inspection STOP (11/21/05 12:32 PM)
-			
 		}
+
 		/*
 		* was the grib endding 7777 found
 		*/
-		private bool endFound = false;
-		
+
 		/*
 		* how long was the ending, should be 4 bytes
 		*/
@@ -69,7 +67,7 @@ namespace NGrib.Sections
 		/// </param>
 		/// <throws>  IOException  if raf contains no valid GRIB record </throws>
 		//UPGRADE_TODO: Class 'java.io.RandomAccessFile' was converted to 'System.IO.FileStream' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioRandomAccessFile'"
-		public Grib2EndSection(System.IO.FileStream raf)
+		public Grib2EndSection(FileStream raf)
 		{
 			int match = 0;
 			while (raf.Position < raf.Length)
@@ -90,7 +88,7 @@ namespace NGrib.Sections
 				}
 				if (match == 4)
 				{
-					endFound = true;
+					EndFound = true;
 					//System.out.println( "7777 ending found" );
 					break;
 				}

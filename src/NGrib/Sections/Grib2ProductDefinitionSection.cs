@@ -17,6 +17,9 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using System;
+using System.IO;
+
 namespace NGrib.Sections
 {
 	
@@ -26,191 +29,88 @@ namespace NGrib.Sections
 		/// <summary> Number of this coordinates.</summary>
 		/// <returns>  Coordinates number
 		/// </returns>
-		public int Coordinates
-		{
-			get
-			{
-				return coordinates;
-			}
-			
-		}
+		public int Coordinates { get; }
+
 		/// <summary> productDefinition.</summary>
 		/// <returns> ProductDefinition
 		/// </returns>
-		public int ProductDefinition
-		{
-			get
-			{
-				return productDefinition;
-			}
-			
-		}
+		public int ProductDefinition { get; }
+
 		/// <summary> parameter Category .</summary>
 		/// <returns> parameterCategory as int
 		/// </returns>
-		public int ParameterCategory
-		{
-			get
-			{
-				return parameterCategory;
-			}
-			
-		}
+		public int ParameterCategory { get; }
+
 		/// <summary> parameter Number.</summary>
 		/// <returns> ParameterNumber
 		/// </returns>
-		public int ParameterNumber
-		{
-			get
-			{
-				return parameterNumber;
-			}
-			
-		}
+		public int ParameterNumber { get; }
+
 		/// <summary> typeGenProcess.</summary>
 		/// <returns> GenProcess
 		/// </returns>
-		public int TypeGenProcess
-		{
-			get
-			{
-				return typeGenProcess;
-			}
-			
-		}
+		public int TypeGenProcess { get; }
+
 		/// <summary> backGenProcess.</summary>
 		/// <returns> BackGenProcess
 		/// </returns>
-		public int BackGenProcess
-		{
-			get
-			{
-				return backGenProcess;
-			}
-			
-		}
+		public int BackGenProcess { get; }
+
 		/// <summary> analysisGenProcess.</summary>
 		/// <returns> analysisGenProcess
 		/// </returns>
-		public int AnalysisGenProcess
-		{
-			get
-			{
-				return analysisGenProcess;
-			}
-			
-		}
+		public int AnalysisGenProcess { get; }
+
 		/// <summary> hoursAfter.</summary>
 		/// <returns> HoursAfter
 		/// </returns>
-		public int HoursAfter
-		{
-			get
-			{
-				return hoursAfter;
-			}
-			
-		}
+		public int HoursAfter { get; }
+
 		/// <summary> minutesAfter.</summary>
 		/// <returns>  MinutesAfter
 		/// </returns>
-		public int MinutesAfter
-		{
-			get
-			{
-				return minutesAfter;
-			}
-			
-		}
+		public int MinutesAfter { get; }
+
 		/// <summary> returns timeRangeUnit .</summary>
 		/// <returns> TimeRangeUnitName
 		/// </returns>
-		public int TimeRangeUnit
-		{
-			get
-			{
-				return timeRangeUnit;
-			}
-			
-		}
+		public int TimeRangeUnit { get; }
+
 		/// <summary> forecastTime.</summary>
 		/// <returns> ForecastTime
 		/// </returns>
-		public int ForecastTime
-		{
-			get
-			{
-				return forecastTime;
-			}
-			
-		}
+		public int ForecastTime { get; }
+
 		/// <summary> typeFirstFixedSurface.</summary>
 		/// <returns> FirstFixedSurface as int
 		/// </returns>
-		public int TypeFirstFixedSurface
-		{
-			get
-			{
-				return typeFirstFixedSurface;
-			}
-			
-		}
+		public int TypeFirstFixedSurface { get; }
+
 		/// <summary> typeFirstFixedSurface Name.</summary>
 		/// <returns> FirstFixedSurfaceName
 		/// </returns>
-		public System.String TypeFirstFixedSurfaceName
-		{
-			get
-			{
-				return getTypeSurfaceName(typeFirstFixedSurface);
-			}
-			
-		}
+		public string TypeFirstFixedSurfaceName => getTypeSurfaceName(TypeFirstFixedSurface);
+
 		/// <summary> valueFirstFixedSurface.</summary>
 		/// <returns> FirstFixedSurfaceValue
 		/// </returns>
-		public float ValueFirstFixedSurface
-		{
-			get
-			{
-				return FirstFixedSurfaceValue;
-			}
-			
-		}
+		public float ValueFirstFixedSurface { get; }
+
 		/// <summary> typeSecondFixedSurface.</summary>
 		/// <returns>  SecondFixedSurface as int
 		/// </returns>
-		public int TypeSecondFixedSurface
-		{
-			get
-			{
-				return typeSecondFixedSurface;
-			}
-			
-		}
+		public int TypeSecondFixedSurface { get; }
+
 		/// <summary> typeSecondFixedSurface Name.</summary>
 		/// <returns>  SecondFixedSurfaceName
 		/// </returns>
-		public System.String TypeSecondFixedSurfaceName
-		{
-			get
-			{
-				return getTypeSurfaceName(typeSecondFixedSurface);
-			}
-			
-		}
+		public string TypeSecondFixedSurfaceName => getTypeSurfaceName(TypeSecondFixedSurface);
+
 		/// <summary> valueSecondFixedSurface.</summary>
 		/// <returns> SecondFixedSurfaceValue
 		/// </returns>
-		public float ValueSecondFixedSurface
-		{
-			get
-			{
-				return SecondFixedSurfaceValue;
-			}
-			
-		}
-		
+		public float ValueSecondFixedSurface { get; }
+
 		/// <summary> Length in bytes of this PDS.</summary>
 		//UPGRADE_NOTE: Final was removed from the declaration of 'length '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 		private int length;
@@ -218,58 +118,9 @@ namespace NGrib.Sections
 		/// <summary> Number of this section, should be 4.</summary>
 		//UPGRADE_NOTE: Final was removed from the declaration of 'section '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 		private int section;
-		
-		/// <summary> Number of this coordinates.</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'coordinates '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private int coordinates;
-		
-		/// <summary> productDefinition.</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'productDefinition '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private int productDefinition;
-		
-		/// <summary> parameterCategory.</summary>
-		private int parameterCategory;
-		
-		/// <summary> parameterNumber.</summary>
-		private int parameterNumber;
-		
-		/// <summary> typeGenProcess.</summary>
-		private int typeGenProcess;
-		
-		/// <summary> backGenProcess.</summary>
-		private int backGenProcess;
-		
-		/// <summary> analysisGenProcess.</summary>
-		private int analysisGenProcess;
-		
-		/// <summary> hoursAfter.</summary>
-		private int hoursAfter;
-		
-		/// <summary> minutesAfter.</summary>
-		private int minutesAfter;
-		
-		/// <summary> timeRangeUnit.</summary>
-		internal int timeRangeUnit;
-		
-		/// <summary> forecastTime.</summary>
-		private int forecastTime;
-		
-		/// <summary> typeFirstFixedSurface.</summary>
-		private int typeFirstFixedSurface;
-		
-		/// <summary> value of FirstFixedSurface.
-		/// 
-		/// </summary>
-		private float FirstFixedSurfaceValue;
-		
-		/// <summary> typeSecondFixedSurface.</summary>
-		private int typeSecondFixedSurface;
-		
-		/// <summary> SecondFixedSurface Value.</summary>
-		private float SecondFixedSurfaceValue;
-		
+
 		/// <summary>  number of bands.</summary>
-		private int nb;
+		private readonly int nb;
 		
 		// *** constructors *******************************************************
 		
@@ -281,7 +132,7 @@ namespace NGrib.Sections
 		/// </param>
 		/// <throws>  IOException  if raf contains no valid GRIB file </throws>
 		//UPGRADE_TODO: Class 'java.io.RandomAccessFile' was converted to 'System.IO.FileStream' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioRandomAccessFile'"
-		public Grib2ProductDefinitionSection(System.IO.FileStream raf)
+		public Grib2ProductDefinitionSection(FileStream raf)
 		{
 			// octets 1-4 (Length of PDS)
 			length = GribNumbers.int4(raf);
@@ -292,14 +143,14 @@ namespace NGrib.Sections
 			//System.out.println( "PDS is 4, section=" + section );
 			
 			// octet 6-7
-			coordinates = GribNumbers.int2(raf);
+			Coordinates = GribNumbers.int2(raf);
 			//System.out.println( "PDS coordinates=" + coordinates );
 			
 			// octet 8-9
-			productDefinition = GribNumbers.int2(raf);
+			ProductDefinition = GribNumbers.int2(raf);
 			//System.out.println( "PDS productDefinition=" + productDefinition );
 			
-			switch (productDefinition)
+			switch (ProductDefinition)
 			{
 				
 				
@@ -316,45 +167,45 @@ namespace NGrib.Sections
 				case 8:  {
 						
 						// octet 10
-						parameterCategory = raf.ReadByte();
+						ParameterCategory = raf.ReadByte();
 						//System.out.println( "PDS parameterCategory=" + 
 						//parameterCategory );
 						
 						// octet 11
-						parameterNumber = raf.ReadByte();
+						ParameterNumber = raf.ReadByte();
 						//System.out.println( "PDS parameterNumber=" + parameterNumber );
 						
 						// octet 12
-						typeGenProcess = raf.ReadByte();
+						TypeGenProcess = raf.ReadByte();
 						//System.out.println( "PDS typeGenProcess=" + typeGenProcess );
 						
 						// octet 13
-						backGenProcess = raf.ReadByte();
+						BackGenProcess = raf.ReadByte();
 						//System.out.println( "PDS backGenProcess=" + backGenProcess );
 						
 						// octet 14
-						analysisGenProcess = raf.ReadByte();
+						AnalysisGenProcess = raf.ReadByte();
 						//System.out.println( "PDS analysisGenProcess=" + 
 						//analysisGenProcess );
 						
 						// octet 15-16
-						hoursAfter = GribNumbers.int2(raf);
+						HoursAfter = GribNumbers.int2(raf);
 						//System.out.println( "PDS hoursAfter=" + hoursAfter );
 						
 						// octet 17
-						minutesAfter = raf.ReadByte();
+						MinutesAfter = raf.ReadByte();
 						//System.out.println( "PDS minutesAfter=" + minutesAfter );
 						
 						// octet 18
-						timeRangeUnit = raf.ReadByte();
+						TimeRangeUnit = raf.ReadByte();
 						//System.out.println( "PDS timeRangeUnit=" + timeRangeUnit );
 						
 						// octet 19-22
-						forecastTime = GribNumbers.int4(raf);
+						ForecastTime = GribNumbers.int4(raf);
 						//System.out.println( "PDS forecastTime=" + forecastTime );
 						
 						// octet 23
-						typeFirstFixedSurface = raf.ReadByte();
+						TypeFirstFixedSurface = raf.ReadByte();
 						//System.out.println( "PDS typeFirstFixedSurface=" + 
 						//     typeFirstFixedSurface );
 						
@@ -369,10 +220,10 @@ namespace NGrib.Sections
 						//     valueFirstFixedSurface );
 						
 						//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-						FirstFixedSurfaceValue = (float) ((scaleFirstFixedSurface == 0 || valueFirstFixedSurface == 0)?valueFirstFixedSurface:System.Math.Pow(valueFirstFixedSurface, - scaleFirstFixedSurface));
+						ValueFirstFixedSurface = (float) ((scaleFirstFixedSurface == 0 || valueFirstFixedSurface == 0)?valueFirstFixedSurface:Math.Pow(valueFirstFixedSurface, - scaleFirstFixedSurface));
 						
 						// octet 29
-						typeSecondFixedSurface = raf.ReadByte();
+						TypeSecondFixedSurface = raf.ReadByte();
 						//System.out.println( "PDS typeSecondFixedSurface=" + 
 						//typeSecondFixedSurface );
 						
@@ -387,64 +238,64 @@ namespace NGrib.Sections
 						//valueSecondFixedSurface );
 						
 						//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-						SecondFixedSurfaceValue = (float) ((scaleSecondFixedSurface == 0 || valueSecondFixedSurface == 0)?valueSecondFixedSurface:System.Math.Pow(valueSecondFixedSurface, - scaleSecondFixedSurface));
+						ValueSecondFixedSurface = (float) ((scaleSecondFixedSurface == 0 || valueSecondFixedSurface == 0)?valueSecondFixedSurface:Math.Pow(valueSecondFixedSurface, - scaleSecondFixedSurface));
 						
 						
 						// Individual ensemble forecast, control and perturbed, at a
 						// horizontal level or in a horizontal layer at a point in time
-						if (productDefinition == 1)
+						if (ProductDefinition == 1)
 						{
-							System.Console.Out.WriteLine("PDS productDefinition == 1 not done");
+							Console.Out.WriteLine("PDS productDefinition == 1 not done");
 							
 							//Derived forecast based on all ensemble members at a horizontal 
 							// level or in a horizontal layer at a point in time
 						}
-						else if (productDefinition == 2)
+						else if (ProductDefinition == 2)
 						{
-							System.Console.Out.WriteLine("PDS productDefinition == 2 not done");
+							Console.Out.WriteLine("PDS productDefinition == 2 not done");
 							
 							// Derived forecasts based on a cluster of ensemble members over
 							// a rectangular area at a horizontal level or in a horizontal layer
 							// at a point in time
 						}
-						else if (productDefinition == 3)
+						else if (ProductDefinition == 3)
 						{
-							System.Console.Out.WriteLine("PDS productDefinition == 3 not done");
+							Console.Out.WriteLine("PDS productDefinition == 3 not done");
 							
 							// Derived forecasts based on a cluster of ensemble members
 							// over a circular area at a horizontal level or in a horizontal
 							// layer at a point in time
 						}
-						else if (productDefinition == 4)
+						else if (ProductDefinition == 4)
 						{
-							System.Console.Out.WriteLine("PDS productDefinition == 4 not done");
+							Console.Out.WriteLine("PDS productDefinition == 4 not done");
 							
 							// Probability forecasts at a horizontal level or in a horizontal 
 							//  layer at a point in time
 						}
-						else if (productDefinition == 5)
+						else if (ProductDefinition == 5)
 						{
-							System.Console.Out.WriteLine("PDS productDefinition == 5 not done");
+							Console.Out.WriteLine("PDS productDefinition == 5 not done");
 							
 							// Percentile forecasts at a horizontal level or in a horizontal layer
 							// at a point in time
 						}
-						else if (productDefinition == 6)
+						else if (ProductDefinition == 6)
 						{
-							System.Console.Out.WriteLine("PDS productDefinition == 6 not done");
+							Console.Out.WriteLine("PDS productDefinition == 6 not done");
 							
 							// Analysis or forecast error at a horizontal level or in a horizontal 
 							// layer at a point in time
 						}
-						else if (productDefinition == 7)
+						else if (ProductDefinition == 7)
 						{
-							System.Console.Out.WriteLine("PDS productDefinition == 7 not done");
+							Console.Out.WriteLine("PDS productDefinition == 7 not done");
 							
 							// Average, accumulation, and/or extreme values at a horizontal
 							// level or in a horizontal layer in a continuous or non-continuous
 							// time interval
 						}
-						else if (productDefinition == 8)
+						else if (ProductDefinition == 8)
 						{
 							//System.out.println( "PDS productDefinition == 8 " );
 							//  35-41 bytes
@@ -494,29 +345,29 @@ namespace NGrib.Sections
 				
 				case 20:  {
 						
-						parameterCategory = raf.ReadByte();
+						ParameterCategory = raf.ReadByte();
 						//System.out.println( "PDS parameterCategory=" + 
 						//parameterCategory );
 						
-						parameterNumber = raf.ReadByte();
+						ParameterNumber = raf.ReadByte();
 						//System.out.println( "PDS parameterNumber=" + parameterNumber );
 						
-						typeGenProcess = raf.ReadByte();
+						TypeGenProcess = raf.ReadByte();
 						//System.out.println( "PDS typeGenProcess=" + typeGenProcess );
 						
-						backGenProcess = raf.ReadByte();
+						BackGenProcess = raf.ReadByte();
 						//System.out.println( "PDS backGenProcess=" + backGenProcess );
 						
-						hoursAfter = GribNumbers.int2(raf);
+						HoursAfter = GribNumbers.int2(raf);
 						//System.out.println( "PDS hoursAfter=" + hoursAfter );
 						
-						minutesAfter = raf.ReadByte();
+						MinutesAfter = raf.ReadByte();
 						//System.out.println( "PDS minutesAfter=" + minutesAfter );
 						
-						timeRangeUnit = raf.ReadByte();
+						TimeRangeUnit = raf.ReadByte();
 						//System.out.println( "PDS timeRangeUnit=" + timeRangeUnit );
 						
-						forecastTime = GribNumbers.int4(raf);
+						ForecastTime = GribNumbers.int4(raf);
 						//System.out.println( "PDS forecastTime=" + forecastTime );
 						
 						break;
@@ -526,16 +377,16 @@ namespace NGrib.Sections
 				
 				case 30:  {
 						
-						parameterCategory = raf.ReadByte();
+						ParameterCategory = raf.ReadByte();
 						//System.out.println( "PDS parameterCategory=" + parameterCategory );
 						
-						parameterNumber = raf.ReadByte();
+						ParameterNumber = raf.ReadByte();
 						//System.out.println( "PDS parameterNumber=" + parameterNumber );
 						
-						typeGenProcess = raf.ReadByte();
+						TypeGenProcess = raf.ReadByte();
 						//System.out.println( "PDS typeGenProcess=" + typeGenProcess );
 						
-						backGenProcess = raf.ReadByte();
+						BackGenProcess = raf.ReadByte();
 						//System.out.println( "PDS backGenProcess=" + backGenProcess );
 						
 						nb = raf.ReadByte();
@@ -549,11 +400,11 @@ namespace NGrib.Sections
 				
 				case 254:  {
 						
-						parameterCategory = raf.ReadByte();
+						ParameterCategory = raf.ReadByte();
 						//System.out.println( "PDS parameterCategory=" + 
 						//parameterCategory );
 						
-						parameterNumber = raf.ReadByte();
+						ParameterNumber = raf.ReadByte();
 						//System.out.println( "PDS parameterNumber=" + parameterNumber );
 						
 						//numberOfChars = GribNumbers.int4( raf );
@@ -594,9 +445,9 @@ namespace NGrib.Sections
 		/// <summary> product Definition  Name.</summary>
 		/// <returns> ProductDefinitionName
 		/// </returns>
-		public System.String getProductDefinitionName()
+		public string getProductDefinitionName()
 		{
-			return getProductDefinitionName(productDefinition);
+			return getProductDefinitionName(ProductDefinition);
 		}
 		
 		/// <summary> productDefinition  Name.
@@ -606,7 +457,7 @@ namespace NGrib.Sections
 		/// </param>
 		/// <returns> ProductDefinitionName
 		/// </returns>
-		static public System.String getProductDefinitionName(int productDefinition)
+		static public string getProductDefinitionName(int productDefinition)
 		{
 			switch (productDefinition)
 			{
@@ -645,9 +496,9 @@ namespace NGrib.Sections
 		/// <summary> returns    Time Range Unit Name.</summary>
 		/// <returns> TimeRangeUnitName
 		/// </returns>
-		public System.String getTimeRangeUnitName()
+		public string getTimeRangeUnitName()
 		{
-			return getTimeRangeUnitName(timeRangeUnit);
+			return getTimeRangeUnitName(TimeRangeUnit);
 		}
 		
 		/// <summary> return Time Range Unit Name from code table 4.4.</summary>
@@ -655,7 +506,7 @@ namespace NGrib.Sections
 		/// </param>
 		/// <returns> TimeRangeUnitName
 		/// </returns>
-		static public System.String getTimeRangeUnitName(int timeRangeUnit)
+		static public string getTimeRangeUnitName(int timeRangeUnit)
 		{
 			switch (timeRangeUnit)
 			{
@@ -694,7 +545,7 @@ namespace NGrib.Sections
 		/// </param>
 		/// <returns> SurfaceName
 		/// </returns>
-		static public System.String getTypeSurfaceName(int id)
+		static public string getTypeSurfaceName(int id)
 		{
 			switch (id)
 			{
@@ -823,7 +674,7 @@ namespace NGrib.Sections
 		/// </param>
 		/// <returns> SurfaceNameShort
 		/// </returns>
-		static public System.String getTypeSurfaceNameShort(int id)
+		static public string getTypeSurfaceNameShort(int id)
 		{
 			switch (id)
 			{
@@ -951,7 +802,7 @@ namespace NGrib.Sections
 		/// </param>
 		/// <returns> surfaceUnit
 		/// </returns>
-		static public System.String getTypeSurfaceUnit(int id)
+		static public string getTypeSurfaceUnit(int id)
 		{
 			switch (id)
 			{

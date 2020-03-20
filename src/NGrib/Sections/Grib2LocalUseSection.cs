@@ -17,6 +17,8 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using System.IO;
+
 namespace NGrib.Sections
 {
 	
@@ -28,13 +30,13 @@ namespace NGrib.Sections
 		
 		/// <summary> Length in bytes of this section.</summary>
 		//UPGRADE_NOTE: Final was removed from the declaration of 'length '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private int length;
+		private readonly int length;
 		
 		/// <summary> section number should be 2.</summary>
 		//UPGRADE_NOTE: Final was removed from the declaration of 'section '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private int section;
+		private readonly int section;
 
-        private byte[] bytes;
+        private readonly byte[] bytes;
 		
 		// *** constructors *******************************************************
 		
@@ -43,7 +45,7 @@ namespace NGrib.Sections
 		/// </param>
 		/// <throws>  IOException  if raf contains no valid GRIB product </throws>
 		//UPGRADE_TODO: Class 'java.io.RandomAccessFile' was converted to 'System.IO.FileStream' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioRandomAccessFile'"
-		public Grib2LocalUseSection(System.IO.FileStream raf)
+		public Grib2LocalUseSection(FileStream raf)
 		{
 			
 			// octets 1-4 (Length of GDS)
