@@ -18,7 +18,6 @@
  */
 
 using System;
-using System.Globalization;
 using System.IO;
 
 namespace NGrib.Sections
@@ -225,16 +224,6 @@ namespace NGrib.Sections
 			}
 		}
 
-		/// <summary> return reference time of product.</summary>
-		/// <returns> referenceTime
-		/// </returns>
-		public string ReferenceTime { get; }
-
-		/// <summary> reference time as Calendar.</summary>
-		/// <returns> baseTime
-		/// </returns>
-		public DateTime BaseTime { get; }
-
 		/// <summary> productStatus
 		/// values are operational, test, research, etc.
 		/// </summary>
@@ -314,24 +303,11 @@ namespace NGrib.Sections
 			}
 		}
 
-		private static readonly DateTimeFormatInfo dateFormat;
-
 		/// <summary> Length in bytes of this IdentificationSection.</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'length '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private int length;
+		public long Length { get; }
 
 		/// <summary> Number of this section, should be 1.</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'section '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private int section;
-
-		//UPGRADE_NOTE: Final was removed from the declaration of 'local_table_version '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-
-		//UPGRADE_NOTE: Final was removed from the declaration of 'referenceTime '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-
-		//UPGRADE_NOTE: Final was removed from the declaration of 'baseTime '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		// TODO Why baseTime???
-
-		// *** constructors *******************************************************
+		public int Section { get; }
 
 		/// <summary> Constructs a <tt>Grib2IdentificationSection</tt> object from a RandomAccessFile.
 		/// 
@@ -340,13 +316,12 @@ namespace NGrib.Sections
 		/// 
 		/// </param>
 		/// <throws>  IOException  if raf contains no valid GRIB file </throws>
-		//UPGRADE_TODO: Class 'java.io.RandomAccessFile' was converted to 'System.IO.FileStream' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioRandomAccessFile'"
 		public Grib2IdentificationSection(FileStream raf)
 		{
 			// section 1 octet 1-4 (length of section)
-			length = GribNumbers.int4(raf);
+			Length = GribNumbers.int4(raf);
 
-			section = raf.ReadByte();
+			Section = raf.ReadByte();
 
 			// Center  octet 6-7
 			Center_id = GribNumbers.int2(raf);
@@ -373,8 +348,6 @@ namespace NGrib.Sections
 				int second = raf.ReadByte();
 
 				RefTime = new DateTime(year, month, day, hour, minute, second, DateTimeKind.Utc);
-				BaseTime = RefTime;
-				ReferenceTime = RefTime.ToString(dateFormat);
 			}
 
 			ProductStatus = raf.ReadByte();
@@ -382,34 +355,73 @@ namespace NGrib.Sections
 			ProductType = raf.ReadByte();
 		} // end if Grib2IdentificationSection
 
-
-		// --Commented out by Inspection START (11/21/05 12:42 PM):
-		//   /**
-		//    * Get the byte length of this section.
-		//    *
-		//    * @return length in bytes of this section
-		//    */
-		//   public final int getLength()
-		//   {
-		//      return length;
-		//   }
-		// --Commented out by Inspection STOP (11/21/05 12:42 PM)
-
-		// --Commented out by Inspection START (11/21/05 12:42 PM):
-		//   /**
-		//    * Number of this section, should be 1
-		//    */
-		//   public final int getSection()
-		//   {
-		//      return section;
-		//   }
-		// --Commented out by Inspection STOP (11/21/05 12:42 PM)
-		static Grib2IdentificationSection()
+		public Grib2IdentificationSection(long length, int section, int centerId, int subcenterId, int masterTableVersion, int localTableVersion, int significanceOfRt, DateTime refTime, int productStatus, int productType)
 		{
+			Length = length;
+			Section = section;
+			Center_id = centerId;
+			Subcenter_id = subcenterId;
+			Master_table_version = masterTableVersion;
+			Local_table_version = localTableVersion;
+			SignificanceOfRT = significanceOfRt;
+			RefTime = refTime;
+			ProductStatus = productStatus;
+			ProductType = productType;
+		}
+
+		internal static Grib2IdentificationSection BuildFrom(BufferedBinaryReader reader)
+		{
+			// section 1 octet 1-4 (length of section)
+			var length = reader.ReadUInt32();
+
+			var section = reader.ReadUInt8();
+			if (section != 1)
 			{
-				//UPGRADE_ISSUE: Constructor 'java.text.SimpleDateFormat.SimpleDateFormat' was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1000_javatextSimpleDateFormat'"
-				dateFormat = new DateTimeFormatInfo();
+				return null;
 			}
+
+			// Center  octet 6-7
+			var centerId = reader.ReadUInt16();
+
+			// Center  octet 8-9
+			var subcenterId = reader.ReadUInt16();
+
+			// Paramter master table octet 10
+			var masterTableVersion = reader.ReadUInt8();
+
+			// Paramter local table octet 11
+			var localTableVersion = reader.ReadUInt8();
+
+			// significanceOfRT octet 12
+			var significanceOfRt = reader.ReadUInt8();
+
+			DateTime refTime;
+			// octets 13-19 (base time of forecast)
+			{
+				int year = reader.ReadUInt16();
+				int month = reader.ReadUInt8();
+				int day = reader.ReadUInt8();
+				int hour = reader.ReadUInt8();
+				int minute = reader.ReadUInt8();
+				int second = reader.ReadUInt8();
+
+				refTime = new DateTime(year, month, day, hour, minute, second, DateTimeKind.Utc);
+			}
+
+			var productStatus = reader.ReadUInt8();
+
+			var productType = reader.ReadUInt8();
+			return new Grib2IdentificationSection(
+				length,
+				section,
+				centerId,
+				subcenterId,
+				masterTableVersion,
+				localTableVersion,
+				significanceOfRt,
+				refTime,
+				productStatus,
+				productType);
 		}
 	}
 }

@@ -17,6 +17,7 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using System.Globalization;
 using NGrib.Sections;
 
 namespace NGrib
@@ -122,7 +123,7 @@ namespace NGrib
 			this.header = header;
 			this.discipline = is_Renamed.DisciplineNumber;
 			this.id = id;
-			this.referenceTime = id.ReferenceTime;
+			this.referenceTime = id.RefTime.ToString(CultureInfo.InvariantCulture);
 			this.gdsKey = gdsKey;
 			this.pds = pds;
 			this.GdsOffset = GdsOffset;
