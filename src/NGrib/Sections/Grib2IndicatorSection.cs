@@ -19,6 +19,8 @@
 
 using System;
 using System.IO;
+using System.Linq;
+using System.Numerics;
 
 namespace NGrib.Sections
 {
@@ -35,7 +37,7 @@ namespace NGrib.Sections
 		/// <summary>
 		/// Discipline - GRIB Master Table Number.
 		/// </summary>
-		public byte DisciplineNumber { get; }
+		public int DisciplineNumber { get; }
 
 		/// <summary>
 		/// Discipline from the GRIB Code Table 0.0.
@@ -50,9 +52,9 @@ namespace NGrib.Sections
 		/// <summary>
 		/// Total length of GRIB message in octets (including Section 0).
 		/// </summary>
-		public long TotalLength { get; }
+		public BigInteger TotalLength { get; }
 
-		public Grib2IndicatorSection(int length, byte disciplineNumber, int gribEdition, long totalLength)
+		public Grib2IndicatorSection(int length, int disciplineNumber, int gribEdition, BigInteger totalLength)
 		{
 			Length = length;
 			DisciplineNumber = disciplineNumber;
@@ -95,6 +97,30 @@ namespace NGrib.Sections
 			{
 				throw new NotSupportedException("GRIB edition " + GribEdition + " is not yet supported");
 			}
+		}
+
+		internal static Grib2IndicatorSection BuildFrom(BufferedBinaryReader reader)
+		{
+			var fileStart = reader.Read(Constants.GribFileStart.Length);
+			if (!Constants.GribFileStart.SequenceEqual(fileStart))
+			{
+				throw new NoValidGribException("Grib2Input.scan failed to find header");
+			}
+
+			// Ignore the 2 reserved bytes
+			reader.Skip(2);
+
+			var disciplineNumber = reader.ReadUInt8();
+			var gribEdition = reader.ReadUInt8();
+			if (gribEdition != 2)
+			{
+				throw new NotSupportedException("Only GRIB edition 2 is supported. GRIB edition " + gribEdition + " is not yet supported");
+			}
+
+			var totalLength = reader.ReadUInt64();
+			const int indicatorSectionLength = 16;
+
+			return new Grib2IndicatorSection(indicatorSectionLength, disciplineNumber, 2, totalLength);
 		}
 	}
 }

@@ -22,7 +22,7 @@ namespace NGrib
   /// <summary>
   /// Discipline of processed data in the GRIB message.
   /// </summary>
-	public enum Discipline : byte
+	public enum Discipline
 	{
 		MeteorologicalProducts = 0,
 		HydrologicalProducts = 1,
