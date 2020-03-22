@@ -82,8 +82,6 @@ namespace NGrib.Sections
 
 			if (section != 2)
 			{
-				// no local use section
-				reader.Seek(-5, SeekOrigin.Current);
 				return null;
 			}
 

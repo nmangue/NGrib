@@ -11,6 +11,7 @@ namespace NGrib
 		private readonly int bufferSize;
 		private int bufferOffset;
 		private int numBufferedBytes;
+		private long savedPosition;
 		private int NumBytesAvailable => Math.Max(0, numBufferedBytes - bufferOffset);
 
 		public BufferedBinaryReader(Stream stream, int bufferSize = 4096)
@@ -19,6 +20,7 @@ namespace NGrib
 			this.bufferSize = bufferSize;
 			buffer = new byte[bufferSize];
 			MarkBufferAsUsed();
+			SaveCurrentPosition();
 		}
 
 		private bool FillBuffer()
@@ -121,7 +123,7 @@ namespace NGrib
 			}
 		}
 
-		public void Seek(int offset, SeekOrigin origin)
+		public void Seek(long offset, SeekOrigin origin)
 		{
 			stream.Seek(offset, origin);
 			MarkBufferAsUsed();
@@ -137,6 +139,16 @@ namespace NGrib
 		public void Dispose()
 		{
 			stream.Close();
+		}
+
+		public void SaveCurrentPosition()
+		{
+			savedPosition = stream.Position;
+		}
+
+		public void SeekToSavedPosition()
+		{
+			Seek(savedPosition, SeekOrigin.Begin);
 		}
 	}
 }
