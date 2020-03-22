@@ -27,6 +27,12 @@ namespace NGrib.Sections
 	/// </summary>
 	public sealed class Grib2GridDefinitionSection
 	{
+		/// <summary> Length in bytes of this section.</summary>
+		public int Length { get; }
+
+		/// <summary> section number should be 3.</summary>
+		public int Section { get; }
+
 		/// <summary> source of grid definition.</summary>
 		/// <returns> source
 		/// </returns>
@@ -386,13 +392,7 @@ namespace NGrib.Sections
 
 		//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
 		private static readonly float tenToNegThree = (float)SupportClass.Identity((1 / 1000.0));
-
-		/// <summary> Length in bytes of this section.</summary>
-		public int Length { get; }
-
-		/// <summary> section number should be 3.</summary>
-		public int Section { get; }
-
+		
 		private long lonofcenter;
 		private readonly long factor;
 		private readonly long lap;
