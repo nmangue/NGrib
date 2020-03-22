@@ -36,7 +36,7 @@ namespace NGrib
             {
                 throw new ArgumentNullException();
             }
-            _memStream = new MemoryStream(source.getBytes());
+            _memStream = new MemoryStream(source.Bytes);
         }
 
         public string ReadString(int startByte, int byteCount, Encoding encoding)

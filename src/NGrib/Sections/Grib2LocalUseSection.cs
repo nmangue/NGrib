@@ -27,14 +27,12 @@ namespace NGrib.Sections
 	public sealed class Grib2LocalUseSection
 	{
 		/// <summary> Length in bytes of this section.</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'length '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private readonly int length;
+		public long Length { get; }
 
 		/// <summary> section number should be 2.</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'section '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private readonly int section;
+		public int Section { get; }
 
-		private readonly byte[] bytes;
+		public byte[] Bytes { get; }
 
 		// *** constructors *******************************************************
 
@@ -46,11 +44,11 @@ namespace NGrib.Sections
 		public Grib2LocalUseSection(FileStream raf)
 		{
 			// octets 1-4 (Length of GDS)
-			length = GribNumbers.int4(raf);
+			Length = GribNumbers.int4(raf);
 
-			section = raf.ReadByte(); // This is section 2
+			Section = raf.ReadByte(); // This is section 2
 
-			if (section != 2)
+			if (Section != 2)
 			{
 				// no local use section
 				SupportClass.Skip(raf, -5);
@@ -59,39 +57,38 @@ namespace NGrib.Sections
 			else
 			{
 				//SupportClass.Skip(raf, length - 5);
-				bytes = new byte[length - 5];
-				int nb = raf.Read(bytes, 0, length - 5);
-				if (nb != length - 5)
+				Bytes = new byte[Length - 5];
+				int nb = raf.Read(Bytes, 0, (int) Length - 5);
+				if (nb != Length - 5)
 				{
 					throw new NoValidGribException("Failed to read Local Use Section data");
 				}
 			}
 		} // end of Grib2LocalUseSection
 
-		// *** public methods *****************************************************
-
-
-		/**
-	    * Get length in bytes of this section.
-	    *
-	    * @return length in bytes of this section
-	   */
-		public int getLength()
+		public Grib2LocalUseSection(long length, int section, byte[] bytes)
 		{
-			return length;
+			Length = length;
+			Section = section;
+			Bytes = bytes;
 		}
 
-		public byte[] getBytes()
+		internal static Grib2LocalUseSection? BuildFrom(BufferedBinaryReader reader)
 		{
-			return bytes;
-		}
+			// octets 1-4 (Length of GDS)
+			var length = reader.ReadUInt32();
 
-		/**
-	    * Number of this section, should be 3
-	    */
-		public int getSection()
-		{
-			return section;
+			var section = reader.ReadUInt8(); // This is section 2
+
+			if (section != 2)
+			{
+				// no local use section
+				reader.Seek(-5, SeekOrigin.Current);
+				return null;
+			}
+
+			var bytes = reader.Read((int) length - 5);
+			return new Grib2LocalUseSection(length, section, bytes);
 		}
 	} // end Grib2LocalUseSection
 }
