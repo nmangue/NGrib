@@ -35,7 +35,7 @@ namespace NGrib.Sections
 		/// <summary> number of data points .</summary>
 		/// <returns> numberPoints
 		/// </returns>
-		public int NumberPoints { get; }
+		public long NumberPoints { get; }
 
 		/// <summary> optional list of numbers .</summary>
 		/// <returns> olon
@@ -86,26 +86,26 @@ namespace NGrib.Sections
 		/// </summary>
 		/// <returns> number of grid columns
 		/// </returns>
-		public int Nx { get; }
+		public long Nx { get; }
 
 		/// <summary> Get number of grid rows.
 		/// 
 		/// </summary>
 		/// <returns> number of grid rows.
 		/// </returns>
-		public int Ny { get; }
+		public long Ny { get; }
 
 		/// <summary> .</summary>
 		/// <returns> Angle as a int
 		/// 
 		/// </returns>
-		public int Angle { get; }
+		public long Angle { get; }
 
 		/// <summary> .</summary>
 		/// <returns> Subdivisionsangle as a int
 		/// 
 		/// </returns>
-		public int Subdivisionsangle { get; }
+		public long Subdivisionsangle { get; }
 
 		/// <summary> .</summary>
 		/// <returns> La1 as a float
@@ -231,7 +231,7 @@ namespace NGrib.Sections
 		/// <returns> N as a int
 		/// 
 		/// </returns>
-		public int N { get; }
+		public long N { get; }
 
 		/// <summary> .</summary>
 		/// <returns> J as a float
@@ -382,26 +382,24 @@ namespace NGrib.Sections
 
 		/// <summary>  scale factor for Lat/Lon variables in degrees.</summary>
 		//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-		private static readonly float tenToNegSix = (float) SupportClass.Identity((1 / 1000000.0));
+		private static readonly float tenToNegSix = (float)SupportClass.Identity((1 / 1000000.0));
 
 		//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-		private static readonly float tenToNegThree = (float) SupportClass.Identity((1 / 1000.0));
+		private static readonly float tenToNegThree = (float)SupportClass.Identity((1 / 1000.0));
 
 		/// <summary> Length in bytes of this section.</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'length '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private int length;
+		public int Length { get; }
 
 		/// <summary> section number should be 3.</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'section '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private int section;
+		public int Section { get; }
 
-		private int lonofcenter;
-		private readonly int factor;
-		private readonly int lap;
-		private readonly int lop;
-		private readonly int xo;
-		private readonly int yo;
-		private readonly int altitude;
+		private long lonofcenter;
+		private readonly long factor;
+		private readonly long lap;
+		private readonly long lop;
+		private readonly long xo;
+		private readonly long yo;
+		private readonly long altitude;
 
 		// *** constructors *******************************************************
 
@@ -424,7 +422,7 @@ namespace NGrib.Sections
 			int scaledvalueminor = 0;
 
 			// octets 1-4 (Length of GDS)
-			length = GribNumbers.int4(raf);
+			Length = GribNumbers.int4(raf);
 
 			if (doCheckSum)
 			{
@@ -447,7 +445,7 @@ checksum = System.Convert.ToString(cs.getValue());
 				// TODO Check this
 			}
 
-			section = raf.ReadByte(); // This is section 3
+			Section = raf.ReadByte(); // This is section 3
 
 			Source = raf.ReadByte();
 
@@ -490,16 +488,16 @@ checksum = System.Convert.ToString(cs.getValue());
 					}
 					else
 					{
-						ratio = Angle / (float) Subdivisionsangle;
+						ratio = Angle / (float)Subdivisionsangle;
 					}
 
-					La1 = (float) (GribNumbers.int4(raf) * ratio);
-					Lo1 = (float) (GribNumbers.int4(raf) * ratio);
+					La1 = (float)(GribNumbers.int4(raf) * ratio);
+					Lo1 = (float)(GribNumbers.int4(raf) * ratio);
 					Resolution = raf.ReadByte();
-					La2 = (float) (GribNumbers.int4(raf) * ratio);
-					Lo2 = (float) (GribNumbers.int4(raf) * ratio);
-					Dx = (float) (GribNumbers.int4(raf) * ratio);
-					Dy = (float) (GribNumbers.int4(raf) * ratio);
+					La2 = (float)(GribNumbers.int4(raf) * ratio);
+					Lo2 = (float)(GribNumbers.int4(raf) * ratio);
+					Dx = (float)(GribNumbers.int4(raf) * ratio);
+					Dy = (float)(GribNumbers.int4(raf) * ratio);
 					ScanMode = raf.ReadByte();
 
 					//  1, 2, and 3 needs checked
@@ -532,7 +530,7 @@ checksum = System.Convert.ToString(cs.getValue());
 					break;
 
 				case 10: // Mercator
-					// la1, lo1, lad, la2, and lo2 need checked
+								 // la1, lo1, lad, la2, and lo2 need checked
 					Shape = raf.ReadByte();
 
 					scalefactorradius = raf.ReadByte();
@@ -553,13 +551,13 @@ checksum = System.Convert.ToString(cs.getValue());
 					Lo2 = GribNumbers.int4(raf) * tenToNegSix;
 					ScanMode = raf.ReadByte();
 					Angle = GribNumbers.int4(raf);
-					Dx = (float) (GribNumbers.int4(raf) * tenToNegThree);
-					Dy = (float) (GribNumbers.int4(raf) * tenToNegThree);
+					Dx = (float)(GribNumbers.int4(raf) * tenToNegThree);
+					Dy = (float)(GribNumbers.int4(raf) * tenToNegThree);
 
 					break;
 
 				case 20: // Polar stereographic projection
-					// la1, lo1, lad, and lov need checked
+								 // la1, lo1, lad, and lov need checked
 					Shape = raf.ReadByte();
 
 					scalefactorradius = raf.ReadByte();
@@ -577,8 +575,8 @@ checksum = System.Convert.ToString(cs.getValue());
 					Resolution = raf.ReadByte();
 					Lad = GribNumbers.int4(raf) * tenToNegSix;
 					Lov = GribNumbers.int4(raf) * tenToNegSix;
-					Dx = (float) (GribNumbers.int4(raf) * tenToNegThree);
-					Dy = (float) (GribNumbers.int4(raf) * tenToNegThree);
+					Dx = (float)(GribNumbers.int4(raf) * tenToNegThree);
+					Dy = (float)(GribNumbers.int4(raf) * tenToNegThree);
 					ProjectionCenter = raf.ReadByte();
 					ScanMode = raf.ReadByte();
 
@@ -597,27 +595,27 @@ checksum = System.Convert.ToString(cs.getValue());
 
 					Ny = GribNumbers.int4(raf);
 
-					La1 = (float) (GribNumbers.int4(raf) * tenToNegSix);
+					La1 = (float)(GribNumbers.int4(raf) * tenToNegSix);
 
-					Lo1 = (float) (GribNumbers.int4(raf) * tenToNegSix);
+					Lo1 = (float)(GribNumbers.int4(raf) * tenToNegSix);
 
 					Resolution = raf.ReadByte();
-					Lad = (float) (GribNumbers.int4(raf) * tenToNegSix);
-					Lov = (float) (GribNumbers.int4(raf) * tenToNegSix);
-					Dx = (float) (GribNumbers.int4(raf) * tenToNegThree);
-					Dy = (float) (GribNumbers.int4(raf) * tenToNegThree);
+					Lad = (float)(GribNumbers.int4(raf) * tenToNegSix);
+					Lov = (float)(GribNumbers.int4(raf) * tenToNegSix);
+					Dx = (float)(GribNumbers.int4(raf) * tenToNegThree);
+					Dy = (float)(GribNumbers.int4(raf) * tenToNegThree);
 					ProjectionCenter = raf.ReadByte();
 					ScanMode = raf.ReadByte();
-					Latin1 = (float) (GribNumbers.int4(raf) * tenToNegSix);
-					Latin2 = (float) (GribNumbers.int4(raf) * tenToNegSix);
+					Latin1 = (float)(GribNumbers.int4(raf) * tenToNegSix);
+					Latin2 = (float)(GribNumbers.int4(raf) * tenToNegSix);
 
-					SpLat = (float) (GribNumbers.int4(raf) * tenToNegSix);
-					SpLon = (float) (GribNumbers.int4(raf) * tenToNegSix);
+					SpLat = (float)(GribNumbers.int4(raf) * tenToNegSix);
+					SpLon = (float)(GribNumbers.int4(raf) * tenToNegSix);
 
 					break;
 
 				case 31: // Albers Equal Area
-					// la1, lo1, lad, and lov need checked
+								 // la1, lo1, lad, and lov need checked
 					Shape = raf.ReadByte();
 
 					scalefactorradius = raf.ReadByte();
@@ -637,8 +635,8 @@ checksum = System.Convert.ToString(cs.getValue());
 					Resolution = raf.ReadByte();
 					Lad = GribNumbers.int4(raf) * tenToNegSix;
 					Lov = GribNumbers.int4(raf) * tenToNegSix;
-					Dx = (float) (GribNumbers.int4(raf) * tenToNegThree);
-					Dy = (float) (GribNumbers.int4(raf) * tenToNegThree);
+					Dx = (float)(GribNumbers.int4(raf) * tenToNegThree);
+					Dy = (float)(GribNumbers.int4(raf) * tenToNegThree);
 					ProjectionCenter = raf.ReadByte();
 					ScanMode = raf.ReadByte();
 					Latin1 = GribNumbers.int4(raf) * tenToNegSix;
@@ -676,12 +674,12 @@ checksum = System.Convert.ToString(cs.getValue());
 						ratio = Angle / Subdivisionsangle;
 					}
 
-					La1 = (float) (GribNumbers.int4(raf) * ratio);
-					Lo1 = (float) (GribNumbers.int4(raf) * ratio);
+					La1 = (float)(GribNumbers.int4(raf) * ratio);
+					Lo1 = (float)(GribNumbers.int4(raf) * ratio);
 					Resolution = raf.ReadByte();
-					La2 = (float) (GribNumbers.int4(raf) * ratio);
-					Lo2 = (float) (GribNumbers.int4(raf) * ratio);
-					Dx = (float) (GribNumbers.int4(raf) * ratio);
+					La2 = (float)(GribNumbers.int4(raf) * ratio);
+					Lo2 = (float)(GribNumbers.int4(raf) * ratio);
+					Dx = (float)(GribNumbers.int4(raf) * ratio);
 					N = raf.ReadByte();
 					ScanMode = raf.ReadByte();
 
@@ -777,8 +775,8 @@ checksum = System.Convert.ToString(cs.getValue());
 					Resolution = raf.ReadByte();
 					Dx = GribNumbers.int4(raf);
 					Dy = GribNumbers.int4(raf);
-					Xp = (float) (GribNumbers.int4(raf) * tenToNegThree);
-					Yp = (float) (GribNumbers.int4(raf) * tenToNegThree);
+					Xp = (float)(GribNumbers.int4(raf) * tenToNegThree);
+					Yp = (float)(GribNumbers.int4(raf) * tenToNegThree);
 					ScanMode = raf.ReadByte();
 					Angle = GribNumbers.int4(raf);
 					altitude = GribNumbers.int4(raf) * 1000000;
@@ -818,8 +816,8 @@ checksum = System.Convert.ToString(cs.getValue());
 					La1 = GribNumbers.int4(raf) * tenToNegSix;
 					Lo1 = GribNumbers.int4(raf) * tenToNegSix;
 					Resolution = raf.ReadByte();
-					Dx = (float) (GribNumbers.int4(raf) * tenToNegThree);
-					Dy = (float) (GribNumbers.int4(raf) * tenToNegThree);
+					Dx = (float)(GribNumbers.int4(raf) * tenToNegThree);
+					Dy = (float)(GribNumbers.int4(raf) * tenToNegThree);
 					ProjectionCenter = raf.ReadByte();
 					ScanMode = raf.ReadByte();
 
@@ -859,30 +857,500 @@ checksum = System.Convert.ToString(cs.getValue());
 				{
 					EarthRadius = scaledvalueradius;
 					if (scalefactorradius != 0)
-						EarthRadius = (float) (EarthRadius / Math.Pow(10, scalefactorradius));
+						EarthRadius = (float)(EarthRadius / Math.Pow(10, scalefactorradius));
 				}
 				else if (Shape == 2)
 				{
 					//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-					MajorAxis = (float) 6378160.0;
+					MajorAxis = (float)6378160.0;
 					//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-					MinorAxis = (float) 6356775.0;
+					MinorAxis = (float)6356775.0;
 				}
 				else if (Shape == 3)
 				{
 					MajorAxis = scaledvaluemajor;
 
-					MajorAxis = (float) (MajorAxis / Math.Pow(10, scalefactormajor));
+					MajorAxis = (float)(MajorAxis / Math.Pow(10, scalefactormajor));
 
 					MinorAxis = scaledvalueminor;
 
-					MinorAxis = (float) (MinorAxis / Math.Pow(10, scalefactorminor));
+					MinorAxis = (float)(MinorAxis / Math.Pow(10, scalefactorminor));
 				}
 				else if (Shape == 4)
 				{
 					//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-					MajorAxis = (float) 6378137.0;
-					MinorAxis = (float) SupportClass.Identity(6356752.314);
+					MajorAxis = (float)6378137.0;
+					MinorAxis = (float)SupportClass.Identity(6356752.314);
+				}
+				else if (Shape == 6)
+				{
+					EarthRadius = 6371229;
+				}
+			}
+		} // end of Grib2GridDefinitionSection
+
+		/// <summary> Constructs a <tt>Grib2GridDefinitionSection</tt> object from a raf.
+		/// 
+		/// </summary>
+		/// <param name="raf">RandomAccessFile
+		/// </param>
+		/// <param name="doCheckSum"> calculate the checksum
+		/// </param>
+		/// <throws>  IOException  if raf contains no valid GRIB product </throws>
+		//UPGRADE_TODO: Class 'java.io.RandomAccessFile' was converted to 'System.IO.FileStream' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioRandomAccessFile'"
+		internal Grib2GridDefinitionSection(BufferedBinaryReader reader)
+		{
+			int scalefactorradius = 0;
+			long scaledvalueradius = 0;
+			int scalefactormajor = 0;
+			long scaledvaluemajor = 0;
+			int scalefactorminor = 0;
+			long scaledvalueminor = 0;
+
+			// octets 1-4 (Length of GDS)
+			Length = (int)reader.ReadUInt32();
+
+			Section = reader.ReadUInt8(); // This is section 3
+
+			if (Section != 3)
+			{
+				throw new NoValidGribException("Expected section 3");
+			}
+
+			Source = reader.ReadUInt8();
+
+			NumberPoints = reader.ReadUInt32();
+
+			Olon = reader.ReadUInt8();
+
+			Iolon = reader.ReadUInt8();
+
+			Gdtn = reader.ReadUInt16();
+
+			Name = getGridName(Gdtn);
+
+			float ratio;
+
+			switch (Gdtn)
+			{
+				// Grid Definition Template Number
+				case 0:
+				case 1:
+				case 2:
+				case 3: // Latitude/Longitude Grid
+					Shape = reader.ReadUInt8();
+
+					scalefactorradius = reader.ReadUInt8();
+					scaledvalueradius = reader.ReadUInt32();
+					scalefactormajor = reader.ReadUInt8();
+					scaledvaluemajor = reader.ReadUInt32();
+					scalefactorminor = reader.ReadUInt8();
+					scaledvalueminor = reader.ReadUInt32();
+					Nx = reader.ReadUInt32();
+
+					Ny = reader.ReadUInt32();
+
+					Angle = reader.ReadUInt32();
+					Subdivisionsangle = reader.ReadUInt32();
+					if (Angle == 0)
+					{
+						ratio = tenToNegSix;
+					}
+					else
+					{
+						ratio = Angle / (float)Subdivisionsangle;
+					}
+
+					La1 = (float)(reader.ReadUInt32() * ratio);
+					Lo1 = (float)(reader.ReadUInt32() * ratio);
+					Resolution = reader.ReadUInt8();
+					La2 = (float)(reader.ReadUInt32() * ratio);
+					Lo2 = (float)(reader.ReadUInt32() * ratio);
+					Dx = (float)(reader.ReadUInt32() * ratio);
+					Dy = (float)(reader.ReadUInt32() * ratio);
+					ScanMode = reader.ReadUInt8();
+
+					//  1, 2, and 3 needs checked
+					if (Gdtn == 1)
+					{
+						//Rotated Latitude/longitude
+						SpLat = reader.ReadUInt32() * tenToNegSix;
+						SpLon = reader.ReadUInt32() * tenToNegSix;
+						Rotationangle = reader.ReadSingle();
+					}
+					else if (Gdtn == 2)
+					{
+						//Stretched Latitude/longitude
+						PoleLat = reader.ReadUInt32() * tenToNegSix;
+						PoleLon = reader.ReadUInt32() * tenToNegSix;
+						factor = reader.ReadUInt32();
+					}
+					else if (Gdtn == 3)
+					{
+						//Stretched and Rotated 
+						// Latitude/longitude
+						SpLat = reader.ReadUInt32() * tenToNegSix;
+						SpLon = reader.ReadUInt32() * tenToNegSix;
+						Rotationangle = reader.ReadSingle();
+						PoleLat = reader.ReadUInt32() * tenToNegSix;
+						PoleLon = reader.ReadUInt32() * tenToNegSix;
+						factor = reader.ReadUInt32();
+					}
+
+					break;
+
+				case 10: // Mercator
+								 // la1, lo1, lad, la2, and lo2 need checked
+					Shape = reader.ReadUInt8();
+
+					scalefactorradius = reader.ReadUInt8();
+					scaledvalueradius = reader.ReadUInt32();
+					scalefactormajor = reader.ReadUInt8();
+					scaledvaluemajor = reader.ReadUInt32();
+					scalefactorminor = reader.ReadUInt8();
+					scaledvalueminor = reader.ReadUInt32();
+					Nx = reader.ReadUInt32();
+
+					Ny = reader.ReadUInt32();
+
+					La1 = reader.ReadUInt32() * tenToNegSix;
+					Lo1 = reader.ReadUInt32() * tenToNegSix;
+					Resolution = reader.ReadUInt8();
+					Lad = reader.ReadUInt32() * tenToNegSix;
+					La2 = reader.ReadUInt32() * tenToNegSix;
+					Lo2 = reader.ReadUInt32() * tenToNegSix;
+					ScanMode = reader.ReadUInt8();
+					Angle = reader.ReadUInt32();
+					Dx = (float)(reader.ReadUInt32() * tenToNegThree);
+					Dy = (float)(reader.ReadUInt32() * tenToNegThree);
+
+					break;
+
+				case 20: // Polar stereographic projection
+								 // la1, lo1, lad, and lov need checked
+					Shape = reader.ReadUInt8();
+
+					scalefactorradius = reader.ReadUInt8();
+					scaledvalueradius = reader.ReadUInt32();
+					scalefactormajor = reader.ReadUInt8();
+					scaledvaluemajor = reader.ReadUInt32();
+					scalefactorminor = reader.ReadUInt8();
+					scaledvalueminor = reader.ReadUInt32();
+					Nx = reader.ReadUInt32();
+
+					Ny = reader.ReadUInt32();
+
+					La1 = reader.ReadUInt32() * tenToNegSix;
+					Lo1 = reader.ReadUInt32() * tenToNegSix;
+					Resolution = reader.ReadUInt8();
+					Lad = reader.ReadUInt32() * tenToNegSix;
+					Lov = reader.ReadUInt32() * tenToNegSix;
+					Dx = (float)(reader.ReadUInt32() * tenToNegThree);
+					Dy = (float)(reader.ReadUInt32() * tenToNegThree);
+					ProjectionCenter = reader.ReadUInt8();
+					ScanMode = reader.ReadUInt8();
+
+					break;
+
+				case 30: // Lambert Conformal
+					Shape = reader.ReadUInt8();
+
+					scalefactorradius = reader.ReadUInt8();
+					scaledvalueradius = reader.ReadUInt32();
+					scalefactormajor = reader.ReadUInt8();
+					scaledvaluemajor = reader.ReadUInt32();
+					scalefactorminor = reader.ReadUInt8();
+					scaledvalueminor = reader.ReadUInt32();
+					Nx = reader.ReadUInt32();
+
+					Ny = reader.ReadUInt32();
+
+					La1 = (float)(reader.ReadUInt32() * tenToNegSix);
+
+					Lo1 = (float)(reader.ReadUInt32() * tenToNegSix);
+
+					Resolution = reader.ReadUInt8();
+					Lad = (float)(reader.ReadUInt32() * tenToNegSix);
+					Lov = (float)(reader.ReadUInt32() * tenToNegSix);
+					Dx = (float)(reader.ReadUInt32() * tenToNegThree);
+					Dy = (float)(reader.ReadUInt32() * tenToNegThree);
+					ProjectionCenter = reader.ReadUInt8();
+					ScanMode = reader.ReadUInt8();
+					Latin1 = (float)(reader.ReadUInt32() * tenToNegSix);
+					Latin2 = (float)(reader.ReadUInt32() * tenToNegSix);
+
+					SpLat = (float)(reader.ReadUInt32() * tenToNegSix);
+					SpLon = (float)(reader.ReadUInt32() * tenToNegSix);
+
+					break;
+
+				case 31: // Albers Equal Area
+								 // la1, lo1, lad, and lov need checked
+					Shape = reader.ReadUInt8();
+
+					scalefactorradius = reader.ReadUInt8();
+					scaledvalueradius = reader.ReadUInt32();
+					scalefactormajor = reader.ReadUInt8();
+					scaledvaluemajor = reader.ReadUInt32();
+					scalefactorminor = reader.ReadUInt8();
+					scaledvalueminor = reader.ReadUInt32();
+					Nx = reader.ReadUInt32();
+
+					Ny = reader.ReadUInt32();
+
+					La1 = reader.ReadUInt32() * tenToNegSix;
+
+					Lo1 = reader.ReadUInt32() * tenToNegSix;
+
+					Resolution = reader.ReadUInt8();
+					Lad = reader.ReadUInt32() * tenToNegSix;
+					Lov = reader.ReadUInt32() * tenToNegSix;
+					Dx = (float)(reader.ReadUInt32() * tenToNegThree);
+					Dy = (float)(reader.ReadUInt32() * tenToNegThree);
+					ProjectionCenter = reader.ReadUInt8();
+					ScanMode = reader.ReadUInt8();
+					Latin1 = reader.ReadUInt32() * tenToNegSix;
+					Latin2 = reader.ReadUInt32() * tenToNegSix;
+
+					SpLat = reader.ReadUInt32() * tenToNegSix;
+					SpLon = reader.ReadUInt32() * tenToNegSix;
+
+					break;
+
+				case 40:
+				case 41:
+				case 42:
+				case 43: // Gaussian latitude/longitude
+					Shape = reader.ReadUInt8();
+
+					scalefactorradius = reader.ReadUInt8();
+					scaledvalueradius = reader.ReadUInt32();
+					scalefactormajor = reader.ReadUInt8();
+					scaledvaluemajor = reader.ReadUInt32();
+					scalefactorminor = reader.ReadUInt8();
+					scaledvalueminor = reader.ReadUInt32();
+					Nx = reader.ReadUInt32();
+
+					Ny = reader.ReadUInt32();
+
+					Angle = reader.ReadUInt32();
+					Subdivisionsangle = reader.ReadUInt32();
+					if (Angle == 0)
+					{
+						ratio = tenToNegSix;
+					}
+					else
+					{
+						ratio = Angle / Subdivisionsangle;
+					}
+
+					La1 = (float)(reader.ReadUInt32() * ratio);
+					Lo1 = (float)(reader.ReadUInt32() * ratio);
+					Resolution = reader.ReadUInt8();
+					La2 = (float)(reader.ReadUInt32() * ratio);
+					Lo2 = (float)(reader.ReadUInt32() * ratio);
+					Dx = (float)(reader.ReadUInt32() * ratio);
+					N = reader.ReadUInt8();
+					ScanMode = reader.ReadUInt8();
+
+					if (Gdtn == 41)
+					{
+						//Rotated Gaussian Latitude/longitude
+
+						SpLat = reader.ReadUInt32() * ratio;
+						SpLon = reader.ReadUInt32() * ratio;
+						Rotationangle = reader.ReadSingle();
+					}
+					else if (Gdtn == 42)
+					{
+						//Stretched Gaussian 
+						// Latitude/longitude
+
+						PoleLat = reader.ReadUInt32() * ratio;
+						PoleLon = reader.ReadUInt32() * ratio;
+						factor = reader.ReadUInt32();
+					}
+					else if (Gdtn == 43)
+					{
+						//Stretched and Rotated Gaussian  
+						// Latitude/longitude
+
+						SpLat = reader.ReadUInt32() * ratio;
+						SpLon = reader.ReadUInt32() * ratio;
+						Rotationangle = reader.ReadSingle();
+						PoleLat = reader.ReadUInt32() * ratio;
+						PoleLon = reader.ReadUInt32() * ratio;
+						factor = reader.ReadUInt32();
+					}
+
+					break;
+
+				case 50:
+				case 51:
+				case 52:
+				case 53: // Spherical harmonic coefficients
+
+					J = reader.ReadSingle();
+					K = reader.ReadSingle();
+					M = reader.ReadSingle();
+					Method = reader.ReadUInt8();
+					Mode = reader.ReadUInt8();
+					if (Gdtn == 51)
+					{
+						//Rotated Spherical harmonic coefficients
+
+						SpLat = reader.ReadUInt32() * tenToNegSix;
+						SpLon = reader.ReadUInt32() * tenToNegSix;
+						Rotationangle = reader.ReadSingle();
+					}
+					else if (Gdtn == 52)
+					{
+						//Stretched Spherical 
+						// harmonic coefficients
+
+						PoleLat = reader.ReadUInt32() * tenToNegSix;
+						PoleLon = reader.ReadUInt32() * tenToNegSix;
+						factor = reader.ReadUInt32();
+					}
+					else if (Gdtn == 53)
+					{
+						//Stretched and Rotated 
+						// Spherical harmonic coefficients
+
+						SpLat = reader.ReadUInt32() * tenToNegSix;
+						SpLon = reader.ReadUInt32() * tenToNegSix;
+						Rotationangle = reader.ReadSingle();
+						PoleLat = reader.ReadUInt32() * tenToNegSix;
+						PoleLon = reader.ReadUInt32() * tenToNegSix;
+						factor = reader.ReadUInt32();
+					}
+
+					break;
+
+				case 90: // Space view perspective or orthographic
+					Shape = reader.ReadUInt8();
+
+					scalefactorradius = reader.ReadUInt8();
+					scaledvalueradius = reader.ReadUInt32();
+					scalefactormajor = reader.ReadUInt8();
+					scaledvaluemajor = reader.ReadUInt32();
+					scalefactorminor = reader.ReadUInt8();
+					scaledvalueminor = reader.ReadUInt32();
+					Nx = reader.ReadUInt32();
+
+					Ny = reader.ReadUInt32();
+
+					lap = reader.ReadUInt32();
+					lop = reader.ReadUInt32();
+					Resolution = reader.ReadUInt8();
+					Dx = reader.ReadUInt32();
+					Dy = reader.ReadUInt32();
+					Xp = (float)(reader.ReadUInt32() * tenToNegThree);
+					Yp = (float)(reader.ReadUInt32() * tenToNegThree);
+					ScanMode = reader.ReadUInt8();
+					Angle = reader.ReadUInt32();
+					altitude = reader.ReadUInt32() * 1000000;
+					xo = reader.ReadUInt32();
+					yo = reader.ReadUInt32();
+
+					break;
+
+				case 100: // Triangular grid based on an icosahedron
+
+					N2 = reader.ReadUInt8();
+					N3 = reader.ReadUInt8();
+					Ni = reader.ReadUInt16();
+					Nd = reader.ReadUInt8();
+					PoleLat = reader.ReadUInt32() * tenToNegSix;
+					PoleLon = reader.ReadUInt32() * tenToNegSix;
+					lonofcenter = reader.ReadUInt32();
+					Position = reader.ReadUInt8();
+					Order = reader.ReadUInt8();
+					ScanMode = reader.ReadUInt8();
+					N = reader.ReadUInt32();
+					break;
+
+				case 110: // Equatorial azimuthal equidistant projection
+					Shape = reader.ReadUInt8();
+
+					scalefactorradius = reader.ReadUInt8();
+					scaledvalueradius = reader.ReadUInt32();
+					scalefactormajor = reader.ReadUInt8();
+					scaledvaluemajor = reader.ReadUInt32();
+					scalefactorminor = reader.ReadUInt8();
+					scaledvalueminor = reader.ReadUInt32();
+					Nx = reader.ReadUInt32();
+
+					Ny = reader.ReadUInt32();
+
+					La1 = reader.ReadUInt32() * tenToNegSix;
+					Lo1 = reader.ReadUInt32() * tenToNegSix;
+					Resolution = reader.ReadUInt8();
+					Dx = (float)(reader.ReadUInt32() * tenToNegThree);
+					Dy = (float)(reader.ReadUInt32() * tenToNegThree);
+					ProjectionCenter = reader.ReadUInt8();
+					ScanMode = reader.ReadUInt8();
+
+					break;
+
+				case 120: // Azimuth-range Projection
+					Nb = reader.ReadUInt32();
+					Nr = reader.ReadUInt32();
+					La1 = reader.ReadUInt32();
+					Lo1 = reader.ReadUInt32();
+					Dx = reader.ReadUInt32();
+					Dstart = reader.ReadSingle();
+					ScanMode = reader.ReadUInt8();
+					for (int i = 0; i < Nr; i++)
+					{
+						// get azi (33+4(Nr-1))-(34+4(Nr-1))
+						// get adelta (35+4(Nr-1))-(36+4(Nr-1))
+					}
+
+					Console.Out.WriteLine("need code to get azi and adelta");
+
+					break;
+
+				default:
+					Console.Out.WriteLine("Unknown Grid Type " + Convert.ToString(Gdtn));
+					break;
+			} // end switch
+
+			// calculate earth radius
+			if ((Gdtn < 50 || Gdtn > 53) && Gdtn != 100 && Gdtn != 120)
+			{
+				if (Shape == 0)
+				{
+					EarthRadius = 6367470;
+				}
+				else if (Shape == 1)
+				{
+					EarthRadius = scaledvalueradius;
+					if (scalefactorradius != 0)
+						EarthRadius = (float)(EarthRadius / Math.Pow(10, scalefactorradius));
+				}
+				else if (Shape == 2)
+				{
+					//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
+					MajorAxis = (float)6378160.0;
+					//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
+					MinorAxis = (float)6356775.0;
+				}
+				else if (Shape == 3)
+				{
+					MajorAxis = scaledvaluemajor;
+
+					MajorAxis = (float)(MajorAxis / Math.Pow(10, scalefactormajor));
+
+					MinorAxis = scaledvalueminor;
+
+					MinorAxis = (float)(MinorAxis / Math.Pow(10, scalefactorminor));
+				}
+				else if (Shape == 4)
+				{
+					//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
+					MajorAxis = (float)6378137.0;
+					MinorAxis = (float)SupportClass.Identity(6356752.314);
 				}
 				else if (Shape == 6)
 				{

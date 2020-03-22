@@ -159,7 +159,7 @@ namespace NGrib.Sections
 			//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
 			float EE = (float) Math.Pow((double) 2.0, (double) E);
 
-			int numberPoints = gds.NumberPoints;
+			int numberPoints = (int) gds.NumberPoints;
 
 			Data = new float[numberPoints];
 
@@ -200,7 +200,7 @@ namespace NGrib.Sections
 			}
 
 			scanMode = gds.ScanMode;
-			Xlength = gds.Nx; // needs some smarts for different type Grids
+			Xlength = (int) gds.Nx; // needs some smarts for different type Grids
 			//scanningModeCheck();
 		} // end simpleUnpacking
 
@@ -284,7 +284,7 @@ namespace NGrib.Sections
 
 			//gds.getNumberPoints() );
 			count = 0;
-			Xlength = gds.Nx; // needs some smarts for different type Grids
+			Xlength = (int) gds.Nx; // needs some smarts for different type Grids
 			// used to check missing values when X2 is packed with all 1's
 			int[] bitsmv1 = new int[31];
 			//int bitsmv2[] = new int[ 31 ]; didn't code cuz number larger the # of bits
@@ -520,7 +520,7 @@ namespace NGrib.Sections
 			}
 
 			count = 0;
-			Xlength = gds.Nx; // needs some smarts for different type Grids
+			Xlength = (int) gds.Nx; // needs some smarts for different type Grids
 			int X2;
 			bitPos = 0;
 			bitBuf = 0;
@@ -852,7 +852,7 @@ namespace NGrib.Sections
 				// TODO Error handling
 			}
 
-			int numberPoints = gds.NumberPoints;
+			int numberPoints = (int) gds.NumberPoints;
 
 			Data = new float[numberPoints];
 			bool[] bitmap = bms.Bitmap;
