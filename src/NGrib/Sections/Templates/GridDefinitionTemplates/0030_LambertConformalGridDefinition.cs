@@ -1,6 +1,6 @@
 ﻿namespace NGrib.Sections.Templates.GridDefinitionTemplates
 {
-	public class LambertConformalGridDefinition : GridPointEarthGridDefinition
+	public class LambertConformalGridDefinition : PolarStereographicProjectionGridDefinition
 	{
 		/// <summary> .</summary>
 		/// <returns> Latin1 as a float

@@ -65,7 +65,7 @@
 			Yp = (float)(reader.ReadUInt32() * 1e-3f);
 			ScanMode = reader.ReadUInt8();
 			Angle = reader.ReadUInt32();
-			Altitude = reader.ReadUInt32() * 1000000;
+			Altitude = reader.ReadUInt32() * 1_000_000;
 			Xo = reader.ReadUInt32();
 			Yo = reader.ReadUInt32();
 		}
