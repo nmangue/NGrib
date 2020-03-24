@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
+using NGrib.Sections.Templates;
 using NGrib.Sections.Templates.GridDefinitionTemplates;
 
 namespace NGrib.Sections
@@ -943,7 +944,7 @@ checksum = System.Convert.ToString(cs.getValue());
             var gdtn = reader.ReadUInt16();
 
 
-            var gridDefinition = ReadGridDefinition(reader, gdtn);
+            var gridDefinition = GridDefinitionFactories.Build(reader, gdtn);
 
             return new Grib2GridDefinitionSection(length, section, source, numberPoints, olon, iolon, gdtn, gridDefinition);
         } // end of Grib2GridDefinitionSection
@@ -1041,33 +1042,28 @@ checksum = System.Convert.ToString(cs.getValue());
             }
         }
 
-        private static IEnumerable<(int TemplateNumber, Func<BufferedBinaryReader, GridDefinition> FactoryFunc)> GridDefinitionFactories = ImmutableList<(int, Func<BufferedBinaryReader, GridDefinition>)>.Empty
-                .Add((0, r => new LatLonGridDefinition(r)))
-                .Add((1, r => new RotatedLatLonGridDefinition(r)))
-                .Add((2, r => new StretchedLatLonGridDefinition(r)))
-                .Add((3, r => new StretchedRotatedLatLonGridDefinition(r)))
-                .Add((10, r => new MercatorGridDefinition(r)))
-                .Add((20, r => new PolarStereographicProjectionGridDefinition(r)))
-                .Add((30, r => new LambertConformalGridDefinition(r)))
-                .Add((31, r => new AlbersEqualAreaGridDefinition(r)))
-                .Add((40, r => new GaussianLatLonGridDefinition(r)))
-                .Add((41, r => new RotatedGaussianLatLonGridDefinition(r)))
-                .Add((42, r => new StretchedGaussianLatLonGridDefinition(r)))
-                .Add((43, r => new StretchedRotatedGaussianLatLonGridDefinition(r)))
-                .Add((50, r => new SphericalHarmonicCoefficientsGridDefinition(r)))
-                .Add((51, r => new RotatedSphericalHarmonicCoefficientsGridDefinition(r)))
-                .Add((52, r => new StretchedSphericalHarmonicCoefficientsGridDefinition(r)))
-                .Add((53, r => new StretchedRotatedSphericalHarmonicCoefficientsGridDefinition(r)))
-                .Add((90, r => new SpaceViewPerspectiveOrOrthographicGridDefinition(r)))
-                .Add((100, r => new TriangularGridBasedOnAnIcosahedronGridDefinition(r)))
-                .Add((110, r => new EquatorialAzimuthalEquidistantProjectionGridDefinition(r)))
-            ;
-
-        private static GridDefinition ReadGridDefinition(BufferedBinaryReader reader, int gridDescriptionTemplateNumber)
-        {
-            var factories = GridDefinitionFactories.Where(t => t.TemplateNumber == gridDescriptionTemplateNumber).Select(t => t.FactoryFunc).ToArray();
-            return factories.Any()? factories[0](reader) : throw new NotImplementedException();
-        }
+        private static readonly TemplateFactory<GridDefinition> GridDefinitionFactories = new TemplateFactory<GridDefinition>()
+        { 
+            { 0, r => new LatLonGridDefinition(r) },
+            { 1, r => new RotatedLatLonGridDefinition(r) },
+            { 2, r => new StretchedLatLonGridDefinition(r) },
+            { 3, r => new StretchedRotatedLatLonGridDefinition(r) },
+            { 10, r => new MercatorGridDefinition(r) },
+            { 20, r => new PolarStereographicProjectionGridDefinition(r) },
+            { 30, r => new LambertConformalGridDefinition(r) },
+            { 31, r => new AlbersEqualAreaGridDefinition(r) },
+            { 40, r => new GaussianLatLonGridDefinition(r) },
+            { 41, r => new RotatedGaussianLatLonGridDefinition(r) },
+            { 42, r => new StretchedGaussianLatLonGridDefinition(r) },
+            { 43, r => new StretchedRotatedGaussianLatLonGridDefinition(r) },
+            { 50, r => new SphericalHarmonicCoefficientsGridDefinition(r) },
+            { 51, r => new RotatedSphericalHarmonicCoefficientsGridDefinition(r) },
+            { 52, r => new StretchedSphericalHarmonicCoefficientsGridDefinition(r) },
+            { 53, r => new StretchedRotatedSphericalHarmonicCoefficientsGridDefinition(r) },
+            { 90, r => new SpaceViewPerspectiveOrOrthographicGridDefinition(r) },
+            { 100, r => new TriangularGridBasedOnAnIcosahedronGridDefinition(r) },
+            { 110, r => new EquatorialAzimuthalEquidistantProjectionGridDefinition(r) }
+          };
     } // end Grib2GridDefinitionSection
 
 }
