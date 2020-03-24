@@ -38,14 +38,14 @@ namespace NGrib.Sections
 		/// </summary>
 		/// <returns> length in bytes of Section DRS section
 		/// </returns>
-		public int Length { get; }
+		public long Length { get; }
 
 		/// <summary> Get the number of dataPoints in DS section.
 		/// 
 		/// </summary>
 		/// <returns> number of dataPoints in DS section
 		/// </returns>
-		public int DataPoints { get; }
+		public long DataPoints { get; }
 
 		/// <summary> Get the Data Template Number for the GRID.
 		/// 
@@ -112,7 +112,7 @@ namespace NGrib.Sections
 		/// <summary> NG - Number of groups of data values into which field is split.</summary>
 		/// <returns> NumberOfGroups NG
 		/// </returns>
-		public int NumberOfGroups { get; }
+		public long NumberOfGroups { get; }
 
 		/// <summary> Reference for group widths (see Note 12).</summary>
 		/// <returns> ReferenceGroupWidths
@@ -129,7 +129,7 @@ namespace NGrib.Sections
 		/// <summary> Reference for group lengths (see Note 13).</summary>
 		/// <returns> ReferenceGroupLength
 		/// </returns>
-		public int ReferenceGroupLength { get; }
+		public long ReferenceGroupLength { get; }
 
 		/// <summary> Length increment for the group lengths (see Note 14).</summary>
 		/// <returns> LengthIncrement
@@ -139,7 +139,7 @@ namespace NGrib.Sections
 		/// <summary> Length increment for the group lengths (see Note 14).</summary>
 		/// <returns> LengthLastGroup
 		/// </returns>
-		public int LengthLastGroup { get; }
+		public long LengthLastGroup { get; }
 
 		/// <summary> Number of bits used for the scaled group lengths (after subtraction of 
 		/// the reference value given in octets 38-41 and division by the length 
@@ -287,6 +287,132 @@ namespace NGrib.Sections
 					CompressionMethod = raf.ReadByte();
 
 					CompressionRatio = raf.ReadByte();
+
+					break;
+
+				default:
+					break;
+			}
+		} // end of Grib2DataRepresentationSection
+
+		/// <summary> Constructs a <tt>Grib2DataRepresentationSection</tt> object from a raf.
+		/// 
+		/// </summary>
+		/// <param name="reader">RandomAccessFile with Section DRS content
+		/// </param>
+		/// <throws>  IOException  if stream contains no valid GRIB file </throws>
+		internal Grib2DataRepresentationSection(BufferedBinaryReader reader)
+		{
+			InitBlock();
+			// octets 1-4 (Length of DRS)
+			Length = reader.ReadUInt32();
+
+			section = reader.ReadUInt8();
+
+			DataPoints = reader.ReadUInt32();
+
+			DataTemplateNumber = (int)reader.ReadUInt16();
+
+			switch (DataTemplateNumber)
+			{
+				// Data Template Number
+				case 0:
+				case 1: // 0 - Grid point data - simple packing 
+						// 1 - Matrix values - simple packing
+
+					ReferenceValue = reader.ReadSingle();
+					BinaryScaleFactor = reader.ReadUInt16();
+					DecimalScaleFactor = reader.ReadUInt16();
+					NumberOfBits = reader.ReadUInt8();
+
+					OriginalType = reader.ReadUInt8();
+
+					if (DataTemplateNumber == 0)
+						break;
+					// case 1 not implememted
+					Console.Out.WriteLine("DRS dataTemplate=1 not implemented yet");
+					break;
+
+				case 2:
+				case 3: // Grid point data - complex packing
+
+					// octet 12 - 15
+					ReferenceValue = reader.ReadSingle();
+					// octet 16 - 17
+					BinaryScaleFactor = reader.ReadUInt16();
+					// octet 18 - 19
+					DecimalScaleFactor = reader.ReadUInt16();
+					// octet 20
+					NumberOfBits = reader.ReadUInt8();
+
+					// octet 21
+					OriginalType = reader.ReadUInt8();
+
+					// octet 22
+					SplittingMethod = reader.ReadUInt8();
+
+					//     splittingMethod );
+					// octet 23
+					MissingValueManagement = reader.ReadUInt8();
+
+					//     missingValueManagement );
+					// octet 24 - 27
+					PrimaryMissingValue = reader.ReadSingle();
+					// octet 28 - 31
+					SecondaryMissingValue = reader.ReadSingle();
+					// octet 32 - 35
+					NumberOfGroups = reader.ReadUInt32();
+
+					//     numberOfGroups );
+					// octet 36
+					ReferenceGroupWidths = reader.ReadUInt8();
+
+					//     referenceGroupWidths );
+					// octet 37
+					BitsGroupWidths = reader.ReadUInt8();
+					// according to documentation subtract referenceGroupWidths
+					BitsGroupWidths = BitsGroupWidths - ReferenceGroupWidths;
+
+					//     bitsGroupWidths );
+					// octet 38 - 41
+					ReferenceGroupLength = reader.ReadUInt32();
+
+					//     referenceGroupLength );
+					// octet 42
+					LengthIncrement = reader.ReadUInt8();
+
+					//     lengthIncrement );
+					// octet 43 - 46
+					LengthLastGroup = reader.ReadUInt32();
+
+					//     lengthLastGroup );
+					// octet 47
+					BitsScaledGroupLength = reader.ReadUInt8();
+
+					//     bitsScaledGroupLength );
+					if (DataTemplateNumber == 2)
+						break;
+
+					// case 3 // complex packing & spatial differencing
+					OrderSpatial = reader.ReadUInt8();
+
+					DescriptorSpatial = reader.ReadUInt8();
+
+					break;
+
+				case 40:
+				case 40000: // Grid point data - JPEG 2000 Code Stream Format
+
+					ReferenceValue = reader.ReadSingle();
+					BinaryScaleFactor = reader.ReadUInt16();
+					DecimalScaleFactor = reader.ReadUInt16();
+					NumberOfBits = reader.ReadUInt8();
+
+					OriginalType = reader.ReadUInt8();
+
+					CompressionMethod = reader.ReadUInt8();
+
+					CompressionRatio = reader.ReadUInt8();
 
 					break;
 
