@@ -61,7 +61,7 @@ namespace NGrib.Sections
         /// <returns> gdtn
         /// </returns>
         public int Gdtn { get; }
-
+        
         /// <summary> Grid name .</summary>
         /// <returns> gridName
         /// </returns>
@@ -898,6 +898,19 @@ checksum = System.Convert.ToString(cs.getValue());
         } // end of Grib2GridDefinitionSection
 
         #endregion
+        
+        private Grib2GridDefinitionSection(int length, int section, int source, long numberPoints, int oLon, int ioLon, int gdtn, GridDefinition gridDefinition)
+        {
+            Gdtn = gdtn;
+            Length = length;
+            Section = section;
+            Source = source;
+            NumberPoints = numberPoints;
+            Olon = oLon;
+            Iolon = ioLon;
+            GridDefinition = gridDefinition;
+            Name = getGridName(gdtn);
+        }
 
         /// <summary> Constructs a <tt>Grib2GridDefinitionSection</tt> object from a raf.
         /// 
@@ -908,38 +921,31 @@ checksum = System.Convert.ToString(cs.getValue());
         /// </param>
         /// <throws>  IOException  if raf contains no valid GRIB product </throws>
         //UPGRADE_TODO: Class 'java.io.RandomAccessFile' was converted to 'System.IO.FileStream' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioRandomAccessFile'"
-        internal Grib2GridDefinitionSection(BufferedBinaryReader reader)
+        internal static Grib2GridDefinitionSection BuildFrom(BufferedBinaryReader reader)
         {
-            int scalefactorradius = 0;
-            long scaledvalueradius = 0;
-            int scalefactormajor = 0;
-            long scaledvaluemajor = 0;
-            int scalefactorminor = 0;
-            long scaledvalueminor = 0;
+            var length = (int) reader.ReadUInt32();
 
-            // octets 1-4 (Length of GDS)
-            Length = (int) reader.ReadUInt32();
+            var section = reader.ReadUInt8(); // This is section 3
 
-            Section = reader.ReadUInt8(); // This is section 3
-
-            if (Section != 3)
+            if (section != 3)
             {
                 throw new NoValidGribException("Expected section 3");
             }
 
-            Source = reader.ReadUInt8();
+            var source = reader.ReadUInt8();
 
-            NumberPoints = reader.ReadUInt32();
+            var numberPoints = reader.ReadUInt32();
 
-            Olon = reader.ReadUInt8();
+            var olon = reader.ReadUInt8();
 
-            Iolon = reader.ReadUInt8();
+            var iolon = reader.ReadUInt8();
 
-            Gdtn = reader.ReadUInt16();
+            var gdtn = reader.ReadUInt16();
 
-            Name = getGridName(Gdtn);
 
-            GridDefinition = ReadGridDefinition(reader, Gdtn);
+            var gridDefinition = ReadGridDefinition(reader, gdtn);
+
+            return new Grib2GridDefinitionSection(length, section, source, numberPoints, olon, iolon, gdtn, gridDefinition);
         } // end of Grib2GridDefinitionSection
 
         /// <summary> .</summary>

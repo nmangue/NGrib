@@ -28,6 +28,9 @@ namespace NGrib
 			{
 				reader.SeekToSavedPosition();
 			}
-		}
+
+            var gridDefinitionSection = Grib2GridDefinitionSection.BuildFrom(reader);
+
+        }
 	}
 }
