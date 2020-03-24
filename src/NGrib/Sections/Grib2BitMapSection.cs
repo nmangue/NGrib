@@ -17,6 +17,7 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.IO;
 
 namespace NGrib.Sections
@@ -35,7 +36,7 @@ namespace NGrib.Sections
 
 		/// <summary> Length in bytes of BitMapSection section.</summary>
 		//UPGRADE_NOTE: Final was removed from the declaration of 'length '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private readonly int length;
+		private readonly long length;
 
 		/// <summary> Number of this section, should be 6.</summary>
 		//UPGRADE_NOTE: Final was removed from the declaration of 'section '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
@@ -82,16 +83,69 @@ namespace NGrib.Sections
 				Bitmap[i] = (data[i / 8] & bitmask[i % 8]) != 0;
 		}
 
-		// --Commented out by Inspection START (12/8/05 1:12 PM):
-		//   /**
-		//    * Get the byte length of the BitMapSection section.
-		//    *
-		//    * @return length in bytes of BitMapSection section
-		//    */
-		//   public final int getLength()
-		//   {
-		//      return length;
-		//   }
-		// --Commented out by Inspection STOP (12/8/05 1:12 PM)
-	}
+
+        internal Grib2BitMapSection(long length, int section, bool[] bitmap)
+        {
+            this.length = length;
+            this.section = section;
+            Bitmap = bitmap;
+        }
+        /// <summary> Constructs a <tt>Grib2BitMapSection</tt> object from a byteBuffer.
+        /// 
+        /// </summary>
+        /// <param name="raf">RandomAccessFile with Section BMS content
+        /// </param>
+        /// <param name="gds">Grib2GridDefinitionSection
+        /// </param>
+        /// <throws>  IOException  if stream contains no valid GRIB file </throws>
+        internal Grib2BitMapSection(BufferedBinaryReader raf, long numberPoints)
+        {
+            length = raf.ReadUInt32();
+
+            section = raf.ReadUInt8();
+
+            bitMapIndicator = raf.ReadUInt8();
+            
+            Bitmap = new bool[numberPoints];
+            if (bitMapIndicator == 0)
+			{
+				// create new bit map, octet 4 contains number of unused bits at the end
+                
+                var i = 0;
+                while (i < Bitmap.Length)
+                {
+                    var bitmap = (Bitmask) raf.ReadByte();
+
+                    Bitmap[i++] = bitmap.HasFlag(Bitmask.Bit1);
+                    Bitmap[i++] = bitmap.HasFlag(Bitmask.Bit2);
+                    Bitmap[i++] = bitmap.HasFlag(Bitmask.Bit3);
+                    Bitmap[i++] = bitmap.HasFlag(Bitmask.Bit4);
+                    Bitmap[i++] = bitmap.HasFlag(Bitmask.Bit5);
+                    Bitmap[i++] = bitmap.HasFlag(Bitmask.Bit6);
+                    Bitmap[i++] = bitmap.HasFlag(Bitmask.Bit7);
+                    Bitmap[i++] = bitmap.HasFlag(Bitmask.Bit8);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < Bitmap.Length; i++)
+                {
+                    Bitmap[i] = true;
+                }
+            }
+        }
+
+        [Flags]
+        private enum Bitmask : byte
+        {
+            Bit1 = 1 << 7,
+            Bit2 = 1 << 6,
+            Bit3 = 1 << 5,
+            Bit4 = 1 << 4,
+            Bit5 = 1 << 3,
+            Bit6 = 1 << 2,
+            Bit7 = 1 << 1,
+            Bit8 = 1,
+        }
+    }
 }

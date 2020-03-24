@@ -59,15 +59,17 @@ namespace NGrib
 			}
 		}
 
-		public int ReadUInt8()
-		{
-			EnsureAvailable(sizeof(byte));
-			var val = buffer[bufferOffset];
-			bufferOffset += sizeof(byte);
-			return val;
+        public byte ReadByte()
+        {
+            EnsureAvailable(sizeof(byte));
+            var val = buffer[bufferOffset];
+            bufferOffset += sizeof(byte);
+            return val;
 		}
 
-		public int ReadUInt16()
+		public int ReadUInt8() => ReadByte();
+
+        public int ReadUInt16()
 		{
 			EnsureAvailable(sizeof(short));
 			var val = BigEndianBitConverter.ToUInt16(buffer, bufferOffset);
