@@ -69,24 +69,6 @@ namespace NGrib.Sections
 		/// </returns>
 		public int Shape { get; }
 
-		/// <summary> .</summary>
-		/// <returns> EarthRadius as a float
-		/// 
-		/// </returns>
-		public float EarthRadius { get; }
-
-		/// <summary> .</summary>
-		/// <returns> MajorAxis as a float
-		/// 
-		/// </returns>
-		public float MajorAxis { get; }
-
-		/// <summary> .</summary>
-		/// <returns> MinorAxis as a float
-		/// 
-		/// </returns>
-		public float MinorAxis { get; }
-
 		/// <summary> Get number of grid columns.
 		/// 
 		/// </summary>
@@ -143,18 +125,6 @@ namespace NGrib.Sections
 		/// </returns>
 		public float Lo2 { get; }
 
-		/// <summary> .</summary>
-		/// <returns> Lad as a float
-		/// 
-		/// </returns>
-		public float Lad { get; }
-
-		/// <summary> .</summary>
-		/// <returns> Lov as a float
-		/// 
-		/// </returns>
-		public float Lov { get; }
-
 		/// <summary> Get x-increment/distance between two grid points.
 		/// 
 		/// </summary>
@@ -169,18 +139,48 @@ namespace NGrib.Sections
 		/// </returns>
 		public float Dy { get; }
 
-		/// <summary> .</summary>
-		/// <returns> ProjectionCenter as a int
-		/// 
-		/// </returns>
-		public int ProjectionCenter { get; }
-
 		/// <summary> Get scan mode.
 		/// 
 		/// </summary>
 		/// <returns> scan mode
 		/// </returns>
 		public int ScanMode { get; }
+
+		/// <summary> .</summary>
+		/// <returns> EarthRadius as a float
+		/// 
+		/// </returns>
+		public float EarthRadius { get; }
+
+		/// <summary> .</summary>
+		/// <returns> MajorAxis as a float
+		/// 
+		/// </returns>
+		public float MajorAxis { get; }
+
+		/// <summary> .</summary>
+		/// <returns> MinorAxis as a float
+		/// 
+		/// </returns>
+		public float MinorAxis { get; }
+
+		/// <summary> .</summary>
+		/// <returns> Lad as a float
+		/// 
+		/// </returns>
+		public float Lad { get; }
+
+		/// <summary> .</summary>
+		/// <returns> Lov as a float
+		/// 
+		/// </returns>
+		public float Lov { get; }
+
+		/// <summary> .</summary>
+		/// <returns> ProjectionCenter as a int
+		/// 
+		/// </returns>
+		public int ProjectionCenter { get; }
 
 		/// <summary> .</summary>
 		/// <returns> Latin1 as a float
