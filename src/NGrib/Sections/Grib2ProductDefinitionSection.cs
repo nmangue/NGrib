@@ -78,7 +78,7 @@ namespace NGrib.Sections
 		/// <summary> forecastTime.</summary>
 		/// <returns> ForecastTime
 		/// </returns>
-		public int ForecastTime { get; }
+		public long ForecastTime { get; }
 
 		/// <summary> typeFirstFixedSurface.</summary>
 		/// <returns> FirstFixedSurface as int
@@ -112,7 +112,7 @@ namespace NGrib.Sections
 
 		/// <summary> Length in bytes of this PDS.</summary>
 		//UPGRADE_NOTE: Final was removed from the declaration of 'length '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private int length;
+		private long length;
 
 		/// <summary> Number of this section, should be 4.</summary>
 		//UPGRADE_NOTE: Final was removed from the declaration of 'section '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
@@ -390,27 +390,272 @@ namespace NGrib.Sections
 			} // end switch
 		}
 
-		// --Commented out by Inspection START (11/21/05 2:24 PM):
-		//   /**
-		//    * Get the byte length of this section.
-		//    *
-		//    * @return length in bytes of this section
-		//    */
-		//   public final int getLength()
-		//   {
-		//      return length;
-		//   }
-		// --Commented out by Inspection STOP (11/21/05 2:24 PM)
+		/// <summary> Constructs a Grib2ProductDefinitionSection  object from a raf.
+		/// 
+		/// </summary>
+		/// <param name="reader">RandomAccessFile with PDS content
+		/// 
+		/// </param>
+		/// <throws>  IOException  if raf contains no valid GRIB file </throws>
+		//UPGRADE_TODO: Class 'java.io.RandomAccessFile' was converted to 'System.IO.FileStream' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioRandomAccessFile'"
+		internal Grib2ProductDefinitionSection(BufferedBinaryReader reader)
+		{
+			// octets 1-4 (Length of PDS)
+			length = reader.ReadUInt32();
 
-		// --Commented out by Inspection START (11/21/05 2:24 PM):
-		//   /**
-		//    * Number of this section, should be 4
-		//    */
-		//   public final int getSection()
-		//   {
-		//      return section;
-		//   }
-		// --Commented out by Inspection STOP (11/21/05 2:24 PM)
+			// octet 5
+			section = reader.ReadUInt8();
+
+			// octet 6-7
+			Coordinates = reader.ReadUInt16();
+
+			// octet 8-9
+			ProductDefinition = reader.ReadUInt16();
+
+			switch (ProductDefinition)
+			{
+				// Analysis or forecast at a horizontal level or in a horizontal
+				// layer at a point in time
+				case 0:
+				case 1:
+				case 2:
+				case 3:
+				case 4:
+				case 5:
+				case 6:
+				case 7:
+				case 8:
+					{
+						// octet 10
+						ParameterCategory = reader.ReadUInt8();
+
+						//parameterCategory );
+
+						// octet 11
+						ParameterNumber = reader.ReadUInt8();
+
+						// octet 12
+						TypeGenProcess = reader.ReadUInt8();
+
+						// octet 13
+						BackGenProcess = reader.ReadUInt8();
+
+						// octet 14
+						AnalysisGenProcess = reader.ReadUInt8();
+
+						//analysisGenProcess );
+
+						// octet 15-16
+						HoursAfter = reader.ReadUInt16();
+
+						// octet 17
+						MinutesAfter = reader.ReadUInt8();
+
+						// octet 18
+						TimeRangeUnit = reader.ReadUInt8();
+
+						// octet 19-22
+						ForecastTime = reader.ReadUInt32();
+
+						// octet 23
+						TypeFirstFixedSurface = reader.ReadUInt8();
+
+						//     typeFirstFixedSurface );
+
+						// octet 24
+						int scaleFirstFixedSurface = reader.ReadUInt8();
+
+						//     scaleFirstFixedSurface );
+
+						// octet 25-28
+						long valueFirstFixedSurface = reader.ReadUInt32();
+
+						//     valueFirstFixedSurface );
+
+						//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
+						ValueFirstFixedSurface = (float)((scaleFirstFixedSurface == 0 || valueFirstFixedSurface == 0)
+							? valueFirstFixedSurface
+							: Math.Pow(valueFirstFixedSurface, -scaleFirstFixedSurface));
+
+						// octet 29
+						TypeSecondFixedSurface = reader.ReadUInt8();
+
+						//typeSecondFixedSurface );
+
+						// octet 30
+						int scaleSecondFixedSurface = reader.ReadUInt8();
+
+						//scaleSecondFixedSurface );
+
+						// octet 31-34
+						long valueSecondFixedSurface = reader.ReadUInt32();
+
+						//valueSecondFixedSurface );
+
+						//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
+						ValueSecondFixedSurface = (float)((scaleSecondFixedSurface == 0 || valueSecondFixedSurface == 0)
+							? valueSecondFixedSurface
+							: Math.Pow(valueSecondFixedSurface, -scaleSecondFixedSurface));
+
+						// Individual ensemble forecast, control and perturbed, at a
+						// horizontal level or in a horizontal layer at a point in time
+						if (ProductDefinition == 1)
+						{
+							Console.Out.WriteLine("PDS productDefinition == 1 not done");
+
+							//Derived forecast based on all ensemble members at a horizontal 
+							// level or in a horizontal layer at a point in time
+						}
+						else if (ProductDefinition == 2)
+						{
+							Console.Out.WriteLine("PDS productDefinition == 2 not done");
+
+							// Derived forecasts based on a cluster of ensemble members over
+							// a rectangular area at a horizontal level or in a horizontal layer
+							// at a point in time
+						}
+						else if (ProductDefinition == 3)
+						{
+							Console.Out.WriteLine("PDS productDefinition == 3 not done");
+
+							// Derived forecasts based on a cluster of ensemble members
+							// over a circular area at a horizontal level or in a horizontal
+							// layer at a point in time
+						}
+						else if (ProductDefinition == 4)
+						{
+							Console.Out.WriteLine("PDS productDefinition == 4 not done");
+
+							// Probability forecasts at a horizontal level or in a horizontal 
+							//  layer at a point in time
+						}
+						else if (ProductDefinition == 5)
+						{
+							Console.Out.WriteLine("PDS productDefinition == 5 not done");
+
+							// Percentile forecasts at a horizontal level or in a horizontal layer
+							// at a point in time
+						}
+						else if (ProductDefinition == 6)
+						{
+							Console.Out.WriteLine("PDS productDefinition == 6 not done");
+
+							// Analysis or forecast error at a horizontal level or in a horizontal 
+							// layer at a point in time
+						}
+						else if (ProductDefinition == 7)
+						{
+							Console.Out.WriteLine("PDS productDefinition == 7 not done");
+
+							// Average, accumulation, and/or extreme values at a horizontal
+							// level or in a horizontal layer in a continuous or non-continuous
+							// time interval
+						}
+						else if (ProductDefinition == 8)
+						{
+							//  35-41 bytes
+							int year = reader.ReadUInt16();
+							int month = (reader.ReadUInt8()) - 1;
+							int day = reader.ReadUInt8();
+							int hour = reader.ReadUInt8();
+							int minute = reader.ReadUInt8();
+							int second = reader.ReadUInt8();
+
+							//":" + day + ":" + hour +":" + minute +":" + second );
+
+							// 42 - 46
+							int timeRanges = reader.ReadUInt8();
+
+							long missingDataValues = reader.ReadUInt32();
+
+							// 47 - 48
+							int outmostTimeRange = reader.ReadUInt8();
+
+							;
+							int missing = reader.ReadUInt8();
+
+							// 49 - 53
+							int statisticalProcess = reader.ReadUInt8();
+
+							long timeIncrement = reader.ReadUInt32();
+
+							// 54 - 58
+							int indicatorTR = reader.ReadUInt8();
+
+							long lengthTR = reader.ReadUInt32();
+
+							//int indicatorSF = raf.read();
+
+							//int incrementSF = GribNumbers.int4( raf );
+						}
+
+						break;
+					} // cases 0-8
+
+				// Radar product
+
+				case 20:
+					{
+						ParameterCategory = reader.ReadUInt8();
+
+						//parameterCategory );
+
+						ParameterNumber = reader.ReadUInt8();
+
+						TypeGenProcess = reader.ReadUInt8();
+
+						BackGenProcess = reader.ReadUInt8();
+
+						HoursAfter = reader.ReadUInt16();
+
+						MinutesAfter = reader.ReadUInt8();
+
+						TimeRangeUnit = reader.ReadUInt8();
+
+						ForecastTime = reader.ReadUInt32();
+
+						break;
+					} // case 20
+
+				// Satellite Product
+
+				case 30:
+					{
+						ParameterCategory = reader.ReadUInt8();
+
+						ParameterNumber = reader.ReadUInt8();
+
+						TypeGenProcess = reader.ReadUInt8();
+
+						BackGenProcess = reader.ReadUInt8();
+
+						nb = reader.ReadUInt8();
+
+						for (int j = 0; j < nb; j++)
+							reader.Skip(10);
+						break;
+					} // case 30
+
+				// CCITTIA5 character string
+
+				case 254:
+					{
+						ParameterCategory = reader.ReadUInt8();
+
+						//parameterCategory );
+
+						ParameterNumber = reader.ReadUInt8();
+
+						//numberOfChars = GribNumbers.int4( raf );
+
+						//numberOfChars );
+						break;
+					} // case 254
+
+				default:
+					break;
+			} // end switch
+		}
 
 		/// <summary> product Definition  Name.</summary>
 		/// <returns> ProductDefinitionName
