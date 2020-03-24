@@ -19,6 +19,8 @@
 
 using System;
 using System.IO;
+using NGrib.Sections.Templates;
+using NGrib.Sections.Templates.DataRepresentationTemplates;
 
 namespace NGrib.Sections
 {
@@ -295,6 +297,8 @@ namespace NGrib.Sections
 			}
 		} // end of Grib2DataRepresentationSection
 
+        public DataRepresentation DataRepresentation { get; }
+
 		/// <summary> Constructs a <tt>Grib2DataRepresentationSection</tt> object from a raf.
 		/// 
 		/// </summary>
@@ -303,7 +307,6 @@ namespace NGrib.Sections
 		/// <throws>  IOException  if stream contains no valid GRIB file </throws>
 		internal Grib2DataRepresentationSection(BufferedBinaryReader reader)
 		{
-			InitBlock();
 			// octets 1-4 (Length of DRS)
 			Length = reader.ReadUInt32();
 
@@ -311,114 +314,18 @@ namespace NGrib.Sections
 
 			DataPoints = reader.ReadUInt32();
 
-			DataTemplateNumber = (int)reader.ReadUInt16();
+			DataTemplateNumber = reader.ReadUInt16();
 
-			switch (DataTemplateNumber)
-			{
-				// Data Template Number
-				case 0:
-				case 1: // 0 - Grid point data - simple packing 
-						// 1 - Matrix values - simple packing
-
-					ReferenceValue = reader.ReadSingle();
-					BinaryScaleFactor = reader.ReadUInt16();
-					DecimalScaleFactor = reader.ReadUInt16();
-					NumberOfBits = reader.ReadUInt8();
-
-					OriginalType = reader.ReadUInt8();
-
-					if (DataTemplateNumber == 0)
-						break;
-					// case 1 not implememted
-					Console.Out.WriteLine("DRS dataTemplate=1 not implemented yet");
-					break;
-
-				case 2:
-				case 3: // Grid point data - complex packing
-
-					// octet 12 - 15
-					ReferenceValue = reader.ReadSingle();
-					// octet 16 - 17
-					BinaryScaleFactor = reader.ReadUInt16();
-					// octet 18 - 19
-					DecimalScaleFactor = reader.ReadUInt16();
-					// octet 20
-					NumberOfBits = reader.ReadUInt8();
-
-					// octet 21
-					OriginalType = reader.ReadUInt8();
-
-					// octet 22
-					SplittingMethod = reader.ReadUInt8();
-
-					//     splittingMethod );
-					// octet 23
-					MissingValueManagement = reader.ReadUInt8();
-
-					//     missingValueManagement );
-					// octet 24 - 27
-					PrimaryMissingValue = reader.ReadSingle();
-					// octet 28 - 31
-					SecondaryMissingValue = reader.ReadSingle();
-					// octet 32 - 35
-					NumberOfGroups = reader.ReadUInt32();
-
-					//     numberOfGroups );
-					// octet 36
-					ReferenceGroupWidths = reader.ReadUInt8();
-
-					//     referenceGroupWidths );
-					// octet 37
-					BitsGroupWidths = reader.ReadUInt8();
-					// according to documentation subtract referenceGroupWidths
-					BitsGroupWidths = BitsGroupWidths - ReferenceGroupWidths;
-
-					//     bitsGroupWidths );
-					// octet 38 - 41
-					ReferenceGroupLength = reader.ReadUInt32();
-
-					//     referenceGroupLength );
-					// octet 42
-					LengthIncrement = reader.ReadUInt8();
-
-					//     lengthIncrement );
-					// octet 43 - 46
-					LengthLastGroup = reader.ReadUInt32();
-
-					//     lengthLastGroup );
-					// octet 47
-					BitsScaledGroupLength = reader.ReadUInt8();
-
-					//     bitsScaledGroupLength );
-					if (DataTemplateNumber == 2)
-						break;
-
-					// case 3 // complex packing & spatial differencing
-					OrderSpatial = reader.ReadUInt8();
-
-					DescriptorSpatial = reader.ReadUInt8();
-
-					break;
-
-				case 40:
-				case 40000: // Grid point data - JPEG 2000 Code Stream Format
-
-					ReferenceValue = reader.ReadSingle();
-					BinaryScaleFactor = reader.ReadUInt16();
-					DecimalScaleFactor = reader.ReadUInt16();
-					NumberOfBits = reader.ReadUInt8();
-
-					OriginalType = reader.ReadUInt8();
-
-					CompressionMethod = reader.ReadUInt8();
-
-					CompressionRatio = reader.ReadUInt8();
-
-					break;
-
-				default:
-					break;
-			}
+            DataRepresentation = DataRepresentationFactory.Build(reader, DataTemplateNumber);
 		} // end of Grib2DataRepresentationSection
-	}
+
+        private static TemplateFactory<DataRepresentation> DataRepresentationFactory = new TemplateFactory<DataRepresentation>
+        {
+            { 0, r => new GridPointDataSimplePacking(r) },
+            { 2, r => new GridPointDataComplexPacking(r) },
+            { 3, r => new GridPointDataComplexPackingAndSpatialDifferencing(r) },
+            { 40, r => new GridPointDataJpeg2000CodeStream(r) },
+            { 40000, r => new GridPointDataJpeg2000CodeStream(r) },
+        };
+    }
 }

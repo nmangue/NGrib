@@ -141,7 +141,7 @@ namespace NGrib.Sections
 
 			// dataPoints are number of points encoded, it could be less than the
 			// numberPoints in the grid record if bitMap is used, otherwise equal
-			int dataPoints = drs.DataPoints;
+			int dataPoints = (int) drs.DataPoints;
 
 			float pmv = drs.PrimaryMissingValue;
 
@@ -219,7 +219,7 @@ namespace NGrib.Sections
 
 			float pmv = drs.PrimaryMissingValue;
 
-			int NG = drs.NumberOfGroups;
+			int NG = (int) drs.NumberOfGroups;
 
 			// 6-xx  Get reference values for groups (X1's)
 			int[] X1 = new int[NG];
@@ -249,7 +249,7 @@ namespace NGrib.Sections
 
 			int[] L = new int[NG];
 			int countL = 0;
-			int ref_Renamed = drs.ReferenceGroupLength;
+			int ref_Renamed = (int)drs.ReferenceGroupLength;
 
 			int len_inc = drs.LengthIncrement;
 
@@ -340,7 +340,7 @@ namespace NGrib.Sections
 			} // end for i
 
 			// process last group
-			int last = drs.LengthLastGroup;
+			int last = (int)drs.LengthLastGroup;
 
 			for (int j = 0; j < last; j++)
 			{
@@ -399,7 +399,7 @@ namespace NGrib.Sections
 
 			float pmv = drs.PrimaryMissingValue;
 
-			int NG = drs.NumberOfGroups;
+			int NG = (int)drs.NumberOfGroups;
 
 			int g1 = 0, gMin = 0, h1 = 0, h2 = 0, hMin = 0;
 			// [6-ww]   1st values of undifferenced scaled values and minimums
@@ -486,7 +486,7 @@ namespace NGrib.Sections
 
 			int[] L = new int[NG];
 			int countL = 0;
-			int ref_Renamed = drs.ReferenceGroupLength;
+			int ref_Renamed = (int)drs.ReferenceGroupLength;
 
 			int len_inc = drs.LengthIncrement;
 
@@ -573,7 +573,7 @@ namespace NGrib.Sections
 			} // end for i
 
 			// process last group
-			int last = drs.LengthLastGroup;
+			int last = (int)drs.LengthLastGroup;
 
 			for (int j = 0; j < last; j++)
 			{
@@ -801,7 +801,7 @@ namespace NGrib.Sections
 
 			// dataPoints are number of points encoded, it could be less than the
 			// numberPoints in the grid record if bitMap is used, otherwise equal
-			int dataPoints = drs.DataPoints;
+			int dataPoints = (int)drs.DataPoints;
 
 			float pmv = drs.PrimaryMissingValue;
 
