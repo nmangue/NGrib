@@ -69,7 +69,7 @@ namespace NGrib.Sections.Templates.GridDefinitionTemplates
 			}
 			else
 			{
-				earthShape = null;
+				throw new NotImplementedException();
 			}
 
 			return earthShape;

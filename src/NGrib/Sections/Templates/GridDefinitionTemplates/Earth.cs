@@ -2,8 +2,7 @@
 {
 	public abstract class Earth
 	{
-
-	}
+    }
 
 	public class SphericalEarth : Earth
 	{
