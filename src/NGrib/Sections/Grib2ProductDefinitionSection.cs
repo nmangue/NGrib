@@ -395,6 +395,16 @@ namespace NGrib.Sections
 			} // end switch
 		}
 
+
+        internal Grib2ProductDefinitionSection(long length, int section, int coordinates, int productDefinitionTemplateNumber, ProductDefinition productDefinition)
+        {
+            Coordinates = coordinates;
+            ProductDefinitionTemplateNumber = productDefinitionTemplateNumber;
+            ProductDefinition = productDefinition;
+            this.length = length;
+            this.section = section;
+        }
+
 		/// <summary> Constructs a Grib2ProductDefinitionSection  object from a raf.
 		/// 
 		/// </summary>
@@ -403,21 +413,23 @@ namespace NGrib.Sections
 		/// </param>
 		/// <throws>  IOException  if raf contains no valid GRIB file </throws>
 		//UPGRADE_TODO: Class 'java.io.RandomAccessFile' was converted to 'System.IO.FileStream' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioRandomAccessFile'"
-		internal Grib2ProductDefinitionSection(BufferedBinaryReader reader)
+		internal static Grib2ProductDefinitionSection BuildFrom(BufferedBinaryReader reader)
 		{
 			// octets 1-4 (Length of PDS)
-			length = reader.ReadUInt32();
+			var length = reader.ReadUInt32();
 
 			// octet 5
-			section = reader.ReadUInt8();
+			var section = reader.ReadUInt8();
 
 			// octet 6-7
-			Coordinates = reader.ReadUInt16();
+			var coordinates = reader.ReadUInt16();
 
 			// octet 8-9
-			ProductDefinitionTemplateNumber = reader.ReadUInt16();
+			var productDefinitionTemplateNumber = reader.ReadUInt16();
 
-            ProductDefinition = ProductDefinitionFactories.Build(reader, ProductDefinitionTemplateNumber);
+            var productDefinition = ProductDefinitionFactories.Build(reader, productDefinitionTemplateNumber);
+
+			return new Grib2ProductDefinitionSection(length, section, coordinates, productDefinitionTemplateNumber, productDefinition);
         }
 
 		/// <summary> product Definition  Name.</summary>

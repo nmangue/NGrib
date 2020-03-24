@@ -31,6 +31,7 @@ namespace NGrib
 
             var gridDefinitionSection = Grib2GridDefinitionSection.BuildFrom(reader);
 
+            var productDefinitionSection = Grib2ProductDefinitionSection.BuildFrom(reader);
         }
 	}
 }
