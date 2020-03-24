@@ -299,24 +299,35 @@ namespace NGrib.Sections
 
         public DataRepresentation DataRepresentation { get; }
 
+        public Grib2DataRepresentationSection(long length, int section, long dataPoints, int dataTemplateNumber, DataRepresentation dataRepresentation)
+        {
+            this.section = section;
+            Length = length;
+            DataPoints = dataPoints;
+            DataTemplateNumber = dataTemplateNumber;
+            DataRepresentation = dataRepresentation;
+        }
+
 		/// <summary> Constructs a <tt>Grib2DataRepresentationSection</tt> object from a raf.
 		/// 
 		/// </summary>
 		/// <param name="reader">RandomAccessFile with Section DRS content
 		/// </param>
 		/// <throws>  IOException  if stream contains no valid GRIB file </throws>
-		internal Grib2DataRepresentationSection(BufferedBinaryReader reader)
+		internal static Grib2DataRepresentationSection BuildFrom(BufferedBinaryReader reader)
 		{
 			// octets 1-4 (Length of DRS)
-			Length = reader.ReadUInt32();
+			var length = reader.ReadUInt32();
 
-			section = reader.ReadUInt8();
+			var section = reader.ReadUInt8();
 
-			DataPoints = reader.ReadUInt32();
+			var dataPoints = reader.ReadUInt32();
 
-			DataTemplateNumber = reader.ReadUInt16();
+			var dataTemplateNumber = reader.ReadUInt16();
 
-            DataRepresentation = DataRepresentationFactory.Build(reader, DataTemplateNumber);
+            var dataRepresentation = DataRepresentationFactory.Build(reader, dataTemplateNumber);
+
+			return new Grib2DataRepresentationSection(length, section, dataPoints, dataTemplateNumber, dataRepresentation);
 		} // end of Grib2DataRepresentationSection
 
         private static TemplateFactory<DataRepresentation> DataRepresentationFactory = new TemplateFactory<DataRepresentation>

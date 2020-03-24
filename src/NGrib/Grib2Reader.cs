@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.IO;
 using NGrib.Sections;
 
 namespace NGrib
@@ -32,6 +29,8 @@ namespace NGrib
             var gridDefinitionSection = Grib2GridDefinitionSection.BuildFrom(reader);
 
             var productDefinitionSection = Grib2ProductDefinitionSection.BuildFrom(reader);
+
+            var dataRepresentationSection = Grib2DataRepresentationSection.BuildFrom(reader);
         }
 	}
 }
