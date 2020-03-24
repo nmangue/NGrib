@@ -146,6 +146,8 @@ namespace NGrib
 			savedPosition = stream.Position;
 		}
 
+        public long Position => stream.Position;
+
 		public void SeekToSavedPosition()
 		{
 			Seek(savedPosition, SeekOrigin.Begin);

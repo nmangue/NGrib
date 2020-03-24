@@ -18,7 +18,12 @@
  */
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
+using NGrib.Sections.Templates;
+using NGrib.Sections.Templates.ProductDefinitionTemplates;
 
 namespace NGrib.Sections
 {
@@ -33,7 +38,7 @@ namespace NGrib.Sections
 		/// <summary> productDefinition.</summary>
 		/// <returns> ProductDefinition
 		/// </returns>
-		public int ProductDefinition { get; }
+		public int ProductDefinitionTemplateNumber { get; }
 
 		/// <summary> parameter Category .</summary>
 		/// <returns> parameterCategory as int
@@ -143,9 +148,9 @@ namespace NGrib.Sections
 			Coordinates = GribNumbers.int2(raf);
 
 			// octet 8-9
-			ProductDefinition = GribNumbers.int2(raf);
+			ProductDefinitionTemplateNumber = GribNumbers.int2(raf);
 
-			switch (ProductDefinition)
+			switch (ProductDefinitionTemplateNumber)
 			{
 				// Analysis or forecast at a horizontal level or in a horizontal
 				// layer at a point in time
@@ -232,14 +237,14 @@ namespace NGrib.Sections
 
 					// Individual ensemble forecast, control and perturbed, at a
 					// horizontal level or in a horizontal layer at a point in time
-					if (ProductDefinition == 1)
+					if (ProductDefinitionTemplateNumber == 1)
 					{
 						Console.Out.WriteLine("PDS productDefinition == 1 not done");
 
 						//Derived forecast based on all ensemble members at a horizontal 
 						// level or in a horizontal layer at a point in time
 					}
-					else if (ProductDefinition == 2)
+					else if (ProductDefinitionTemplateNumber == 2)
 					{
 						Console.Out.WriteLine("PDS productDefinition == 2 not done");
 
@@ -247,7 +252,7 @@ namespace NGrib.Sections
 						// a rectangular area at a horizontal level or in a horizontal layer
 						// at a point in time
 					}
-					else if (ProductDefinition == 3)
+					else if (ProductDefinitionTemplateNumber == 3)
 					{
 						Console.Out.WriteLine("PDS productDefinition == 3 not done");
 
@@ -255,28 +260,28 @@ namespace NGrib.Sections
 						// over a circular area at a horizontal level or in a horizontal
 						// layer at a point in time
 					}
-					else if (ProductDefinition == 4)
+					else if (ProductDefinitionTemplateNumber == 4)
 					{
 						Console.Out.WriteLine("PDS productDefinition == 4 not done");
 
 						// Probability forecasts at a horizontal level or in a horizontal 
 						//  layer at a point in time
 					}
-					else if (ProductDefinition == 5)
+					else if (ProductDefinitionTemplateNumber == 5)
 					{
 						Console.Out.WriteLine("PDS productDefinition == 5 not done");
 
 						// Percentile forecasts at a horizontal level or in a horizontal layer
 						// at a point in time
 					}
-					else if (ProductDefinition == 6)
+					else if (ProductDefinitionTemplateNumber == 6)
 					{
 						Console.Out.WriteLine("PDS productDefinition == 6 not done");
 
 						// Analysis or forecast error at a horizontal level or in a horizontal 
 						// layer at a point in time
 					}
-					else if (ProductDefinition == 7)
+					else if (ProductDefinitionTemplateNumber == 7)
 					{
 						Console.Out.WriteLine("PDS productDefinition == 7 not done");
 
@@ -284,7 +289,7 @@ namespace NGrib.Sections
 						// level or in a horizontal layer in a continuous or non-continuous
 						// time interval
 					}
-					else if (ProductDefinition == 8)
+					else if (ProductDefinitionTemplateNumber == 8)
 					{
 						//  35-41 bytes
 						int year = GribNumbers.int2(raf);
@@ -410,271 +415,29 @@ namespace NGrib.Sections
 			Coordinates = reader.ReadUInt16();
 
 			// octet 8-9
-			ProductDefinition = reader.ReadUInt16();
+			ProductDefinitionTemplateNumber = reader.ReadUInt16();
 
-			switch (ProductDefinition)
-			{
-				// Analysis or forecast at a horizontal level or in a horizontal
-				// layer at a point in time
-				case 0:
-				case 1:
-				case 2:
-				case 3:
-				case 4:
-				case 5:
-				case 6:
-				case 7:
-				case 8:
-					{
-						// octet 10
-						ParameterCategory = reader.ReadUInt8();
-
-						//parameterCategory );
-
-						// octet 11
-						ParameterNumber = reader.ReadUInt8();
-
-						// octet 12
-						TypeGenProcess = reader.ReadUInt8();
-
-						// octet 13
-						BackGenProcess = reader.ReadUInt8();
-
-						// octet 14
-						AnalysisGenProcess = reader.ReadUInt8();
-
-						//analysisGenProcess );
-
-						// octet 15-16
-						HoursAfter = reader.ReadUInt16();
-
-						// octet 17
-						MinutesAfter = reader.ReadUInt8();
-
-						// octet 18
-						TimeRangeUnit = reader.ReadUInt8();
-
-						// octet 19-22
-						ForecastTime = reader.ReadUInt32();
-
-						// octet 23
-						TypeFirstFixedSurface = reader.ReadUInt8();
-
-						//     typeFirstFixedSurface );
-
-						// octet 24
-						int scaleFirstFixedSurface = reader.ReadUInt8();
-
-						//     scaleFirstFixedSurface );
-
-						// octet 25-28
-						long valueFirstFixedSurface = reader.ReadUInt32();
-
-						//     valueFirstFixedSurface );
-
-						//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-						ValueFirstFixedSurface = (float)((scaleFirstFixedSurface == 0 || valueFirstFixedSurface == 0)
-							? valueFirstFixedSurface
-							: Math.Pow(valueFirstFixedSurface, -scaleFirstFixedSurface));
-
-						// octet 29
-						TypeSecondFixedSurface = reader.ReadUInt8();
-
-						//typeSecondFixedSurface );
-
-						// octet 30
-						int scaleSecondFixedSurface = reader.ReadUInt8();
-
-						//scaleSecondFixedSurface );
-
-						// octet 31-34
-						long valueSecondFixedSurface = reader.ReadUInt32();
-
-						//valueSecondFixedSurface );
-
-						//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-						ValueSecondFixedSurface = (float)((scaleSecondFixedSurface == 0 || valueSecondFixedSurface == 0)
-							? valueSecondFixedSurface
-							: Math.Pow(valueSecondFixedSurface, -scaleSecondFixedSurface));
-
-						// Individual ensemble forecast, control and perturbed, at a
-						// horizontal level or in a horizontal layer at a point in time
-						if (ProductDefinition == 1)
-						{
-							Console.Out.WriteLine("PDS productDefinition == 1 not done");
-
-							//Derived forecast based on all ensemble members at a horizontal 
-							// level or in a horizontal layer at a point in time
-						}
-						else if (ProductDefinition == 2)
-						{
-							Console.Out.WriteLine("PDS productDefinition == 2 not done");
-
-							// Derived forecasts based on a cluster of ensemble members over
-							// a rectangular area at a horizontal level or in a horizontal layer
-							// at a point in time
-						}
-						else if (ProductDefinition == 3)
-						{
-							Console.Out.WriteLine("PDS productDefinition == 3 not done");
-
-							// Derived forecasts based on a cluster of ensemble members
-							// over a circular area at a horizontal level or in a horizontal
-							// layer at a point in time
-						}
-						else if (ProductDefinition == 4)
-						{
-							Console.Out.WriteLine("PDS productDefinition == 4 not done");
-
-							// Probability forecasts at a horizontal level or in a horizontal 
-							//  layer at a point in time
-						}
-						else if (ProductDefinition == 5)
-						{
-							Console.Out.WriteLine("PDS productDefinition == 5 not done");
-
-							// Percentile forecasts at a horizontal level or in a horizontal layer
-							// at a point in time
-						}
-						else if (ProductDefinition == 6)
-						{
-							Console.Out.WriteLine("PDS productDefinition == 6 not done");
-
-							// Analysis or forecast error at a horizontal level or in a horizontal 
-							// layer at a point in time
-						}
-						else if (ProductDefinition == 7)
-						{
-							Console.Out.WriteLine("PDS productDefinition == 7 not done");
-
-							// Average, accumulation, and/or extreme values at a horizontal
-							// level or in a horizontal layer in a continuous or non-continuous
-							// time interval
-						}
-						else if (ProductDefinition == 8)
-						{
-							//  35-41 bytes
-							int year = reader.ReadUInt16();
-							int month = (reader.ReadUInt8()) - 1;
-							int day = reader.ReadUInt8();
-							int hour = reader.ReadUInt8();
-							int minute = reader.ReadUInt8();
-							int second = reader.ReadUInt8();
-
-							//":" + day + ":" + hour +":" + minute +":" + second );
-
-							// 42 - 46
-							int timeRanges = reader.ReadUInt8();
-
-							long missingDataValues = reader.ReadUInt32();
-
-							// 47 - 48
-							int outmostTimeRange = reader.ReadUInt8();
-
-							;
-							int missing = reader.ReadUInt8();
-
-							// 49 - 53
-							int statisticalProcess = reader.ReadUInt8();
-
-							long timeIncrement = reader.ReadUInt32();
-
-							// 54 - 58
-							int indicatorTR = reader.ReadUInt8();
-
-							long lengthTR = reader.ReadUInt32();
-
-							//int indicatorSF = raf.read();
-
-							//int incrementSF = GribNumbers.int4( raf );
-						}
-
-						break;
-					} // cases 0-8
-
-				// Radar product
-
-				case 20:
-					{
-						ParameterCategory = reader.ReadUInt8();
-
-						//parameterCategory );
-
-						ParameterNumber = reader.ReadUInt8();
-
-						TypeGenProcess = reader.ReadUInt8();
-
-						BackGenProcess = reader.ReadUInt8();
-
-						HoursAfter = reader.ReadUInt16();
-
-						MinutesAfter = reader.ReadUInt8();
-
-						TimeRangeUnit = reader.ReadUInt8();
-
-						ForecastTime = reader.ReadUInt32();
-
-						break;
-					} // case 20
-
-				// Satellite Product
-
-				case 30:
-					{
-						ParameterCategory = reader.ReadUInt8();
-
-						ParameterNumber = reader.ReadUInt8();
-
-						TypeGenProcess = reader.ReadUInt8();
-
-						BackGenProcess = reader.ReadUInt8();
-
-						nb = reader.ReadUInt8();
-
-						for (int j = 0; j < nb; j++)
-							reader.Skip(10);
-						break;
-					} // case 30
-
-				// CCITTIA5 character string
-
-				case 254:
-					{
-						ParameterCategory = reader.ReadUInt8();
-
-						//parameterCategory );
-
-						ParameterNumber = reader.ReadUInt8();
-
-						//numberOfChars = GribNumbers.int4( raf );
-
-						//numberOfChars );
-						break;
-					} // case 254
-
-				default:
-					break;
-			} // end switch
-		}
+            ProductDefinition = ProductDefinitionFactories.Build(reader, ProductDefinitionTemplateNumber);
+        }
 
 		/// <summary> product Definition  Name.</summary>
 		/// <returns> ProductDefinitionName
 		/// </returns>
 		public string getProductDefinitionName()
 		{
-			return getProductDefinitionName(ProductDefinition);
+			return getProductDefinitionName(ProductDefinitionTemplateNumber);
 		}
 
 		/// <summary> productDefinition  Name.
 		/// from code table 4.0.
 		/// </summary>
-		/// <param name="productDefinition">
+		/// <param name="productDefinitionTemplateNumber">
 		/// </param>
 		/// <returns> ProductDefinitionName
 		/// </returns>
-		static public string getProductDefinitionName(int productDefinition)
+		static public string getProductDefinitionName(int productDefinitionTemplateNumber)
 		{
-			switch (productDefinition)
+			switch (productDefinitionTemplateNumber)
 			{
 				case 0: return "Analysis/forecast at horizontal level/layer";
 
@@ -1042,5 +805,13 @@ namespace NGrib.Sections
 				default: return "";
 			}
 		} // end getTypeSurfaceUnit
-	} // end Grib2ProductDefinitionSection
+
+        private static TemplateFactory<ProductDefinition> ProductDefinitionFactories = new TemplateFactory<ProductDefinition>()
+            {
+                { 0, r => new PointInTimeHorizontalLevelProductDefinition(r) },
+                { 8, r => new StatisticallyProcessedPointInTimeHorizontalLevelProductDefinition(r) }
+			};
+
+        public ProductDefinition ProductDefinition { get; }
+    } // end Grib2ProductDefinitionSection
 }
