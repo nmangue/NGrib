@@ -19,18 +19,39 @@ namespace NGrib
 			var indicatorSection = Grib2IndicatorSection.BuildFrom(reader);
 			var identificationSection = Grib2IdentificationSection.BuildFrom(reader);
 
-			reader.SaveCurrentPosition();
-			var localUseSection = Grib2LocalUseSection.BuildFrom(reader);
-			if (localUseSection == null)
+			Grib2LocalUseSection localSection = null;
+			do
 			{
-				reader.SeekToSavedPosition();
+				if (reader.PeekSection().Is(SectionCode.LocalUseSection))
+				{
+					localSection = Grib2LocalUseSection.BuildFrom(reader);
+				}
+
+				while (reader.PeekSection().Is(SectionCode.GridDefinitionSection))
+				{
+					var gridDefinitionSection = Grib2GridDefinitionSection.BuildFrom(reader);
+
+					while (reader.PeekSection().Is(SectionCode.ProductDefinitionSection))
+					{
+						var productDefinitionSection = Grib2ProductDefinitionSection.BuildFrom(reader);
+
+						Expect(reader.PeekSection().Is(SectionCode.DataRepresentationSection));
+						var dataRepresentationSection = Grib2DataRepresentationSection.BuildFrom(reader);
+
+						Expect(reader.PeekSection().Is(SectionCode.BitmapSection));
+
+						Expect(reader.PeekSection().Is(SectionCode.DataSection));
+					}
+				}
+			} while (!reader.PeekSection().Is(SectionCode.EndSection));
+		}
+
+		private void Expect(bool isOk)
+		{
+			if (!isOk)
+			{
+				throw new NoValidGribException("Unexpected section");
 			}
-
-            var gridDefinitionSection = Grib2GridDefinitionSection.BuildFrom(reader);
-
-            var productDefinitionSection = Grib2ProductDefinitionSection.BuildFrom(reader);
-
-            var dataRepresentationSection = Grib2DataRepresentationSection.BuildFrom(reader);
-        }
+		}
 	}
 }

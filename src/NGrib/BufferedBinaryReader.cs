@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Numerics;
+using NGrib.Sections;
 
 namespace NGrib
 {
@@ -59,17 +60,17 @@ namespace NGrib
 			}
 		}
 
-        public byte ReadByte()
-        {
-            EnsureAvailable(sizeof(byte));
-            var val = buffer[bufferOffset];
-            bufferOffset += sizeof(byte);
-            return val;
+    public byte ReadByte()
+    {
+      EnsureAvailable(sizeof(byte));
+      var val = buffer[bufferOffset];
+      bufferOffset += sizeof(byte);
+      return val;
 		}
 
 		public int ReadUInt8() => ReadByte();
 
-        public int ReadUInt16()
+    public int ReadUInt16()
 		{
 			EnsureAvailable(sizeof(short));
 			var val = BigEndianBitConverter.ToUInt16(buffer, bufferOffset);
@@ -111,6 +112,32 @@ namespace NGrib
 			return result;
 		}
 
+		public SectionInfo PeekSection()
+		{
+			SaveCurrentPosition();
+			var info = ReadSectionInfo();
+			SeekToSavedPosition();
+			return info;
+		}
+
+		public SectionInfo ReadSectionInfo()
+		{
+			var sectionLength = ReadUInt32();
+
+			if (sectionLength == Constants.GribFileStartCode)
+			{
+				return new SectionInfo(Constants.IndicatorSectionLength, SectionCode.IndicatorSection);
+			}
+			
+			if (sectionLength == Constants.GribFileEndCode)
+			{
+				return new SectionInfo(Constants.EndSectionLength, SectionCode.EndSection);
+			}
+
+			var sectionCode = ReadUInt8();
+			return new SectionInfo(sectionLength, sectionCode);
+		}
+
 		public void Skip(int numBytes)
 		{
 			if (numBytes <= NumBytesAvailable)
@@ -148,7 +175,7 @@ namespace NGrib
 			savedPosition = stream.Position;
 		}
 
-        public long Position => stream.Position;
+    public long Position => stream.Position;
 
 		public void SeekToSavedPosition()
 		{

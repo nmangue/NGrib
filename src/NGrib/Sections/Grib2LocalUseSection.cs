@@ -88,5 +88,16 @@ namespace NGrib.Sections
 			var bytes = reader.Read((int) length - 5);
 			return new Grib2LocalUseSection(length, section, bytes);
 		}
+
+		internal static Grib2LocalUseSection? BuildFrom(BufferedBinaryReader reader, SectionInfo info)
+		{
+			if (info.SectionCode != (int) SectionCode.LocalUseSection)
+			{
+				return null;
+			}
+
+			var bytes = reader.Read((int)(info.Length - 5));
+			return new Grib2LocalUseSection(info.Length, info.SectionCode, bytes);
+		}
 	} // end Grib2LocalUseSection
 }
