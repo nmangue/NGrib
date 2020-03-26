@@ -18,6 +18,7 @@
  */
 
 using System;
+using System.Collections;
 using System.IO;
 
 namespace NGrib.Sections
@@ -27,6 +28,8 @@ namespace NGrib.Sections
 	/// </summary>
 	public sealed class Grib2BitMapSection
 	{
+		public long BitmapOffset { get; }
+
 		/// <summary> Get bit map.
 		/// 
 		/// </summary>
@@ -45,6 +48,8 @@ namespace NGrib.Sections
 		/// <summary> Bit-map indicator (see Code Table 6.0 and Note (1))</summary>
 		//UPGRADE_NOTE: Final was removed from the declaration of 'bitMapIndicator '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 		private readonly int bitMapIndicator;
+
+		private readonly long numberPoints;
 
 		// *** constructors *******************************************************
 
@@ -84,68 +89,134 @@ namespace NGrib.Sections
 		}
 
 
-        internal Grib2BitMapSection(long length, int section, bool[] bitmap)
-        {
-            this.length = length;
-            this.section = section;
-            Bitmap = bitmap;
-        }
-        /// <summary> Constructs a <tt>Grib2BitMapSection</tt> object from a byteBuffer.
-        /// 
-        /// </summary>
-        /// <param name="raf">RandomAccessFile with Section BMS content
-        /// </param>
-        /// <param name="gds">Grib2GridDefinitionSection
-        /// </param>
-        /// <throws>  IOException  if stream contains no valid GRIB file </throws>
-        internal Grib2BitMapSection(BufferedBinaryReader raf, long numberPoints)
-        {
-            length = raf.ReadUInt32();
+		internal Grib2BitMapSection(long length, int section, bool[] bitmap)
+		{
+			this.length = length;
+			this.section = section;
+			Bitmap = bitmap;
+		}
 
-            section = raf.ReadUInt8();
+		/// <summary> Constructs a <tt>Grib2BitMapSection</tt> object from a byteBuffer.
+		/// 
+		/// </summary>
+		/// <param name="raf">RandomAccessFile with Section BMS content
+		/// </param>
+		/// <param name="gds">Grib2GridDefinitionSection
+		/// </param>
+		/// <throws>  IOException  if stream contains no valid GRIB file </throws>
+		internal Grib2BitMapSection(BufferedBinaryReader raf, long numberPoints)
+		{
+			length = raf.ReadUInt32();
 
-            bitMapIndicator = raf.ReadUInt8();
-            
-            Bitmap = new bool[numberPoints];
-            if (bitMapIndicator == 0)
+			section = raf.ReadUInt8();
+
+			bitMapIndicator = raf.ReadUInt8();
+
+			Bitmap = new bool[numberPoints];
+			if (bitMapIndicator == 0)
 			{
 				// create new bit map, octet 4 contains number of unused bits at the end
-                
-                var i = 0;
-                while (i < Bitmap.Length)
-                {
-                    var bitmap = (Bitmask) raf.ReadByte();
 
-                    Bitmap[i++] = bitmap.HasFlag(Bitmask.Bit1);
-                    Bitmap[i++] = bitmap.HasFlag(Bitmask.Bit2);
-                    Bitmap[i++] = bitmap.HasFlag(Bitmask.Bit3);
-                    Bitmap[i++] = bitmap.HasFlag(Bitmask.Bit4);
-                    Bitmap[i++] = bitmap.HasFlag(Bitmask.Bit5);
-                    Bitmap[i++] = bitmap.HasFlag(Bitmask.Bit6);
-                    Bitmap[i++] = bitmap.HasFlag(Bitmask.Bit7);
-                    Bitmap[i++] = bitmap.HasFlag(Bitmask.Bit8);
-                }
-            }
-            else
-            {
-                for (int i = 0; i < Bitmap.Length; i++)
-                {
-                    Bitmap[i] = true;
-                }
-            }
-        }
+				var i = 0;
+				while (i < Bitmap.Length)
+				{
+					var bitmap = (Bitmask) raf.ReadByte();
 
-        [Flags]
-        private enum Bitmask : byte
-        {
-            Bit1 = 1 << 7,
-            Bit2 = 1 << 6,
-            Bit3 = 1 << 5,
-            Bit4 = 1 << 4,
-            Bit5 = 1 << 3,
-            Bit6 = 1 << 2,
-            Bit7 = 1 << 1,
-            Bit8 = 1,
-        }
-    }
+					Bitmap[i++] = bitmap.HasFlag(Bitmask.Bit1);
+					Bitmap[i++] = bitmap.HasFlag(Bitmask.Bit2);
+					Bitmap[i++] = bitmap.HasFlag(Bitmask.Bit3);
+					Bitmap[i++] = bitmap.HasFlag(Bitmask.Bit4);
+					Bitmap[i++] = bitmap.HasFlag(Bitmask.Bit5);
+					Bitmap[i++] = bitmap.HasFlag(Bitmask.Bit6);
+					Bitmap[i++] = bitmap.HasFlag(Bitmask.Bit7);
+					Bitmap[i++] = bitmap.HasFlag(Bitmask.Bit8);
+				}
+			}
+			else
+			{
+				for (int i = 0; i < Bitmap.Length; i++)
+				{
+					Bitmap[i] = true;
+				}
+			}
+		}
+
+		private Grib2BitMapSection(long length, int section, int bitmapIndicator, long dataPointsNumber, long bitmapOffset)
+		{
+			BitmapOffset = bitmapOffset;
+			this.length = length;
+			this.section = section;
+			bitMapIndicator = bitmapIndicator;
+			numberPoints = bitmapIndicator == 0 ? length - 6 : dataPointsNumber;
+		}
+
+		internal static Grib2BitMapSection BuildFrom(BufferedBinaryReader raf, long dataPointsNumber)
+		{
+			var length = raf.ReadUInt32();
+
+			var section = raf.ReadUInt8();
+			if (section != (int) SectionCode.BitmapSection)
+			{
+				throw new NoValidGribException("");
+			}
+
+			var bitmapIndicator = raf.ReadUInt8();
+			var bitmapOffset = raf.Position;
+
+			// Skip through the bitmap data
+			// There is no need to load it now
+			raf.Skip((int) length - 6);
+
+			return new Grib2BitMapSection(length, section, bitmapIndicator, dataPointsNumber, bitmapOffset);
+		}
+
+		internal BitArray GetBitmap(BufferedBinaryReader reader)
+		{
+			reader.Seek(BitmapOffset, SeekOrigin.Begin);
+
+			var bitmap = new BitArray((int) numberPoints, true);
+
+			void TrySet(int i, bool value)
+			{
+				if (i < bitmap.Length)
+				{
+					bitmap[i] = value;
+				}
+			}
+
+			if (bitMapIndicator == 0)
+			{
+				// create new bit map, octet 4 contains number of unused bits at the end
+				var i = 0;
+				while (i < bitmap.Length)
+				{
+					var bitmapByte = (Bitmask) reader.ReadByte();
+
+					TrySet(i++, bitmapByte.HasFlag(Bitmask.Bit1));
+					TrySet(i++, bitmapByte.HasFlag(Bitmask.Bit2));
+					TrySet(i++, bitmapByte.HasFlag(Bitmask.Bit3));
+					TrySet(i++, bitmapByte.HasFlag(Bitmask.Bit4));
+					TrySet(i++, bitmapByte.HasFlag(Bitmask.Bit5));
+					TrySet(i++, bitmapByte.HasFlag(Bitmask.Bit6));
+					TrySet(i++, bitmapByte.HasFlag(Bitmask.Bit7));
+					TrySet(i++, bitmapByte.HasFlag(Bitmask.Bit8));
+				}
+			}
+
+			return bitmap;
+		}
+
+		[Flags]
+		private enum Bitmask : byte
+		{
+			Bit1 = 1 << 7,
+			Bit2 = 1 << 6,
+			Bit3 = 1 << 5,
+			Bit4 = 1 << 4,
+			Bit5 = 1 << 3,
+			Bit6 = 1 << 2,
+			Bit7 = 1 << 1,
+			Bit8 = 1,
+		}
+	}
 }

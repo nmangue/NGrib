@@ -1,4 +1,26 @@
-﻿namespace NGrib.Sections.Templates.GridDefinitionTemplates
+﻿/*
+ * This file is part of NGrib.
+ *
+ * Copyright © 2020 Nicolas Mangué
+ * 
+ * NGrib is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ * 
+ * NGrib is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+using System.Collections.Generic;
+using System.Diagnostics;
+
+namespace NGrib.Sections.Templates.GridDefinitionTemplates
 {
 	public class LatLonGridDefinition : XyEarthGridDefinition
 	{
@@ -79,14 +101,39 @@
 				ratio = Angle / (float)Subdivisionsangle;
 			}
 
-			La1 = reader.ReadUInt32() * ratio;
+			La1 = reader.ReadInt32() * ratio;
 			Lo1 = reader.ReadUInt32() * ratio;
 			Resolution = reader.ReadUInt8();
-			La2 = reader.ReadUInt32() * ratio;
+			La2 = reader.ReadInt32() * ratio;
 			Lo2 = reader.ReadUInt32() * ratio;
 			Dx = reader.ReadUInt32() * ratio;
 			Dy = reader.ReadUInt32() * ratio;
 			ScanMode = reader.ReadUInt8();
+		}
+
+		public override IEnumerable<Coordinate> EnumerateGridPoints()
+		{
+			var firstGridPoint = new Coordinate(La1, Lo1);
+			var lastGridPoint = new Coordinate(La2, Lo2);
+
+			var currentGridPoint = firstGridPoint;
+
+			var longitudeOffset = 0f;
+			for (var x = 0; x < Nx; x++)
+			{
+				var latitudeOffset = 0f;
+				for (var y = 0; y < Ny; y++)
+				{
+					currentGridPoint = firstGridPoint.Add(latitudeOffset, longitudeOffset);
+					yield return currentGridPoint;
+
+					latitudeOffset += Dy;
+				}
+
+				longitudeOffset += Dx;
+			}
+
+			Debug.Assert(lastGridPoint.Equals(currentGridPoint));
 		}
 	}
 }

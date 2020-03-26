@@ -1,4 +1,23 @@
-﻿using System;
+﻿/*
+ * This file is part of NGrib.
+ *
+ * Copyright © 2020 Nicolas Mangué
+ * 
+ * NGrib is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ * 
+ * NGrib is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+using System;
 using System.IO;
 using System.Numerics;
 using NGrib.Sections;
@@ -14,6 +33,8 @@ namespace NGrib
 		private int numBufferedBytes;
 		private long savedPosition;
 		private int NumBytesAvailable => Math.Max(0, numBufferedBytes - bufferOffset);
+
+		public bool HasReachedStreamEnd => stream.Position >= stream.Length && NumBytesAvailable <= 0;
 
 		public BufferedBinaryReader(Stream stream, int bufferSize = 4096)
 		{
@@ -54,7 +75,7 @@ namespace NGrib
 			
 			// Try to read from the stream
 			// and check that we were able to read the bytes we wanted
-			if (!FillBuffer() || NumBytesAvailable < numBytes)
+			if (!FillBuffer() && NumBytesAvailable < numBytes)
 			{
 				throw new IndexOutOfRangeException();
 			}
@@ -78,6 +99,14 @@ namespace NGrib
 			return val;
 		}
 
+    public int ReadInt16()
+    {
+	    EnsureAvailable(sizeof(short));
+	    var val = BigEndianBitConverter.ToInt16(buffer, bufferOffset);
+	    bufferOffset += sizeof(short);
+	    return val;
+    }
+
 		public long ReadUInt32()
 		{
 			EnsureAvailable(sizeof(uint));
@@ -86,6 +115,58 @@ namespace NGrib
 			return val;
 		}
 
+		public int ReadInt32()
+		{
+			EnsureAvailable(sizeof(int));
+			var val = BigEndianBitConverter.ToInt32(buffer, bufferOffset);
+			bufferOffset += sizeof(int);
+			return val;
+		}
+
+		public void NextUIntN()
+		{
+			positionInBbbReadBuffer = 0;
+			bitByBitReadBuffer = 0;
+		}
+
+		private int bitByBitReadBuffer;
+		private int positionInBbbReadBuffer;
+		public int ReadUIntN(int nbBit)
+		{
+			int bitsLeft = nbBit;
+			int result = 0;
+
+			if (positionInBbbReadBuffer == 0)
+			{
+				bitByBitReadBuffer = ReadByte();
+				positionInBbbReadBuffer = 8;
+			}
+
+			while (true)
+			{
+				int shift = bitsLeft - positionInBbbReadBuffer;
+				if (shift > 0)
+				{
+					// Consume the entire buffer
+					result |= bitByBitReadBuffer << shift;
+					bitsLeft -= positionInBbbReadBuffer;
+
+					// Get the next byte from the RandomAccessFile
+					bitByBitReadBuffer = ReadByte();
+					positionInBbbReadBuffer = 8;
+				}
+				else
+				{
+					// Consume a portion of the buffer
+					result |= bitByBitReadBuffer >> -shift;
+					positionInBbbReadBuffer -= bitsLeft;
+					bitByBitReadBuffer &= 0xff >> (8 - positionInBbbReadBuffer); // mask off consumed bits
+
+					return result;
+				}
+			}
+		}
+	
 		public BigInteger ReadUInt64()
 		{
 			EnsureAvailable(sizeof(ulong));
@@ -172,10 +253,10 @@ namespace NGrib
 
 		public void SaveCurrentPosition()
 		{
-			savedPosition = stream.Position;
+			savedPosition = Position;
 		}
 
-    public long Position => stream.Position;
+    public long Position => stream.Position - NumBytesAvailable;
 
 		public void SeekToSavedPosition()
 		{

@@ -33,7 +33,7 @@ namespace NGrib.Sections
 		public float[] Data { get; private set; }
 
 		/// <summary> Length in bytes of DataSection section.</summary>
-		private readonly int length;
+		private readonly long length;
 
 		/// <summary> Number of this section, should be 7.</summary>
 		//UPGRADE_NOTE: Final was removed from the declaration of 'section '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
@@ -48,6 +48,7 @@ namespace NGrib.Sections
 		private int scanMode;
 		private int count; // raw data count
 		private int Xlength; // length of the x axis
+		public long DataOffset { get; }
 
 		// *** constructors *******************************************************
 
@@ -80,7 +81,7 @@ namespace NGrib.Sections
 				// sanity check for erronous ds length
 				if (length > 0 && length < raf.Length)
 				{
-					SupportClass.Skip(raf, length - 5);
+					SupportClass.Skip(raf, (int) length - 5);
 				}
 				else
 				{
@@ -115,6 +116,47 @@ namespace NGrib.Sections
 				throw new NotSupportedException();
 			}
 		} // end Grib2DataSection
+
+
+		public Grib2DataSection(long length, int section, long dataOffset)
+		{
+			DataOffset = dataOffset;
+			this.length = length;
+			this.section = section;
+		}
+
+		/// <summary> Constructor for a Grib2 Data Section.</summary>
+		/// <param name="getData">
+		/// </param>
+		/// <param name="raf">
+		/// </param>
+		/// <param name="gds">
+		/// </param>
+		/// <param name="drs">
+		/// </param>
+		/// <param name="bms">
+		/// </param>
+		/// <throws>  IOException </throws>
+		//UPGRADE_TODO: Class 'java.io.RandomAccessFile' was converted to 'System.IO.FileStream' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioRandomAccessFile'"
+		internal static Grib2DataSection BuildFrom(BufferedBinaryReader reader)
+		{
+			// octets 1-4 (Length of DS)
+			var length = reader.ReadUInt32();
+
+			// octet 5  section 7
+			var section = reader.ReadUInt8();
+			if (section != (int) SectionCode.DataSection)
+			{
+				throw new NoValidGribException("");
+			}
+
+			var dataOffset = reader.Position;
+
+			reader.Skip((int) (length - 5));
+
+			return new Grib2DataSection(length, section, dataOffset);
+		} // end Grib2DataSection
+
 
 		/// <summary> simple Unpacking method for Grib2 data.</summary>
 		/// <param name="raf">
@@ -249,7 +291,7 @@ namespace NGrib.Sections
 
 			int[] L = new int[NG];
 			int countL = 0;
-			int ref_Renamed = (int)drs.ReferenceGroupLength;
+			int ref_Renamed = (int) drs.ReferenceGroupLength;
 
 			int len_inc = drs.LengthIncrement;
 
@@ -340,7 +382,7 @@ namespace NGrib.Sections
 			} // end for i
 
 			// process last group
-			int last = (int)drs.LengthLastGroup;
+			int last = (int) drs.LengthLastGroup;
 
 			for (int j = 0; j < last; j++)
 			{
@@ -399,7 +441,7 @@ namespace NGrib.Sections
 
 			float pmv = drs.PrimaryMissingValue;
 
-			int NG = (int)drs.NumberOfGroups;
+			int NG = (int) drs.NumberOfGroups;
 
 			int g1 = 0, gMin = 0, h1 = 0, h2 = 0, hMin = 0;
 			// [6-ww]   1st values of undifferenced scaled values and minimums
@@ -486,7 +528,7 @@ namespace NGrib.Sections
 
 			int[] L = new int[NG];
 			int countL = 0;
-			int ref_Renamed = (int)drs.ReferenceGroupLength;
+			int ref_Renamed = (int) drs.ReferenceGroupLength;
 
 			int len_inc = drs.LengthIncrement;
 
@@ -573,7 +615,7 @@ namespace NGrib.Sections
 			} // end for i
 
 			// process last group
-			int last = (int)drs.LengthLastGroup;
+			int last = (int) drs.LengthLastGroup;
 
 			for (int j = 0; j < last; j++)
 			{
@@ -801,7 +843,7 @@ namespace NGrib.Sections
 
 			// dataPoints are number of points encoded, it could be less than the
 			// numberPoints in the grid record if bitMap is used, otherwise equal
-			int dataPoints = (int)drs.DataPoints;
+			int dataPoints = (int) drs.DataPoints;
 
 			float pmv = drs.PrimaryMissingValue;
 
@@ -841,7 +883,7 @@ namespace NGrib.Sections
 			// Jpeg2000Decoder decoder = new Jpeg2000Decoder();
 			byte[] buf = new byte[length - 5];
 			// TODO Check cast
-			int res = raf.Read(buf, 0, length - 5);
+			int res = raf.Read(buf, 0, (int) (length - 5));
 			int[] values = null;
 			if (res == length - 5)
 			{

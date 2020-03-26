@@ -26,6 +26,9 @@ namespace NGrib.Sections
 	/// </summary>
 	public sealed class Grib2EndSection
 	{
+		public long Length { get; }
+		public int Section { get; }
+
 		/// <summary> Get ending flag for Grib record.
 		/// 
 		/// </summary>
@@ -91,5 +94,23 @@ namespace NGrib.Sections
 				}
 			}
 		} // end Grib2EndSection
+
+		private Grib2EndSection(long length, int section)
+		{
+			Length = length;
+			Section = section;
+		}
+
+		internal static Grib2EndSection BuildFrom(BufferedBinaryReader reader)
+		{
+			var sectionInfos = reader.ReadSectionInfo();
+			if (!sectionInfos.Is(SectionCode.EndSection))
+			{
+				throw new NoValidGribException("");
+			}
+
+			return new Grib2EndSection(sectionInfos.Length, sectionInfos.SectionCode);
+		}
+
 	} // end Grib2EndSection
 }

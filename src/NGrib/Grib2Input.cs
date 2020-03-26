@@ -262,7 +262,7 @@ namespace NGrib
 				}
 				else
 				{
-					Grib2Record gr = new Grib2Record(header, is_Renamed, id, gds, pds, drs, bms, GdsOffset, PdsOffset, lus);
+					Grib2Record gr = new Grib2Record(is_Renamed, id, gds, pds, drs, bms, GdsOffset, PdsOffset, lus);
 					records.Add(gr);
 				}
 				if (oneRecord)

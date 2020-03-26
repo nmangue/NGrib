@@ -114,7 +114,7 @@ namespace NGrib.Sections
 			var gribEdition = reader.ReadUInt8();
 			if (gribEdition != 2)
 			{
-				throw new NotSupportedException("Only GRIB edition 2 is supported. GRIB edition " + gribEdition + " is not yet supported");
+				throw new NotSupportedException($"Only GRIB edition 2 is supported. GRIB edition {gribEdition} is not yet supported");
 			}
 
 			var totalLength = reader.ReadUInt64();

@@ -25,9 +25,6 @@ namespace NGrib
     {
         Grib2DataRepresentationSection DRS { get; }
         Grib2GridDefinitionSection GDS { get; }
-        long getGdsOffset();
-        long getPdsOffset();
-        string Header { get; }
         Grib2IdentificationSection ID { get; }
         Grib2IndicatorSection Is { get; }
         Grib2ProductDefinitionSection PDS { get; }

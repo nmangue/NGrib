@@ -18,9 +18,6 @@
  */
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.IO;
 using NGrib.Sections.Templates;
 using NGrib.Sections.Templates.ProductDefinitionTemplates;
@@ -426,11 +423,11 @@ namespace NGrib.Sections
 
 			// octet 8-9
 			var productDefinitionTemplateNumber = reader.ReadUInt16();
-
-            var productDefinition = ProductDefinitionFactories.Build(reader, productDefinitionTemplateNumber);
+	
+      var productDefinition = ProductDefinitionFactories.Build(reader, productDefinitionTemplateNumber);
 
 			return new Grib2ProductDefinitionSection(length, section, coordinates, productDefinitionTemplateNumber, productDefinition);
-        }
+    }
 
 		/// <summary> product Definition  Name.</summary>
 		/// <returns> ProductDefinitionName

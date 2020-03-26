@@ -17,127 +17,53 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using NGrib.Sections;
 
 namespace NGrib
 {
-	
 	/// <summary> Class which represents a record in a Grib2File.</summary>
 	public sealed class Grib2Record : IGrib2Record
 	{
-		/// <summary> returns Header of Grib record.</summary>
-		/// <returns> header
-		/// </returns>
-		public System.String Header
-		{
-			get
-			{
-				return header;
-			}
-			
-		}
 		/// <summary> returns Inofrmation Section of record.</summary>
 		/// <returns> is
 		/// </returns>
-		public Grib2IndicatorSection Is
-		{
-			get
-			{
-				return is_Renamed;
-			}
-			
-		}
+		public Grib2IndicatorSection Is { get; }
+
 		/// <summary> returns IdentificationSection.</summary>
 		/// <returns> IdentificationSection
 		/// </returns>
-		public Grib2IdentificationSection ID
-		{
-			get
-			{
-				return id;
-			}
-			
-		}
+		public Grib2IdentificationSection ID { get; }
+
 		/// <summary> returns GDS of record.</summary>
 		/// <returns> gds
 		/// </returns>
-		public Grib2GridDefinitionSection GDS
-		{
-			get
-			{
-				return gds;
-			}
-			
-		}
+		public Grib2GridDefinitionSection GDS { get; }
+
 		/// <summary> returns PDS.</summary>
 		/// <returns> pds
 		/// </returns>
-		public Grib2ProductDefinitionSection PDS
-		{
-			get
-			{
-				return pds;
-			}
-			
-		}
+		public Grib2ProductDefinitionSection PDS { get; }
+
 		/// <summary> returns Data Representation Section.</summary>
 		/// <returns> DataRepresentationSection
 		/// </returns>
-		public Grib2DataRepresentationSection DRS
-		{
-			get
-			{
-				return drs;
-			}
-			
-		}
-        /// <summary> returns Local Use Section.</summary>
-        /// <returns> DataRepresentationSection
-        /// </returns>
-        public Grib2LocalUseSection LUS
-        {
-            get
-            {
-                return lus;
-            }
+		public Grib2DataRepresentationSection DRS { get; }
 
-        }
-		
-		/// <summary> Grib record header.</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'header '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.String header;
-		/// <summary> Grib2IndicatorSection object.</summary>
-		private Grib2IndicatorSection is_Renamed = null;
-		/// <summary> Grib2IdentificationSection object.</summary>
-		private Grib2IdentificationSection id = null;
-		/// <summary> Grib2GridDefinitionSection object.</summary>
-		private Grib2GridDefinitionSection gds = null;
-		/// <summary> Grib2ProductDefinitionSection object.</summary>
-		private Grib2ProductDefinitionSection pds = null;
-		/// <summary> Grib2DataRepresentationSection object.</summary>
-		private Grib2DataRepresentationSection drs = null;
-        /// <summary> Grib2LocalUseSection object.</summary>
-        private Grib2LocalUseSection lus = null;
-		// --Commented out by Inspection START (12/8/05 1:27 PM):
-		//   /**
-		//    * Grib2BitMapSection object.
-		//    */
-		//   private Grib2BitMapSection bms = null;
-		// --Commented out by Inspection STOP (12/8/05 1:27 PM)
-		// --Commented out by Inspection START (12/8/05 1:26 PM):
-		//   /**
-		//    * Grib2DataSection object.
-		//    */
-		//   private Grib2DataSection ds = null;
-		// --Commented out by Inspection STOP (12/8/05 1:26 PM)
-		/// <summary> GdsOffset in file.</summary>
-		private long GdsOffset = - 1;
-		/// <summary> PdsOffset in file.</summary>
-		private long PdsOffset = - 1;
-		
+		public Grib2BitMapSection Bms { get; }
+		public long GdsOffset { get; }
+		public long PdsOffset { get; }
+
+		/// <summary> returns Local Use Section.</summary>
+		/// <returns> DataRepresentationSection
+		/// </returns>
+		public Grib2LocalUseSection LUS { get; }
+
+		public Grib2DataSection DataSection { get; }
+
 		/// <summary> Construction for Grib2Record.</summary>
-		/// <param name="header">
-		/// </param>
 		/// <param name="is">
 		/// </param>
 		/// <param name="id">
@@ -150,63 +76,64 @@ namespace NGrib
 		/// </param>
 		/// <param name="bms">
 		/// </param>
-		/// <param name="GdsOffset">
+		/// <param name="gdsOffset">
 		/// </param>
-		/// <param name="PdsOffset">PDS offset in Grib file
+		/// <param name="pdsOffset">PDS offset in Grib file
 		/// </param>
-		public Grib2Record(System.String header, Grib2IndicatorSection is_Renamed, 
-               Grib2IdentificationSection id, Grib2GridDefinitionSection gds, 
-               Grib2ProductDefinitionSection pds, Grib2DataRepresentationSection drs, 
-               Grib2BitMapSection bms, long GdsOffset, long PdsOffset,
-               Grib2LocalUseSection lus)
+		public Grib2Record(Grib2IndicatorSection is_Renamed,
+			Grib2IdentificationSection id, Grib2GridDefinitionSection gds,
+			Grib2ProductDefinitionSection pds, Grib2DataRepresentationSection drs,
+			Grib2BitMapSection bms, long gdsOffset, long pdsOffset,
+			Grib2LocalUseSection lus)
 		{
+			Is = is_Renamed;
+			ID = id;
+			GDS = gds;
+			PDS = pds;
+			DRS = drs;
+			Bms = bms;
+			GdsOffset = gdsOffset;
+			PdsOffset = pdsOffset;
+			LUS = lus;
+		}
+
+		internal Grib2Record(
+			Grib2IndicatorSection indicatorSection, 
+			Grib2IdentificationSection identificationSection, 
+			Grib2LocalUseSection localSection, 
+			Grib2GridDefinitionSection gridDefinitionSection, 
+			Grib2ProductDefinitionSection productDefinitionSection, 
+			Grib2DataRepresentationSection dataRepresentationSection, 
+			Grib2BitMapSection bitmapSection,
+			Grib2DataSection dataSection)
+		{
+			Is = indicatorSection;
+			ID = identificationSection;
+			LUS = localSection;
+			GDS = gridDefinitionSection;
+			PDS = productDefinitionSection;
+			DRS = dataRepresentationSection;
+			Bms = bitmapSection;
+			DataSection = dataSection;
+		}
+
+		internal IEnumerable<KeyValuePair<Coordinate, float?>> GetData(BufferedBinaryReader reader)
+		{
+			return GDS.GridDefinition.EnumerateGridPoints().Zip(GetRawData(reader), (p, v) => new KeyValuePair<Coordinate, float?>(p, v));
+		}
+
+		internal IEnumerable<float?> GetRawData(BufferedBinaryReader reader)
+		{
+			var bitmap = Bms.GetBitmap(reader);
 			
-			this.header = header;
-			this.is_Renamed = is_Renamed;
-			this.id = id;
-			this.gds = gds;
-			this.pds = pds;
-			this.drs = drs;
-			//this.bms = bms;
-			this.GdsOffset = GdsOffset;
-			this.PdsOffset = PdsOffset;
-            this.lus = lus;
+			reader.Seek(DataSection.DataOffset, SeekOrigin.Begin);
+			using var valuesEnumerator = DRS.DataRepresentation.EnumerateDataValues(reader, DRS.DataPoints).GetEnumerator();
+			
+			foreach (var isValueDefined in bitmap)
+			{
+				var v = (bool) isValueDefined && valuesEnumerator.MoveNext() ? valuesEnumerator.Current : DRS.DataRepresentation.MissingValueSubstitute;
+				yield return v;
+			}
 		}
-		
-		/// <summary> returns GDS offset in file.</summary>
-		/// <returns> GdsOffset
-		/// </returns>
-		public long getGdsOffset()
-		{
-			return GdsOffset;
-		}
-		
-		/// <summary> returns Pds Offset.</summary>
-		/// <returns> PdsOffset
-		/// </returns>
-		public long getPdsOffset()
-		{
-			return PdsOffset;
-		}
-		
-		// --Commented out by Inspection START (12/8/05 1:26 PM):
-		//    /**
-		//     * returns BitMapSection.
-		//     * @return BitMapSection
-		//     */
-		//   public final Grib2BitMapSection getBMS(){
-		//      return bms;
-		//   }
-		// --Commented out by Inspection STOP (12/8/05 1:26 PM)
-		
-		// --Commented out by Inspection START (12/8/05 1:26 PM):
-		//    /**
-		//     * returns DataSection.
-		//     * @return DataSection
-		//     */
-		//   public final Grib2DataSection getDS(){
-		//      return ds;
-		//   }
-		// --Commented out by Inspection STOP (12/8/05 1:26 PM)
 	}
 }

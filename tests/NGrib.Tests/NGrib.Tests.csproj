@@ -7,6 +7,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="samples\gfs.20200325.t18z.pgrb2.0p25.f006" />
+    <None Remove="samples\gfs.20200325.t18z.pgrb2.0p25.f018" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="samples\gfs.20200325.t18z.pgrb2.0p25.f006">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="samples\gfs.20200325.t18z.pgrb2.0p25.f018">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
     <PackageReference Include="NFluent" Version="2.7.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
