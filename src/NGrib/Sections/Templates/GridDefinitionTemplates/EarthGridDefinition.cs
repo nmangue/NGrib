@@ -82,6 +82,10 @@ namespace NGrib.Sections.Templates.GridDefinitionTemplates
 					6378137.0f,
 					6356752.314f);
 			}
+			else if (Shape == 5)
+			{
+				earthShape = new OblateSpheroidEarth(6_378_137.0f, 6_356_752.314245179497563967f);
+			}
 			else if (Shape == 6)
 			{
 				earthShape = new SphericalEarth(6371229);
