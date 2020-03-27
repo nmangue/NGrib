@@ -17,8 +17,10 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using NGrib.CodeTables;
 
 namespace NGrib.Sections.Templates.GridDefinitionTemplates
 {
@@ -113,8 +115,44 @@ namespace NGrib.Sections.Templates.GridDefinitionTemplates
 
 		public override IEnumerable<Coordinate> EnumerateGridPoints()
 		{
-			var firstGridPoint = new Coordinate(La1, Lo1);
-			var lastGridPoint = new Coordinate(La2, Lo2);
+			var scanningMode = (ScanningMode) ScanMode;
+			var resolution = (ResolutionAndComponents) Resolution;
+
+			if (resolution != (ResolutionAndComponents.JDirectionIncrementGiven | ResolutionAndComponents.IDirectionIncrementGiven) ||
+			    (scanningMode & ~(ScanningMode.ScanJPositive | ScanningMode.ScanIReverse)) != ScanningMode.Default)
+			{
+				throw new NotImplementedException();
+			}
+			
+			float southLatitude;
+			float northLatitude;
+			float eastLongitude;
+			float westLongitude;
+
+			if (scanningMode.HasFlag(ScanningMode.ScanJPositive))
+			{
+				southLatitude = La1;
+				northLatitude = La2;
+			}
+			else
+			{
+				southLatitude = La2;
+				northLatitude = La1;
+			}
+
+			if (!scanningMode.HasFlag(ScanningMode.ScanIReverse))
+			{
+				westLongitude = Lo1;
+				eastLongitude = Lo2;
+			}
+			else
+			{
+				westLongitude = Lo2;
+				eastLongitude = Lo1;
+			}
+			
+			var firstGridPoint = new Coordinate(northLatitude, westLongitude);
+			var lastGridPoint = new Coordinate(southLatitude, eastLongitude);
 
 			var currentGridPoint = firstGridPoint;
 
