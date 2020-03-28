@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using NFluent;
+using NGrib.Grib2.CodeTables;
 using NGrib.Grib2.Sections;
 using Xunit;
 

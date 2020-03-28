@@ -21,6 +21,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using NGrib.Grib2.CodeTables;
 
 namespace NGrib.Grib2.Sections
 {

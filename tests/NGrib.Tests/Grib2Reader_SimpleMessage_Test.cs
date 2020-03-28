@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using NFluent;
+using NGrib.Grib2.CodeTables;
 using NGrib.Grib2.Sections.Templates.DataRepresentationTemplates;
 using NGrib.Grib2.Sections.Templates.GridDefinitionTemplates;
 using NGrib.Grib2.Sections.Templates.ProductDefinitionTemplates;
