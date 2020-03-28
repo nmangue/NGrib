@@ -22,33 +22,33 @@ using System.Collections.Generic;
 
 namespace NGrib.Sections.Templates.GridDefinitionTemplates
 {
-	public class PolarStereographicProjectionGridDefinition : XyEarthGridDefinition
+	public class PolarStereographicProjectionGridDefinition : GridPointEarthGridDefinition
 	{
 		/// <summary> .</summary>
 		/// <returns> Lad as a float
 		/// 
 		/// </returns>
-		public float Lad { get; }
+		public double Lad { get; }
 
 		/// <summary> .</summary>
 		/// <returns> Lov as a float
 		/// 
 		/// </returns>
-		public float Lov { get; }
+		public double Lov { get; }
 
 		/// <summary> Get x-increment/distance between two grid points.
 		/// 
 		/// </summary>
 		/// <returns> x-increment
 		/// </returns>
-		public float Dx { get; }
+		public double Dx { get; }
 
 		/// <summary> Get y-increment/distance between two grid points.
 		/// 
 		/// </summary>
 		/// <returns> y-increment
 		/// </returns>
-		public float Dy { get; }
+		public double Dy { get; }
 
 		/// <summary> .</summary>
 		/// <returns> ProjectionCenter as a int
@@ -65,10 +65,10 @@ namespace NGrib.Sections.Templates.GridDefinitionTemplates
 
 		internal PolarStereographicProjectionGridDefinition(BufferedBinaryReader reader) : base(reader)
 		{
-			Lad = reader.ReadInt32() * 1e-6f;
-			Lov = reader.ReadUInt32() * 1e-6f;
-			Dx = reader.ReadUInt32() * 1e-3f;
-			Dy = reader.ReadUInt32() * 1e-3f;
+			Lad = reader.ReadInt32() * 1e-6;
+			Lov = reader.ReadUInt32() * 1e-6;
+			Dx = reader.ReadUInt32() * 1e-3;
+			Dy = reader.ReadUInt32() * 1e-3;
 			ProjectionCenter = reader.ReadUInt8();
 			ScanMode = reader.ReadUInt8();
 		}
