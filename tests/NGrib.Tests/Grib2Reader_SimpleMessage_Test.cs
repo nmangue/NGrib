@@ -40,7 +40,7 @@ namespace NGrib.Tests
 
 		private static void CheckIndicatorSection(Grib2Record record)
 		{
-			Check.That(record.Is.DisciplineNumber).Equals(0);
+			Check.That(record.Is.DisciplineCode).Equals(0);
 			Check.That(record.Is.Discipline).Equals(Discipline.MeteorologicalProducts);
 			Check.That(record.Is.GribEdition).Equals(2);
 			Check.That(record.Is.TotalLength).Equals(new BigInteger(207));

@@ -18,7 +18,6 @@
  */
 
 using System;
-using System.IO;
 using System.Linq;
 using System.Numerics;
 using NGrib.Grib2.CodeTables;
@@ -26,19 +25,26 @@ using NGrib.Grib2.CodeTables;
 namespace NGrib.Grib2.Sections
 {
 	/// <summary>
-	/// Represents the IndicatorSection (Section 0) of a GRIB record.
+	/// Section 0 - Indicator Section
 	/// </summary>
-	public sealed class Grib2IndicatorSection
+	public sealed class IndicatorSection
 	{
+		private const int INDICATOR_SECTION_LENGTH = 16;
+
 		/// <summary>
-		/// Length in bytes of IndicatorSection.
+		/// Length of section in octets.
 		/// </summary>
-		public int Length { get; }
+		public long Length { get; }
+
+		/// <summary>
+		/// Number of section.
+		/// </summary>
+		public int Section { get; }
 
 		/// <summary>
 		/// Discipline - GRIB Master Table Number.
 		/// </summary>
-		public int DisciplineNumber { get; }
+		public int DisciplineCode { get; }
 
 		/// <summary>
 		/// Discipline from the GRIB Code Table 0.0.
@@ -55,52 +61,22 @@ namespace NGrib.Grib2.Sections
 		/// </summary>
 		public BigInteger TotalLength { get; }
 
-		public Grib2IndicatorSection(int length, int disciplineNumber, int gribEdition, BigInteger totalLength)
+		private IndicatorSection(int disciplineCode, int gribEdition, BigInteger totalLength)
 		{
-			Length = length;
-			DisciplineNumber = disciplineNumber;
+			Length = INDICATOR_SECTION_LENGTH;
+			Section = (int) SectionCode.IndicatorSection;
+			DisciplineCode = disciplineCode;
 
-			if (Enum.IsDefined(typeof(Discipline), disciplineNumber))
+			if (Enum.IsDefined(typeof(Discipline), disciplineCode))
 			{
-				Discipline = (Discipline) disciplineNumber;
+				Discipline = (Discipline) disciplineCode;
 			}
 
 			GribEdition = gribEdition;
 			TotalLength = totalLength;
 		}
 
-		/// <summary> Constructs a <tt>Grib2IndicatorSection</tt> object from a byteBuffer.
-		/// 
-		/// </summary>
-		/// <param name="raf">RandomAccessFile with IndicatorSection content
-		/// 
-		/// </param>
-		/// <throws>  IOException  if raf contains no valid GRIB file </throws>
-		public Grib2IndicatorSection(Stream raf)
-		{
-			//if Grib edition 1, get bytes for the gribLength
-			int[] data = new int[3];
-			for (int i = 0; i < 3; i++)
-			{
-				data[i] = raf.ReadByte();
-			}
-
-			// edition of GRIB specification
-			GribEdition = raf.ReadByte();
-			if (GribEdition == 2)
-			{
-				// length of GRIB record
-				DisciplineNumber = (byte) data[2];
-				TotalLength = GribNumbers.int8(raf);
-				Length = 16;
-			}
-			else
-			{
-				throw new NotSupportedException("GRIB edition " + GribEdition + " is not yet supported");
-			}
-		}
-
-		internal static Grib2IndicatorSection BuildFrom(BufferedBinaryReader reader)
+		internal static IndicatorSection BuildFrom(BufferedBinaryReader reader)
 		{
 			var fileStart = reader.Read(Constants.GribFileStart.Length);
 			if (!Constants.GribFileStart.SequenceEqual(fileStart))
@@ -119,9 +95,8 @@ namespace NGrib.Grib2.Sections
 			}
 
 			var totalLength = reader.ReadUInt64();
-			const int indicatorSectionLength = 16;
 
-			return new Grib2IndicatorSection(indicatorSectionLength, disciplineNumber, 2, totalLength);
+			return new IndicatorSection(disciplineNumber, 2, totalLength);
 		}
 	}
 }

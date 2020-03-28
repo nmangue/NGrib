@@ -43,7 +43,7 @@ namespace NGrib
 
 			do
 			{
-				var indicatorSection = Grib2IndicatorSection.BuildFrom(reader);
+				var indicatorSection = IndicatorSection.BuildFrom(reader);
 				var identificationSection = Grib2IdentificationSection.BuildFrom(reader);
 
 				Grib2LocalUseSection localSection = null;

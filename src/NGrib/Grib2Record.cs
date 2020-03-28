@@ -30,7 +30,7 @@ namespace NGrib
 		/// <summary> returns Inofrmation Section of record.</summary>
 		/// <returns> is
 		/// </returns>
-		public Grib2IndicatorSection Is { get; }
+		public IndicatorSection Is { get; }
 
 		/// <summary> returns IdentificationSection.</summary>
 		/// <returns> IdentificationSection
@@ -80,7 +80,7 @@ namespace NGrib
 		/// </param>
 		/// <param name="pdsOffset">PDS offset in Grib file
 		/// </param>
-		public Grib2Record(Grib2IndicatorSection is_Renamed,
+		public Grib2Record(IndicatorSection is_Renamed,
 			Grib2IdentificationSection id, Grib2GridDefinitionSection gds,
 			Grib2ProductDefinitionSection pds, Grib2DataRepresentationSection drs,
 			Grib2BitMapSection bms, long gdsOffset, long pdsOffset,
@@ -98,7 +98,7 @@ namespace NGrib
 		}
 
 		internal Grib2Record(
-			Grib2IndicatorSection indicatorSection, 
+			IndicatorSection indicatorSection, 
 			Grib2IdentificationSection identificationSection, 
 			Grib2LocalUseSection localSection, 
 			Grib2GridDefinitionSection gridDefinitionSection, 
