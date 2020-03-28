@@ -193,6 +193,18 @@ namespace NGrib
 			return result;
 		}
 
+		public DateTime ReadDateTime()
+		{
+			var year = ReadUInt16();
+			var month = ReadUInt8();
+			var day = ReadUInt8();
+			var hour = ReadUInt8();
+			var minute = ReadUInt8();
+			var second = ReadUInt8();
+
+			return new DateTime(year, month, day, hour, minute, second, DateTimeKind.Utc);
+		}
+
 		public SectionInfo PeekSection()
 		{
 			SaveCurrentPosition();

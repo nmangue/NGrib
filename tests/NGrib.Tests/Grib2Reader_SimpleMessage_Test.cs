@@ -51,14 +51,17 @@ namespace NGrib.Tests
 		{
 			Check.That(record.ID.Length).Equals(21);
 			Check.That(record.ID.Section).Equals(1);
-			Check.That(record.ID.Center_id).Equals(74);
-			Check.That(record.ID.Subcenter_id).Equals(0);
-			Check.That(record.ID.Master_table_version).Equals(1);
-			Check.That(record.ID.Local_table_version).Equals(0);
-			Check.That(record.ID.SignificanceOfRT).Equals(1);
-			Check.That(record.ID.RefTime).Equals(new DateTime(2020, 5, 1, 6, 0, 0, DateTimeKind.Utc));
-			Check.That(record.ID.ProductStatus).Equals(0);
-			Check.That(record.ID.ProductType).Equals(1);
+			Check.That(record.ID.CenterCode).Equals(74);
+			Check.That(record.ID.SubCenterCode).Equals(0);
+			Check.That(record.ID.MasterTableVersion).Equals(1);
+			Check.That(record.ID.LocalTableVersion).Equals(0);
+			Check.That(record.ID.ReferenceTimeSignificanceCode).Equals(1);
+			Check.That(record.ID.ReferenceTimeSignificance).Equals(ReferenceTimeSignificance.ForecastStart);
+			Check.That(record.ID.ReferenceTime).Equals(new DateTime(2020, 5, 1, 6, 0, 0, DateTimeKind.Utc));
+			Check.That(record.ID.ProductStatusCode).Equals(0);
+			Check.That(record.ID.ProductStatus).Equals(ProductStatus.OperationalProducts);
+			Check.That(record.ID.ProductTypeCode).Equals(1);
+			Check.That(record.ID.ProductType).Equals(ProductType.ForecastProducts);
 		}
 
 		private static void CheckGridDefinitionSection(Grib2Record record)
