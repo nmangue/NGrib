@@ -22,7 +22,7 @@ using System.Collections.Generic;
 
 namespace NGrib.Sections.Templates.GridDefinitionTemplates
 {
-	public class PolarStereographicProjectionGridDefinition : GridPointEarthGridDefinition
+	public class PolarStereographicProjectionGridDefinition : XyEarthGridDefinition
 	{
 		/// <summary> .</summary>
 		/// <returns> Lad as a float
