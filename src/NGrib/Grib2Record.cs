@@ -50,7 +50,7 @@ namespace NGrib
 		/// <summary> returns Data Representation Section.</summary>
 		/// <returns> DataRepresentationSection
 		/// </returns>
-		public Grib2DataRepresentationSection DRS { get; }
+		public DataRepresentationSection DRS { get; }
 
 		public Grib2BitMapSection Bms { get; }
 		public long GdsOffset { get; }
@@ -82,7 +82,7 @@ namespace NGrib
 		/// </param>
 		public Grib2Record(IndicatorSection is_Renamed,
 			IdentificationSection id, GridDefinitionSection gds,
-			Grib2ProductDefinitionSection pds, Grib2DataRepresentationSection drs,
+			Grib2ProductDefinitionSection pds, DataRepresentationSection drs,
 			Grib2BitMapSection bms, long gdsOffset, long pdsOffset,
 			LocalUseSection lus)
 		{
@@ -103,7 +103,7 @@ namespace NGrib
 			LocalUseSection localSection, 
 			GridDefinitionSection gridDefinitionSection, 
 			Grib2ProductDefinitionSection productDefinitionSection, 
-			Grib2DataRepresentationSection dataRepresentationSection, 
+			DataRepresentationSection dataRepresentationSection, 
 			Grib2BitMapSection bitmapSection,
 			Grib2DataSection dataSection)
 		{
@@ -127,7 +127,7 @@ namespace NGrib
 			var bitmap = Bms.GetBitmap(reader);
 			
 			reader.Seek(DataSection.DataOffset, SeekOrigin.Begin);
-			using var valuesEnumerator = DRS.DataRepresentation.EnumerateDataValues(reader, DRS.DataPoints).GetEnumerator();
+			using var valuesEnumerator = DRS.DataRepresentation.EnumerateDataValues(reader, DRS.DataPointsNumber).GetEnumerator();
 			
 			foreach (var isValueDefined in bitmap)
 			{

@@ -61,9 +61,9 @@ namespace NGrib
 						while (reader.PeekSection().Is(SectionCode.ProductDefinitionSection))
 						{
 							var productDefinitionSection = Grib2ProductDefinitionSection.BuildFrom(reader);
-							var dataRepresentationSection = Grib2DataRepresentationSection.BuildFrom(reader);
+							var dataRepresentationSection = DataRepresentationSection.BuildFrom(reader);
 
-							var bitmapSection = Grib2BitMapSection.BuildFrom(reader, dataRepresentationSection.DataPoints);
+							var bitmapSection = Grib2BitMapSection.BuildFrom(reader, dataRepresentationSection.DataPointsNumber);
 
 							var dataSection = Grib2DataSection.BuildFrom(reader);
 

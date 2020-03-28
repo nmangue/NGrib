@@ -65,7 +65,7 @@ namespace NGrib.Grib2.Sections
 		/// <throws>  IOException </throws>
 		//UPGRADE_TODO: Class 'java.io.RandomAccessFile' was converted to 'System.IO.FileStream' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioRandomAccessFile'"
 		public Grib2DataSection(bool getData, FileStream raf, GridDefinitionSection gds,
-			Grib2DataRepresentationSection drs, Grib2BitMapSection bms)
+			DataRepresentationSection drs, Grib2BitMapSection bms)
 		{
 			// octets 1-4 (Length of DS)
 			Length = GribNumbers.int4(raf);
@@ -90,7 +90,7 @@ namespace NGrib.Grib2.Sections
 				return;
 			}
 
-			int dtn = drs.DataTemplateNumber;
+			int dtn = drs.TemplateNumber;
 
 			if (dtn == 0 || dtn == 1)
 			{
@@ -168,10 +168,10 @@ namespace NGrib.Grib2.Sections
 		/// </param>
 		/// <throws>  IOException </throws>
 		//UPGRADE_TODO: Class 'java.io.RandomAccessFile' was converted to 'System.IO.FileStream' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioRandomAccessFile'"
-		private void simpleUnpacking(FileStream raf, GridDefinitionSection gds, Grib2DataRepresentationSection drs,
+		private void simpleUnpacking(FileStream raf, GridDefinitionSection gds, DataRepresentationSection drs,
 			Grib2BitMapSection bms)
 		{
-			int dtn = drs.DataTemplateNumber;
+			int dtn = drs.TemplateNumber;
 
 			if (dtn == 1)
 			{
@@ -182,7 +182,7 @@ namespace NGrib.Grib2.Sections
 
 			// dataPoints are number of points encoded, it could be less than the
 			// numberPoints in the grid record if bitMap is used, otherwise equal
-			int dataPoints = (int) drs.DataPoints;
+			int dataPoints = (int) drs.DataPointsNumber;
 
 			float pmv = drs.PrimaryMissingValue;
 
@@ -254,7 +254,7 @@ namespace NGrib.Grib2.Sections
 		/// </param>
 		/// <throws>  IOException </throws>
 		//UPGRADE_TODO: Class 'java.io.RandomAccessFile' was converted to 'System.IO.FileStream' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioRandomAccessFile'"
-		private void complexUnpacking(FileStream raf, GridDefinitionSection gds, Grib2DataRepresentationSection drs)
+		private void complexUnpacking(FileStream raf, GridDefinitionSection gds, DataRepresentationSection drs)
 		{
 			int mvm = drs.MissingValueManagement;
 
@@ -434,7 +434,7 @@ namespace NGrib.Grib2.Sections
 		/// <throws>  IOException </throws>
 		//UPGRADE_TODO: Class 'java.io.RandomAccessFile' was converted to 'System.IO.FileStream' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioRandomAccessFile'"
 		private void complexUnpackingWithSpatial(FileStream raf, GridDefinitionSection gds,
-			Grib2DataRepresentationSection drs)
+			DataRepresentationSection drs)
 		{
 			int mvm = drs.MissingValueManagement;
 
@@ -835,14 +835,14 @@ namespace NGrib.Grib2.Sections
 		/// <param name="bms">bit-map section object
 		/// </param>
 		//UPGRADE_TODO: Class 'java.io.RandomAccessFile' was converted to 'System.IO.FileStream' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioRandomAccessFile'"
-		private void jpeg2000Unpacking(FileStream raf, GridDefinitionSection gds, Grib2DataRepresentationSection drs,
+		private void jpeg2000Unpacking(FileStream raf, GridDefinitionSection gds, DataRepresentationSection drs,
 			Grib2BitMapSection bms)
 		{
 			// 6-xx  jpeg2000 data block to decode
 
 			// dataPoints are number of points encoded, it could be less than the
 			// numberPoints in the grid record if bitMap is used, otherwise equal
-			int dataPoints = (int) drs.DataPoints;
+			int dataPoints = (int) drs.DataPointsNumber;
 
 			float pmv = drs.PrimaryMissingValue;
 

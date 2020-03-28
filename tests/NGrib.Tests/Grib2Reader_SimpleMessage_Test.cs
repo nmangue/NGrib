@@ -124,8 +124,8 @@ namespace NGrib.Tests
 		{
 			Check.That(record.DRS.Length).Equals(21);
 			Check.That(record.DRS.Section).Equals(5);
-			Check.That(record.DRS.DataPoints).Equals(25);
-			Check.That(record.DRS.DataTemplateNumber).Equals(0);
+			Check.That(record.DRS.DataPointsNumber).Equals(25);
+			Check.That(record.DRS.TemplateNumber).Equals(0);
 
 			Check.That(record.DRS.DataRepresentation).IsInstanceOf<GridPointDataSimplePacking>();
 			var dr = (GridPointDataSimplePacking)record.DRS.DataRepresentation;
