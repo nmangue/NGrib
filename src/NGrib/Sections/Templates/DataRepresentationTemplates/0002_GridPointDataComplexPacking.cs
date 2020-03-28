@@ -40,12 +40,12 @@ namespace NGrib.Sections.Templates.DataRepresentationTemplates
         /// <summary> Primary missing value substitute.</summary>
         /// <returns> PrimaryMissingValue
         /// </returns>
-        public float PrimaryMissingValue { get; private set; }
+        public float PrimaryMissingValue { get; }
 
         /// <summary> Secondary missing value substitute.</summary>
         /// <returns> SecondaryMissingValue
         /// </returns>
-        public float SecondaryMissingValue { get; private set; }
+        public float SecondaryMissingValue { get; }
 
         /// <summary> NG - Number of groups of data values into which field is split.</summary>
         /// <returns> NumberOfGroups NG

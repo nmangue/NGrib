@@ -9,7 +9,7 @@ namespace NGrib
 		/// </summary>
 		/// <param name="val">The value to convert to radians</param>
 		/// <returns>The value in radians</returns>
-		public static double ToRadians(this float val) => Math.PI / 180d * val;
+		public static double ToRadians(this double val) => Math.PI / 180d * val;
 
 		/// <summary>
 		/// Convert to degrees.

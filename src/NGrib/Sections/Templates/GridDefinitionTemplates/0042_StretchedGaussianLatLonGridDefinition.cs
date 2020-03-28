@@ -25,13 +25,13 @@ namespace NGrib.Sections.Templates.GridDefinitionTemplates
 		/// <returns> PoleLat as a float
 		/// 
 		/// </returns>
-		public float PoleLat { get; }
+		public double PoleLat { get; }
 
 		/// <summary> .</summary>
 		/// <returns> PoleLon as a float
 		/// 
 		/// </returns>
-		public float PoleLon { get; }
+		public double PoleLon { get; }
 
 		/// <summary> .</summary>
 		/// <returns> Factor as a float

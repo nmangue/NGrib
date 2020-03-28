@@ -42,13 +42,13 @@ namespace NGrib.Sections.Templates.GridDefinitionTemplates
 		/// <returns> La1 as a float
 		/// 
 		/// </returns>
-		public float La1 { get; }
+		public double La1 { get; }
 
 		/// <summary> .</summary>
 		/// <returns> Lo1 as a float
 		/// 
 		/// </returns>
-		public float Lo1 { get; }
+		public double Lo1 { get; }
 
 		/// <summary> .</summary>
 		/// <returns> Resolution as a int
@@ -60,27 +60,27 @@ namespace NGrib.Sections.Templates.GridDefinitionTemplates
 		/// <returns> La2 as a float
 		/// 
 		/// </returns>
-		public float La2 { get; }
+		public double La2 { get; }
 
 		/// <summary> .</summary>
 		/// <returns> Lo2 as a float
 		/// 
 		/// </returns>
-		public float Lo2 { get; }
+		public double Lo2 { get; }
 
 		/// <summary> Get x-increment/distance between two grid points.
 		/// 
 		/// </summary>
 		/// <returns> x-increment
 		/// </returns>
-		public float Dx { get; }
+		public double Dx { get; }
 
 		/// <summary> Get y-increment/distance between two grid points.
 		/// 
 		/// </summary>
 		/// <returns> y-increment
 		/// </returns>
-		public float Dy { get; }
+		public double Dy { get; }
 
 		/// <summary> Get scan mode.
 		/// 
@@ -93,14 +93,14 @@ namespace NGrib.Sections.Templates.GridDefinitionTemplates
 		{
 			Angle = reader.ReadUInt32();
 			Subdivisionsangle = reader.ReadUInt32();
-			float ratio;
+			double ratio;
 			if (Angle == 0)
 			{
-				ratio = 1e-6f;
+				ratio = 1e-6;
 			}
 			else
 			{
-				ratio = Angle / (float)Subdivisionsangle;
+				ratio = Angle / (double)Subdivisionsangle;
 			}
 
 			La1 = reader.ReadInt32() * ratio;
@@ -124,10 +124,7 @@ namespace NGrib.Sections.Templates.GridDefinitionTemplates
 				throw new NotImplementedException();
 			}
 			
-			float southLatitude;
-			float northLatitude;
-			float eastLongitude;
-			float westLongitude;
+			double southLatitude, northLatitude, eastLongitude, westLongitude;
 
 			if (scanningMode.HasFlag(ScanningMode.ScanJPositive))
 			{
@@ -156,10 +153,10 @@ namespace NGrib.Sections.Templates.GridDefinitionTemplates
 
 			var currentGridPoint = firstGridPoint;
 
-			var longitudeOffset = 0f;
+			var longitudeOffset = 0d;
 			for (var x = 0; x < Nx; x++)
 			{
-				var latitudeOffset = 0f;
+				var latitudeOffset = 0d;
 				for (var y = 0; y < Ny; y++)
 				{
 					currentGridPoint = firstGridPoint.Add(latitudeOffset, longitudeOffset);

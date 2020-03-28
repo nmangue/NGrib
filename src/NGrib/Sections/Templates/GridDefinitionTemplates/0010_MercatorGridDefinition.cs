@@ -28,19 +28,19 @@ namespace NGrib.Sections.Templates.GridDefinitionTemplates
 		/// <returns> Lad as a float
 		/// 
 		/// </returns>
-		public float Lad { get; }
+		public double Lad { get; }
 
 		/// <summary> .</summary>
 		/// <returns> La2 as a float
 		/// 
 		/// </returns>
-		public float La2 { get; }
+		public double La2 { get; }
 
 		/// <summary> .</summary>
 		/// <returns> Lo2 as a float
 		/// 
 		/// </returns>
-		public float Lo2 { get; }
+		public double Lo2 { get; }
 		
 		/// <summary> Get scan mode.
 		/// 
@@ -60,24 +60,24 @@ namespace NGrib.Sections.Templates.GridDefinitionTemplates
 		/// </summary>
 		/// <returns> x-increment
 		/// </returns>
-		public float Dx { get; }
+		public double Dx { get; }
 
 		/// <summary> Get y-increment/distance between two grid points.
 		/// 
 		/// </summary>
 		/// <returns> y-increment
 		/// </returns>
-		public float Dy { get; }
+		public double Dy { get; }
 
 		internal MercatorGridDefinition(BufferedBinaryReader reader) : base(reader)
 		{
-			Lad = reader.ReadInt32() * 1e-6f;
-			La2 = reader.ReadInt32() * 1e-6f;
-			Lo2 = reader.ReadUInt32() * 1e-6f;
+			Lad = reader.ReadInt32() * 1e-6;
+			La2 = reader.ReadInt32() * 1e-6;
+			Lo2 = reader.ReadUInt32() * 1e-6;
 			ScanMode = reader.ReadUInt8();
 			Angle = reader.ReadUInt32();
-			Dx = reader.ReadUInt32() * 1e-3f;
-			Dy = reader.ReadUInt32() * 1e-3f;
+			Dx = reader.ReadUInt32() * 1e-3;
+			Dy = reader.ReadUInt32() * 1e-3;
 		}
 
 		public override IEnumerable<Coordinate> EnumerateGridPoints() => throw new NotImplementedException();

@@ -24,7 +24,7 @@ namespace NGrib.Sections.Templates.GridDefinitionTemplates
 {
 	public class GaussianLatLonGridDefinition : XyEarthGridDefinition
 	{
-		protected float Ratio;
+		protected double Ratio { get; }
 
 		/// <summary> .</summary>
 		/// <returns> Angle as a int
@@ -42,13 +42,13 @@ namespace NGrib.Sections.Templates.GridDefinitionTemplates
 		/// <returns> La1 as a float
 		/// 
 		/// </returns>
-		public float La1 { get; }
+		public double La1 { get; }
 
 		/// <summary> .</summary>
 		/// <returns> Lo1 as a float
 		/// 
 		/// </returns>
-		public float Lo1 { get; }
+		public double Lo1 { get; }
 
 		/// <summary> .</summary>
 		/// <returns> Resolution as a int
@@ -60,20 +60,20 @@ namespace NGrib.Sections.Templates.GridDefinitionTemplates
 		/// <returns> La2 as a float
 		/// 
 		/// </returns>
-		public float La2 { get; }
+		public double La2 { get; }
 
 		/// <summary> .</summary>
 		/// <returns> Lo2 as a float
 		/// 
 		/// </returns>
-		public float Lo2 { get; }
+		public double Lo2 { get; }
 
 		/// <summary> Get x-increment/distance between two grid points.
 		/// 
 		/// </summary>
 		/// <returns> x-increment
 		/// </returns>
-		public float Dx { get; }
+		public double Dx { get; }
 
 		/// <summary> Get y-increment/distance between two grid points.
 		/// 
@@ -95,11 +95,11 @@ namespace NGrib.Sections.Templates.GridDefinitionTemplates
 			Subdivisionsangle = reader.ReadUInt32();
 			if (Angle == 0)
 			{
-				Ratio = 1e-6f;
+				Ratio = 1e-6;
 			}
 			else
 			{
-				Ratio = Angle / (float)Subdivisionsangle;
+				Ratio = Angle / (double)Subdivisionsangle;
 			}
 
 			La1 = reader.ReadInt32() * Ratio;

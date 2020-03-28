@@ -25,13 +25,13 @@ namespace NGrib.Sections.Templates.GridDefinitionTemplates
 		/// <returns> SpLat as a float
 		/// 
 		/// </returns>
-		public float SpLat { get; }
+		public double SpLat { get; }
 
 		/// <summary> .</summary>
 		/// <returns> SpLon as a float
 		/// 
 		/// </returns>
-		public float SpLon { get; }
+		public double SpLon { get; }
 
 		/// <summary> .</summary>
 		/// <returns> Rotationangle as a float
