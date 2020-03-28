@@ -25,7 +25,7 @@ using NGrib.Sections;
 namespace NGrib
 {
 	/// <summary> Class which represents a record in a Grib2File.</summary>
-	public sealed class Grib2Record : IGrib2Record
+	public sealed class Grib2Record
 	{
 		/// <summary> returns Inofrmation Section of record.</summary>
 		/// <returns> is
