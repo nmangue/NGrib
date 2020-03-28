@@ -69,10 +69,10 @@ namespace NGrib.Tests
 			Check.That(record.GDS.Length).Equals(65);
 			Check.That(record.GDS.Section).Equals(3);
 			Check.That(record.GDS.Source).Equals(0);
-			Check.That(record.GDS.NumberPoints).Equals(25);
-			Check.That(record.GDS.Olon).Equals(0);
-			Check.That(record.GDS.Iolon).Equals(0);
-			Check.That(record.GDS.Gdtn).Equals(20);
+			Check.That(record.GDS.DataPointsNumber).Equals(25);
+			Check.That(record.GDS.OptionalListNumberLength).Equals(0);
+			Check.That(record.GDS.OptionalListInterpretationCode).Equals(0);
+			Check.That(record.GDS.TemplateNumber).Equals(20);
 
 			Check.That(record.GDS.GridDefinition).IsInstanceOf<PolarStereographicProjectionGridDefinition>();
 			var gd = (PolarStereographicProjectionGridDefinition)record.GDS.GridDefinition;

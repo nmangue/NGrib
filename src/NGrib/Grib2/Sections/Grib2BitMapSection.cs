@@ -59,7 +59,7 @@ namespace NGrib.Grib2.Sections
 		/// </param>
 		/// <throws>  IOException  if stream contains no valid GRIB file </throws>
 		//UPGRADE_TODO: Class 'java.io.RandomAccessFile' was converted to 'System.IO.FileStream' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioRandomAccessFile'"
-		public Grib2BitMapSection(FileStream raf, Grib2GridDefinitionSection gds)
+		public Grib2BitMapSection(FileStream raf, GridDefinitionSection gds)
 		{
 			int[] bitmask = new int[] {128, 64, 32, 16, 8, 4, 2, 1};
 
@@ -78,7 +78,7 @@ namespace NGrib.Grib2.Sections
 			SupportClass.ReadInput(raf, data, 0, data.Length);
 
 			// create new bit map, octet 4 contains number of unused bits at the end
-			Bitmap = new bool[gds.NumberPoints];
+			Bitmap = new bool[gds.DataPointsNumber];
 
 			// fill bit map
 			for (int i = 0; i < Bitmap.Length; i++)

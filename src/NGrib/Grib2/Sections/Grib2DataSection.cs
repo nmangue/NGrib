@@ -64,7 +64,7 @@ namespace NGrib.Grib2.Sections
 		/// </param>
 		/// <throws>  IOException </throws>
 		//UPGRADE_TODO: Class 'java.io.RandomAccessFile' was converted to 'System.IO.FileStream' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioRandomAccessFile'"
-		public Grib2DataSection(bool getData, FileStream raf, Grib2GridDefinitionSection gds,
+		public Grib2DataSection(bool getData, FileStream raf, GridDefinitionSection gds,
 			Grib2DataRepresentationSection drs, Grib2BitMapSection bms)
 		{
 			// octets 1-4 (Length of DS)
@@ -168,7 +168,7 @@ namespace NGrib.Grib2.Sections
 		/// </param>
 		/// <throws>  IOException </throws>
 		//UPGRADE_TODO: Class 'java.io.RandomAccessFile' was converted to 'System.IO.FileStream' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioRandomAccessFile'"
-		private void simpleUnpacking(FileStream raf, Grib2GridDefinitionSection gds, Grib2DataRepresentationSection drs,
+		private void simpleUnpacking(FileStream raf, GridDefinitionSection gds, Grib2DataRepresentationSection drs,
 			Grib2BitMapSection bms)
 		{
 			int dtn = drs.DataTemplateNumber;
@@ -200,7 +200,7 @@ namespace NGrib.Grib2.Sections
 			//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
 			float EE = (float) Math.Pow((double) 2.0, (double) E);
 
-			int numberPoints = (int) gds.NumberPoints;
+			int numberPoints = (int) gds.DataPointsNumber;
 
 			Data = new float[numberPoints];
 
@@ -240,8 +240,8 @@ namespace NGrib.Grib2.Sections
 				}
 			}
 
-			scanMode = gds.ScanMode;
-			Xlength = (int) gds.Nx; // needs some smarts for different type Grids
+			// scanMode = gds.ScanMode;
+			// Xlength = (int) gds.Nx; // needs some smarts for different type Grids
 			//scanningModeCheck();
 		} // end simpleUnpacking
 
@@ -254,7 +254,7 @@ namespace NGrib.Grib2.Sections
 		/// </param>
 		/// <throws>  IOException </throws>
 		//UPGRADE_TODO: Class 'java.io.RandomAccessFile' was converted to 'System.IO.FileStream' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioRandomAccessFile'"
-		private void complexUnpacking(FileStream raf, Grib2GridDefinitionSection gds, Grib2DataRepresentationSection drs)
+		private void complexUnpacking(FileStream raf, GridDefinitionSection gds, Grib2DataRepresentationSection drs)
 		{
 			int mvm = drs.MissingValueManagement;
 
@@ -325,7 +325,7 @@ namespace NGrib.Grib2.Sections
 
 			//gds.getNumberPoints() );
 			count = 0;
-			Xlength = (int) gds.Nx; // needs some smarts for different type Grids
+			// Xlength = (int) gds.Nx; // needs some smarts for different type Grids
 			// used to check missing values when X2 is packed with all 1's
 			int[] bitsmv1 = new int[31];
 			//int bitsmv2[] = new int[ 31 ]; didn't code cuz number larger the # of bits
@@ -420,7 +420,7 @@ namespace NGrib.Grib2.Sections
 				}
 			} // end for j
 
-			scanMode = gds.ScanMode;
+			// scanMode = gds.ScanMode;
 			scanningModeCheck();
 		} // end complexUnpacking
 
@@ -433,7 +433,7 @@ namespace NGrib.Grib2.Sections
 		/// </param>
 		/// <throws>  IOException </throws>
 		//UPGRADE_TODO: Class 'java.io.RandomAccessFile' was converted to 'System.IO.FileStream' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioRandomAccessFile'"
-		private void complexUnpackingWithSpatial(FileStream raf, Grib2GridDefinitionSection gds,
+		private void complexUnpackingWithSpatial(FileStream raf, GridDefinitionSection gds,
 			Grib2DataRepresentationSection drs)
 		{
 			int mvm = drs.MissingValueManagement;
@@ -561,7 +561,7 @@ namespace NGrib.Grib2.Sections
 			}
 
 			count = 0;
-			Xlength = (int) gds.Nx; // needs some smarts for different type Grids
+			// Xlength = (int) gds.Nx; // needs some smarts for different type Grids
 			int X2;
 			bitPos = 0;
 			bitBuf = 0;
@@ -821,7 +821,7 @@ namespace NGrib.Grib2.Sections
 				}
 			}
 
-			scanMode = gds.ScanMode;
+			// scanMode = gds.ScanMode;
 			scanningModeCheck();
 		} // end complexUnpackingWithSpatial
 
@@ -835,7 +835,7 @@ namespace NGrib.Grib2.Sections
 		/// <param name="bms">bit-map section object
 		/// </param>
 		//UPGRADE_TODO: Class 'java.io.RandomAccessFile' was converted to 'System.IO.FileStream' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioRandomAccessFile'"
-		private void jpeg2000Unpacking(FileStream raf, Grib2GridDefinitionSection gds, Grib2DataRepresentationSection drs,
+		private void jpeg2000Unpacking(FileStream raf, GridDefinitionSection gds, Grib2DataRepresentationSection drs,
 			Grib2BitMapSection bms)
 		{
 			// 6-xx  jpeg2000 data block to decode
@@ -893,7 +893,7 @@ namespace NGrib.Grib2.Sections
 				// TODO Error handling
 			}
 
-			int numberPoints = (int) gds.NumberPoints;
+			int numberPoints = (int) gds.DataPointsNumber;
 
 			Data = new float[numberPoints];
 			bool[] bitmap = bms.Bitmap;
@@ -939,7 +939,7 @@ namespace NGrib.Grib2.Sections
 				}
 			}
 
-			scanMode = gds.ScanMode;
+			// scanMode = gds.ScanMode;
 			scanningModeCheck();
 		} // end jpeg2000Unpacking
 

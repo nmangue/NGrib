@@ -56,7 +56,7 @@ namespace NGrib
 
 					while (reader.PeekSection().Is(SectionCode.GridDefinitionSection))
 					{
-						var gridDefinitionSection = Grib2GridDefinitionSection.BuildFrom(reader);
+						var gridDefinitionSection = GridDefinitionSection.BuildFrom(reader);
 
 						while (reader.PeekSection().Is(SectionCode.ProductDefinitionSection))
 						{
