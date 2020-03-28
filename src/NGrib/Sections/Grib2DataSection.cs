@@ -33,11 +33,10 @@ namespace NGrib.Sections
 		public float[] Data { get; private set; }
 
 		/// <summary> Length in bytes of DataSection section.</summary>
-		private readonly long length;
+		public long Length { get; }
 
 		/// <summary> Number of this section, should be 7.</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'section '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private int section;
+		public int Section { get; }
 
 		/// <summary> Buffer for one byte which will be processed bit by bit.</summary>
 		private int bitBuf = 0;
@@ -69,23 +68,23 @@ namespace NGrib.Sections
 			Grib2DataRepresentationSection drs, Grib2BitMapSection bms)
 		{
 			// octets 1-4 (Length of DS)
-			length = GribNumbers.int4(raf);
+			Length = GribNumbers.int4(raf);
 
 			// octet 5  section 7
-			section = raf.ReadByte();
+			Section = raf.ReadByte();
 
 			if (!getData)
 			{
 				// skip data read
 
 				// sanity check for erronous ds length
-				if (length > 0 && length < raf.Length)
+				if (Length > 0 && Length < raf.Length)
 				{
-					SupportClass.Skip(raf, (int) length - 5);
+					SupportClass.Skip(raf, (int) Length - 5);
 				}
 				else
 				{
-					length = 5; // only read length and section
+					Length = 5; // only read length and section
 				}
 
 				return;
@@ -121,8 +120,8 @@ namespace NGrib.Sections
 		public Grib2DataSection(long length, int section, long dataOffset)
 		{
 			DataOffset = dataOffset;
-			this.length = length;
-			this.section = section;
+			this.Length = length;
+			this.Section = section;
 		}
 
 		/// <summary> Constructor for a Grib2 Data Section.</summary>
@@ -881,11 +880,11 @@ namespace NGrib.Sections
              */
 
 			// Jpeg2000Decoder decoder = new Jpeg2000Decoder();
-			byte[] buf = new byte[length - 5];
+			byte[] buf = new byte[Length - 5];
 			// TODO Check cast
-			int res = raf.Read(buf, 0, (int) (length - 5));
+			int res = raf.Read(buf, 0, (int) (Length - 5));
 			int[] values = null;
-			if (res == length - 5)
+			if (res == Length - 5)
 			{
 				// values = decoder.Decode(buf, dataPoints);
 			}

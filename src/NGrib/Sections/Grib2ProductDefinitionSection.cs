@@ -113,12 +113,10 @@ namespace NGrib.Sections
 		public float ValueSecondFixedSurface { get; }
 
 		/// <summary> Length in bytes of this PDS.</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'length '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private long length;
+		public long Length { get; }
 
 		/// <summary> Number of this section, should be 4.</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'section '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private int section;
+		public int Section { get; }
 
 		/// <summary>  number of bands.</summary>
 		private readonly int nb;
@@ -136,10 +134,10 @@ namespace NGrib.Sections
 		public Grib2ProductDefinitionSection(FileStream raf)
 		{
 			// octets 1-4 (Length of PDS)
-			length = GribNumbers.int4(raf);
+			Length = GribNumbers.int4(raf);
 
 			// octet 5
-			section = raf.ReadByte();
+			Section = raf.ReadByte();
 
 			// octet 6-7
 			Coordinates = GribNumbers.int2(raf);
@@ -393,14 +391,15 @@ namespace NGrib.Sections
 		}
 
 
-        internal Grib2ProductDefinitionSection(long length, int section, int coordinates, int productDefinitionTemplateNumber, ProductDefinition productDefinition)
-        {
-            Coordinates = coordinates;
-            ProductDefinitionTemplateNumber = productDefinitionTemplateNumber;
-            ProductDefinition = productDefinition;
-            this.length = length;
-            this.section = section;
-        }
+		internal Grib2ProductDefinitionSection(long length, int section, int coordinates,
+			int productDefinitionTemplateNumber, ProductDefinition productDefinition)
+		{
+			Coordinates = coordinates;
+			ProductDefinitionTemplateNumber = productDefinitionTemplateNumber;
+			ProductDefinition = productDefinition;
+			Length = length;
+			Section = section;
+		}
 
 		/// <summary> Constructs a Grib2ProductDefinitionSection  object from a raf.
 		/// 
@@ -423,11 +422,12 @@ namespace NGrib.Sections
 
 			// octet 8-9
 			var productDefinitionTemplateNumber = reader.ReadUInt16();
-	
-      var productDefinition = ProductDefinitionFactories.Build(reader, productDefinitionTemplateNumber);
 
-			return new Grib2ProductDefinitionSection(length, section, coordinates, productDefinitionTemplateNumber, productDefinition);
-    }
+			var productDefinition = ProductDefinitionFactories.Build(reader, productDefinitionTemplateNumber);
+
+			return new Grib2ProductDefinitionSection(length, section, coordinates, productDefinitionTemplateNumber,
+				productDefinition);
+		}
 
 		/// <summary> product Definition  Name.</summary>
 		/// <returns> ProductDefinitionName
@@ -815,12 +815,13 @@ namespace NGrib.Sections
 			}
 		} // end getTypeSurfaceUnit
 
-        private static TemplateFactory<ProductDefinition> ProductDefinitionFactories = new TemplateFactory<ProductDefinition>()
-            {
-                { 0, r => new PointInTimeHorizontalLevelProductDefinition(r) },
-                { 8, r => new StatisticallyProcessedPointInTimeHorizontalLevelProductDefinition(r) }
+		private static TemplateFactory<ProductDefinition> ProductDefinitionFactories =
+			new TemplateFactory<ProductDefinition>()
+			{
+				{0, r => new PointInTimeHorizontalLevelProductDefinition(r)},
+				{8, r => new StatisticallyProcessedPointInTimeHorizontalLevelProductDefinition(r)}
 			};
 
-        public ProductDefinition ProductDefinition { get; }
-    } // end Grib2ProductDefinitionSection
+		public ProductDefinition ProductDefinition { get; }
+	} // end Grib2ProductDefinitionSection
 }

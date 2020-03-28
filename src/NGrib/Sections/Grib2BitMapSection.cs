@@ -38,16 +38,13 @@ namespace NGrib.Sections
 		public bool[] Bitmap { get; }
 
 		/// <summary> Length in bytes of BitMapSection section.</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'length '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private readonly long length;
+		public long Length { get; }
 
 		/// <summary> Number of this section, should be 6.</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'section '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private int section;
+		public int Section { get; }
 
 		/// <summary> Bit-map indicator (see Code Table 6.0 and Note (1))</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'bitMapIndicator '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private readonly int bitMapIndicator;
+		public int BitMapIndicator { get; }
 
 		private readonly long numberPoints;
 
@@ -67,17 +64,17 @@ namespace NGrib.Sections
 			int[] bitmask = new int[] {128, 64, 32, 16, 8, 4, 2, 1};
 
 			// octets 1-4 (Length of BMS)
-			length = GribNumbers.int4(raf);
+			Length = GribNumbers.int4(raf);
 
-			section = raf.ReadByte();
+			Section = raf.ReadByte();
 
-			bitMapIndicator = raf.ReadByte();
+			BitMapIndicator = raf.ReadByte();
 
 			// no bitMap
-			if (bitMapIndicator != 0)
+			if (BitMapIndicator != 0)
 				return;
 
-			sbyte[] data = new sbyte[length - 6];
+			sbyte[] data = new sbyte[Length - 6];
 			SupportClass.ReadInput(raf, data, 0, data.Length);
 
 			// create new bit map, octet 4 contains number of unused bits at the end
@@ -91,8 +88,8 @@ namespace NGrib.Sections
 
 		internal Grib2BitMapSection(long length, int section, bool[] bitmap)
 		{
-			this.length = length;
-			this.section = section;
+			this.Length = length;
+			this.Section = section;
 			Bitmap = bitmap;
 		}
 
@@ -106,14 +103,14 @@ namespace NGrib.Sections
 		/// <throws>  IOException  if stream contains no valid GRIB file </throws>
 		internal Grib2BitMapSection(BufferedBinaryReader raf, long numberPoints)
 		{
-			length = raf.ReadUInt32();
+			Length = raf.ReadUInt32();
 
-			section = raf.ReadUInt8();
+			Section = raf.ReadUInt8();
 
-			bitMapIndicator = raf.ReadUInt8();
+			BitMapIndicator = raf.ReadUInt8();
 
 			Bitmap = new bool[numberPoints];
-			if (bitMapIndicator == 0)
+			if (BitMapIndicator == 0)
 			{
 				// create new bit map, octet 4 contains number of unused bits at the end
 
@@ -144,9 +141,9 @@ namespace NGrib.Sections
 		private Grib2BitMapSection(long length, int section, int bitmapIndicator, long dataPointsNumber, long bitmapOffset)
 		{
 			BitmapOffset = bitmapOffset;
-			this.length = length;
-			this.section = section;
-			bitMapIndicator = bitmapIndicator;
+			this.Length = length;
+			this.Section = section;
+			BitMapIndicator = bitmapIndicator;
 			numberPoints = bitmapIndicator == 0 ? length - 6 : dataPointsNumber;
 		}
 
@@ -184,7 +181,7 @@ namespace NGrib.Sections
 				}
 			}
 
-			if (bitMapIndicator == 0)
+			if (BitMapIndicator == 0)
 			{
 				// create new bit map, octet 4 contains number of unused bits at the end
 				var i = 0;

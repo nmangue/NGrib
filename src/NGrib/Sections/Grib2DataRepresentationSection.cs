@@ -165,8 +165,7 @@ namespace NGrib.Sections
 		public int DescriptorSpatial { get; }
 
 		/// <summary> Number of this section, should be 5.</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'section '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private int section;
+		public int Section { get; }
 
 		// *** constructors *******************************************************
 
@@ -183,7 +182,7 @@ namespace NGrib.Sections
 			// octets 1-4 (Length of DRS)
 			Length = GribNumbers.int4(raf);
 
-			section = raf.ReadByte();
+			Section = raf.ReadByte();
 
 			DataPoints = GribNumbers.int4(raf);
 
@@ -301,7 +300,7 @@ namespace NGrib.Sections
 
         public Grib2DataRepresentationSection(long length, int section, long dataPoints, int dataTemplateNumber, DataRepresentation dataRepresentation)
         {
-            this.section = section;
+            Section = section;
             Length = length;
             DataPoints = dataPoints;
             DataTemplateNumber = dataTemplateNumber;
