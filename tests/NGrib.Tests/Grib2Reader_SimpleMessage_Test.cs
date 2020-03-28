@@ -3,9 +3,9 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using NFluent;
-using NGrib.Sections.Templates.DataRepresentationTemplates;
-using NGrib.Sections.Templates.GridDefinitionTemplates;
-using NGrib.Sections.Templates.ProductDefinitionTemplates;
+using NGrib.Grib2.Sections.Templates.DataRepresentationTemplates;
+using NGrib.Grib2.Sections.Templates.GridDefinitionTemplates;
+using NGrib.Grib2.Sections.Templates.ProductDefinitionTemplates;
 using Xunit;
 
 namespace NGrib.Tests

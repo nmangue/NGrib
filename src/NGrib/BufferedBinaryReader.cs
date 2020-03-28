@@ -20,7 +20,7 @@
 using System;
 using System.IO;
 using System.Numerics;
-using NGrib.Sections;
+using NGrib.Grib2.Sections;
 
 namespace NGrib
 {

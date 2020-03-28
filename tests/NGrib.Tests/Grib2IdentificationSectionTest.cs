@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using NFluent;
-using NGrib.Sections;
+using NGrib.Grib2.Sections;
 using Xunit;
 
 namespace NGrib.Tests

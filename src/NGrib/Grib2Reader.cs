@@ -19,7 +19,7 @@
 
 using System.Collections.Generic;
 using System.IO;
-using NGrib.Sections;
+using NGrib.Grib2.Sections;
 
 namespace NGrib
 {
