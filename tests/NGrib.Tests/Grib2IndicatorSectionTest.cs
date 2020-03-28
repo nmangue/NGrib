@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using NFluent;
 using NGrib.Sections;
+using NGrib.Sections.Templates.GridDefinitionTemplates;
 using Xunit;
 
 namespace NGrib.Tests
@@ -24,10 +26,5 @@ namespace NGrib.Tests
 			Check.That(indicatorSection.Discipline).Equals(Discipline.MeteorologicalProducts);
 			Check.That(indicatorSection.TotalLength.Sign).IsStrictlyPositive();
 		}
-	}
-
-	internal static class GribFileSamples
-	{
-		public static string ValidFile{ get; } = "samples/gfs.20200314.t00z.pgrb2.0p25.anl";
 	}
 }

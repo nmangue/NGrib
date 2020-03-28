@@ -9,6 +9,7 @@
   <ItemGroup>
     <None Remove="samples\gfs.20200325.t18z.pgrb2.0p25.f006" />
     <None Remove="samples\gfs.20200325.t18z.pgrb2.0p25.f018" />
+    <None Remove="samples\wmo-one_dataset-message.grb2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,6 +37,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\NGrib\NGrib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="samples\wmo-one_dataset-message.grb2">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
