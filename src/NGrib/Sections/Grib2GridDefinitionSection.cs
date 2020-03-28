@@ -924,6 +924,7 @@ checksum = System.Convert.ToString(cs.getValue());
         //UPGRADE_TODO: Class 'java.io.RandomAccessFile' was converted to 'System.IO.FileStream' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioRandomAccessFile'"
         internal static Grib2GridDefinitionSection BuildFrom(BufferedBinaryReader reader)
         {
+						var currentPosition = reader.Position;
             var length = (int) reader.ReadUInt32();
 
             var section = reader.ReadUInt8(); // This is section 3
@@ -943,8 +944,10 @@ checksum = System.Convert.ToString(cs.getValue());
 
             var gdtn = reader.ReadUInt16();
 
-
+					  
             var gridDefinition = GridDefinitionFactories.Build(reader, gdtn);
+
+            reader.Seek(currentPosition+length, SeekOrigin.Begin);
 
             return new Grib2GridDefinitionSection(length, section, source, numberPoints, olon, iolon, gdtn, gridDefinition);
         } // end of Grib2GridDefinitionSection
