@@ -46,12 +46,12 @@ namespace NGrib
 				var indicatorSection = IndicatorSection.BuildFrom(reader);
 				var identificationSection = IdentificationSection.BuildFrom(reader);
 
-				Grib2LocalUseSection localSection = null;
+				LocalUseSection localSection = null;
 				do
 				{
 					if (reader.PeekSection().Is(SectionCode.LocalUseSection))
 					{
-						localSection = Grib2LocalUseSection.BuildFrom(reader);
+						localSection = LocalUseSection.BuildFrom(reader);
 					}
 
 					while (reader.PeekSection().Is(SectionCode.GridDefinitionSection))

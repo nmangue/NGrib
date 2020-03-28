@@ -22,8 +22,8 @@ using NGrib.Grib2.CodeTables;
 
 namespace NGrib.Grib2.Sections
 {
-	/// <summary> A class representing the IdentificationSection section 1 of a GRIB record.
-	/// 
+	/// <summary>
+	/// Section 1 - Identification Section
 	/// </summary>
 	public sealed class IdentificationSection
 	{

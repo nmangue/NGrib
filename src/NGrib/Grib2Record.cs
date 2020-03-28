@@ -59,7 +59,7 @@ namespace NGrib
 		/// <summary> returns Local Use Section.</summary>
 		/// <returns> DataRepresentationSection
 		/// </returns>
-		public Grib2LocalUseSection LUS { get; }
+		public LocalUseSection LUS { get; }
 
 		public Grib2DataSection DataSection { get; }
 
@@ -84,7 +84,7 @@ namespace NGrib
 			IdentificationSection id, Grib2GridDefinitionSection gds,
 			Grib2ProductDefinitionSection pds, Grib2DataRepresentationSection drs,
 			Grib2BitMapSection bms, long gdsOffset, long pdsOffset,
-			Grib2LocalUseSection lus)
+			LocalUseSection lus)
 		{
 			Is = is_Renamed;
 			ID = id;
@@ -100,7 +100,7 @@ namespace NGrib
 		internal Grib2Record(
 			IndicatorSection indicatorSection, 
 			IdentificationSection identificationSection, 
-			Grib2LocalUseSection localSection, 
+			LocalUseSection localSection, 
 			Grib2GridDefinitionSection gridDefinitionSection, 
 			Grib2ProductDefinitionSection productDefinitionSection, 
 			Grib2DataRepresentationSection dataRepresentationSection, 
