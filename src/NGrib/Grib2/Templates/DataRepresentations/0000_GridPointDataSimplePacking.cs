@@ -64,15 +64,15 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 
         internal override IEnumerable<float> EnumerateDataValues(BufferedBinaryReader reader, long numberDataPoints)
         {
-            var D = DecimalScaleFactor;
+            var d = DecimalScaleFactor;
 
-            var DD = (float)Math.Pow(10, D);
+            var dd = (float)Math.Pow(10, d);
 
-            var R = ReferenceValue;
+            var r = ReferenceValue;
 
-            var E = BinaryScaleFactor;
+            var e = BinaryScaleFactor;
 
-            var EE = (float)Math.Pow(2.0, E);
+            var ee = (float)Math.Pow(2.0, e);
 
             //  Y * 10**D = R + (X1 + X2) * 2**E
             //   E = binary scale factor
@@ -84,7 +84,7 @@ namespace NGrib.Grib2.Templates.DataRepresentations
             for (var i = 0; i < numberDataPoints; i++)
             {
                 // (R + ( X1 + X2) * EE)/DD ;
-                yield return (R + reader.ReadUIntN(NumberOfBits) * EE) / DD;
+                yield return (r + reader.ReadUIntN(NumberOfBits) * ee) / dd;
             }
         }
 

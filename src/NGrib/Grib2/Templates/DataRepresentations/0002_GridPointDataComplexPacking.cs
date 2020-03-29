@@ -118,60 +118,57 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 
 					float pmv = PrimaryMissingValue;
 
-					int NG = (int) NumberOfGroups;
+					int ng = (int) NumberOfGroups;
 
 					// 6-xx  Get reference values for groups (X1's)
-					int[] X1 = new int[NG];
-					int nb = NumberOfBits;
+					int[] x1 = new int[ng];
+					int nbBits = NumberOfBits;
 			
-					for (int i = 0; i < NG; i++)
+					for (int i = 0; i < ng; i++)
 					{
-						X1[i] = reader.ReadUIntN(nb);
+						x1[i] = reader.ReadUIntN(nbBits);
 					}
 
 					// [xx + 1 ]-yy Get number of bits used to encode each group
-					int[] NB = new int[NG];
-					nb = BitsGroupWidths;
+					int[] nb = new int[ng];
+					nbBits = BitsGroupWidths;
 
 					reader.NextUIntN();
-					for (int i = 0; i < NG; i++)
+					for (int i = 0; i < ng; i++)
 					{
-						NB[i] = reader.ReadUIntN(nb);
+						nb[i] = reader.ReadUIntN(nbBits);
 					}
 
 					// [yy +1 ]-zz Get the scaled group lengths using formula
 					//     Ln = ref + Kn * len_inc, where n = 1-NG,
 					//          ref = referenceGroupLength, and  len_inc = lengthIncrement
 
-					int[] L = new int[NG];
-					int countL = 0;
-					int ref_Renamed = (int) ReferenceGroupLength;
+					int[] l = new int[ng];
+					int rgLength = (int) ReferenceGroupLength;
 
-					int len_inc = LengthIncrement;
+					int lenInc = LengthIncrement;
 
-					nb = BitsScaledGroupLength;
+					nbBits = BitsScaledGroupLength;
 
 					reader.NextUIntN();
-					for (int i = 0; i < NG; i++)
+					for (int i = 0; i < ng; i++)
 					{
 						// NG
-						L[i] = ref_Renamed + reader.ReadUIntN(nb) * len_inc;
-
-						countL += L[i];
+						l[i] = rgLength + reader.ReadUIntN(nbBits) * lenInc;
 					}
 
 					// [zz +1 ]-nn get X2 values and calculate the results Y using formula
 					//                Y * 10**D = R + (X1 + X2) * 2**E
 
-					int D = DecimalScaleFactor;
+					int d = DecimalScaleFactor;
 
-					float DD = (float) Math.Pow(10, D);
+					float dd = (float) Math.Pow(10, d);
 
-					float R = ReferenceValue;
+					float r = ReferenceValue;
 
-					int E = BinaryScaleFactor;
+					int e = BinaryScaleFactor;
 
-					float EE = (float) Math.Pow(2.0, E);
+					float ee = (float) Math.Pow(2.0, e);
 
 					// used to check missing values when X2 is packed with all 1's
 					int[] bitsmv1 = new int[31];
@@ -180,18 +177,18 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 						bitsmv1[i] = (int) Math.Pow( 2, i) - 1;
 					}
 
-					int X2;
+					int x2;
 					reader.NextUIntN();
-					for (int i = 0; i < NG - 1; i++)
+					for (int i = 0; i < ng - 1; i++)
 					{
-						for (int j = 0; j < L[i]; j++)
+						for (int j = 0; j < l[i]; j++)
 						{
-							if (NB[i] == 0)
+							if (nb[i] == 0)
 							{
 								if (mvm == 0)
 								{
 									// X2 = 0
-									yield return (R + X1[i] * EE) / DD;
+									yield return (r + x1[i] * ee) / dd;
 								}
 								else if (mvm == 1)
 								{
@@ -200,21 +197,21 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 							}
 							else
 							{
-								X2 = reader.ReadUIntN(NB[i]);
+								x2 = reader.ReadUIntN(nb[i]);
 								if (mvm == 0)
 								{
-									yield return (R + (X1[i] + X2) * EE) / DD;
+									yield return (r + (x1[i] + x2) * ee) / dd;
 								}
 								else if (mvm == 1)
 								{
 									// X2 is also set to missing value is all bits set to 1's
-									if (X2 == bitsmv1[NB[i]])
+									if (x2 == bitsmv1[nb[i]])
 									{
 										yield return pmv;
 									}
 									else
 									{
-										yield return (R + (X1[i] + X2) * EE) / DD;
+										yield return (r + (x1[i] + x2) * ee) / dd;
 									}
 								}
 							}
@@ -227,12 +224,12 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 					for (int j = 0; j < last; j++)
 					{
 						// last group
-						if (NB[NG - 1] == 0)
+						if (nb[ng - 1] == 0)
 						{
 							if (mvm == 0)
 							{
 								// X2 = 0
-								yield return (R + X1[NG - 1] * EE) / DD;
+								yield return (r + x1[ng - 1] * ee) / dd;
 							}
 							else if (mvm == 1)
 							{
@@ -241,21 +238,21 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 						}
 						else
 						{
-							X2 = reader.ReadUIntN(NB[NG - 1]);
+							x2 = reader.ReadUIntN(nb[ng - 1]);
 							if (mvm == 0)
 							{
-								yield return (R + (X1[NG - 1] + X2) * EE) / DD;
+								yield return (r + (x1[ng - 1] + x2) * ee) / dd;
 							}
 							else if (mvm == 1)
 							{
 								// X2 is also set to missing value is all bits set to 1's
-								if (X2 == bitsmv1[NB[NG - 1]])
+								if (x2 == bitsmv1[nb[ng - 1]])
 								{
 									yield return pmv;
 								}
 								else
 								{
-									yield return (R + (X1[NG - 1] + X2) * EE) / DD;
+									yield return (r + (x1[ng - 1] + x2) * ee) / dd;
 								}
 							}
 						}

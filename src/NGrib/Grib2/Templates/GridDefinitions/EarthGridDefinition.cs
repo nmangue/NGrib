@@ -38,7 +38,7 @@ namespace NGrib.Grib2.Templates.GridDefinitions
 		
 		public Earth EarthShape { get; set; }
 
-		private protected EarthGridDefinition(BufferedBinaryReader reader)
+		private protected EarthGridDefinition(BufferedBinaryReader reader) : base(reader)
 		{
 			Shape = reader.ReadUInt8();
 

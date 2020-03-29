@@ -51,7 +51,7 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 
 			float pmv = PrimaryMissingValue;
 
-			int NG = (int) NumberOfGroups;
+			int ng = (int) NumberOfGroups;
 
 			int g1 = 0, gMin = 0, h1 = 0, h2 = 0, hMin = 0;
 			// [6-ww]   1st values of undifferenced scaled values and minimums
@@ -109,49 +109,49 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 			}
 
 			// [ww +1]-xx  Get reference values for groups (X1's)
-			int[] X1 = new int[NG];
-			int nb = NumberOfBits;
+			int[] x1 = new int[ng];
+			int nbBits = NumberOfBits;
 
 			reader.NextUIntN();
-			for (int i = 0; i < NG; i++)
+			for (int i = 0; i < ng; i++)
 			{
-				X1[i] = reader.ReadUIntN(nb);
+				x1[i] = reader.ReadUIntN(nbBits);
 			}
 
 			// [xx +1 ]-yy Get number of bits used to encode each group
-			int[] NB = new int[NG];
-			nb = BitsGroupWidths;
+			int[] nb = new int[ng];
+			nbBits = BitsGroupWidths;
 
 			reader.NextUIntN();
-			for (int i = 0; i < NG; i++)
+			for (int i = 0; i < ng; i++)
 			{
-				NB[i] = reader.ReadUIntN(nb);
+				nb[i] = reader.ReadUIntN(nbBits);
 			}
 
 			// [yy +1 ]-zz Get the scaled group lengths using formula
 			//     Ln = ref + Kn * len_inc, where n = 1-NG,
 			//          ref = referenceGroupLength, and  len_inc = lengthIncrement
 
-			int[] L = new int[NG];
+			int[] l = new int[ng];
 			int countL = 0;
-			int ref_Renamed = (int) ReferenceGroupLength;
+			int rgLength = (int) ReferenceGroupLength;
 
-			int len_inc = LengthIncrement;
+			int lenInc = LengthIncrement;
 
-			nb = BitsScaledGroupLength;
+			nbBits = BitsScaledGroupLength;
 
 			reader.NextUIntN();
-			for (int i = 0; i < NG; i++)
+			for (int i = 0; i < ng; i++)
 			{
 				// NG
-				L[i] = ref_Renamed + reader.ReadUIntN(nb) * len_inc;
+				l[i] = rgLength + reader.ReadUIntN(nbBits) * lenInc;
 
-				countL += L[i];
+				countL += l[i];
 			}
 
 			// [zz +1 ]-nn get X2 values and add X1[ i ] + X2
 
-			var Data = new float[countL];
+			var data = new float[countL];
 
 
 			//gds.getNumberPoints() );
@@ -164,42 +164,42 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 			}
 
 			var count = 0;
-			int X2;
+			int x2;
 			reader.NextUIntN();
-			for (int i = 0; i < NG - 1; i++)
+			for (int i = 0; i < ng - 1; i++)
 			{
-				for (int j = 0; j < L[i]; j++)
+				for (int j = 0; j < l[i]; j++)
 				{
-					if (NB[i] == 0)
+					if (nb[i] == 0)
 					{
 						if (mvm == 0)
 						{
 							// X2 = 0
-							Data[count++] = X1[i];
+							data[count++] = x1[i];
 						}
 						else if (mvm == 1)
 						{
-							Data[count++] = pmv;
+							data[count++] = pmv;
 						}
 					}
 					else
 					{
-						X2 = reader.ReadUIntN(NB[i]);
+						x2 = reader.ReadUIntN(nb[i]);
 
 						if (mvm == 0)
 						{
-							Data[count++] = X1[i] + X2;
+							data[count++] = x1[i] + x2;
 						}
 						else if (mvm == 1)
 						{
 							// X2 is also set to missing value is all bits set to 1's
-							if (X2 == bitsmv1[NB[i]])
+							if (x2 == bitsmv1[nb[i]])
 							{
-								Data[count++] = pmv;
+								data[count++] = pmv;
 							}
 							else
 							{
-								Data[count++] = X1[i] + X2;
+								data[count++] = x1[i] + x2;
 							}
 						}
 					}
@@ -212,35 +212,35 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 			for (int j = 0; j < last; j++)
 			{
 				// last group
-				if (NB[NG - 1] == 0)
+				if (nb[ng - 1] == 0)
 				{
 					if (mvm == 0)
 					{
 						// X2 = 0
-						Data[count++] = X1[NG - 1];
+						data[count++] = x1[ng - 1];
 					}
 					else if (mvm == 1)
 					{
-						Data[count++] = pmv;
+						data[count++] = pmv;
 					}
 				}
 				else
 				{
-					X2 = reader.ReadUIntN(NB[NG - 1]);
+					x2 = reader.ReadUIntN(nb[ng - 1]);
 					if (mvm == 0)
 					{
-						Data[count++] = X1[NG - 1] + X2;
+						data[count++] = x1[ng - 1] + x2;
 					}
 					else if (mvm == 1)
 					{
 						// X2 is also set to missing value is all bits set to 1's
-						if (X2 == bitsmv1[NB[NG - 1]])
+						if (x2 == bitsmv1[nb[ng - 1]])
 						{
-							Data[count++] = pmv;
+							data[count++] = pmv;
 						}
 						else
 						{
-							Data[count++] = X1[NG - 1] + X2;
+							data[count++] = x1[ng - 1] + x2;
 						}
 					}
 				}
@@ -253,16 +253,16 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 				if (mvm == 0)
 				{
 					// no missing values
-					for (int i = 1; i < Data.Length; i++)
+					for (int i = 1; i < data.Length; i++)
 					{
-						Data[i] += gMin; // add minimum back
+						data[i] += gMin; // add minimum back
 					}
 
-					Data[0] = g1;
-					for (int i = 1; i < Data.Length; i++)
+					data[0] = g1;
+					for (int i = 1; i < data.Length; i++)
 					{
-						sum += Data[i];
-						Data[i] = Data[i - 1] + sum;
+						sum += data[i];
+						data[i] = data[i - 1] + sum;
 					}
 				}
 				else
@@ -271,20 +271,20 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 					float lastOne = pmv;
 					// add the minimum back and set g1
 					int idx = 0;
-					for (int i = 0; i < Data.Length; i++)
+					for (int i = 0; i < data.Length; i++)
 					{
-						if (Data[i] != pmv)
+						if (data[i] != pmv)
 						{
 							if (idx == 0)
 							{
 								// set g1
-								Data[i] = g1;
-								lastOne = Data[i];
+								data[i] = g1;
+								lastOne = data[i];
 								idx = i + 1;
 							}
 							else
 							{
-								Data[i] += gMin;
+								data[i] += gMin;
 							}
 						}
 					}
@@ -294,13 +294,13 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 						throw new NoValidGribException("DS bad spatial differencing data");
 					}
 
-					for (int i = idx; i < Data.Length; i++)
+					for (int i = idx; i < data.Length; i++)
 					{
-						if (Data[i] != pmv)
+						if (data[i] != pmv)
 						{
-							sum += Data[i];
-							Data[i] = lastOne + sum;
-							lastOne = Data[i];
+							sum += data[i];
+							data[i] = lastOne + sum;
+							lastOne = data[i];
 						}
 					}
 				}
@@ -313,18 +313,18 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 				if (mvm == 0)
 				{
 					// no missing values
-					for (int i = 2; i < Data.Length; i++)
+					for (int i = 2; i < data.Length; i++)
 					{
-						Data[i] += hMin; // add minimum back
+						data[i] += hMin; // add minimum back
 					}
 
-					Data[0] = h1;
-					Data[1] = h2;
+					data[0] = h1;
+					data[1] = h2;
 					sum = hDiff;
-					for (int i = 2; i < Data.Length; i++)
+					for (int i = 2; i < data.Length; i++)
 					{
-						sum += Data[i];
-						Data[i] = Data[i - 1] + sum;
+						sum += data[i];
+						data[i] = data[i - 1] + sum;
 					}
 				}
 				else
@@ -333,29 +333,29 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 					int idx = 0;
 					float lastOne = pmv;
 					// add the minimum back and set h1 and h2
-					for (int i = 0; i < Data.Length; i++)
+					for (int i = 0; i < data.Length; i++)
 					{
-						if (Data[i] != pmv)
+						if (data[i] != pmv)
 						{
 							if (idx == 0)
 							{
 								// set h1
-								Data[i] = h1;
+								data[i] = h1;
 								sum = 0;
-								lastOne = Data[i];
+								lastOne = data[i];
 								idx++;
 							}
 							else if (idx == 1)
 							{
 								// set h2
-								Data[i] = h1 + hDiff;
+								data[i] = h1 + hDiff;
 								sum = hDiff;
-								lastOne = Data[i];
+								lastOne = data[i];
 								idx = i + 1;
 							}
 							else
 							{
-								Data[i] += hMin;
+								data[i] += hMin;
 							}
 						}
 					}
@@ -365,14 +365,14 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 						throw new NoValidGribException("DS bad spatial differencing data");
 					}
 
-					for (int i = idx; i < Data.Length; i++)
+					for (int i = idx; i < data.Length; i++)
 					{
-						if (Data[i] != pmv)
+						if (data[i] != pmv)
 						{
-							sum += Data[i];
+							sum += data[i];
 
-							Data[i] = lastOne + sum;
-							lastOne = Data[i];
+							data[i] = lastOne + sum;
+							lastOne = data[i];
 						}
 					}
 				}
@@ -380,37 +380,37 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 
 			// formula used to create values,  Y * 10**D = R + (X1 + X2) * 2**E
 
-			int D = DecimalScaleFactor;
+			int d = DecimalScaleFactor;
 
-			float DD = (float) Math.Pow(10, D);
+			float dd = (float) Math.Pow(10, d);
 
-			float R = ReferenceValue;
+			float r = ReferenceValue;
 
-			int E = BinaryScaleFactor;
+			int e = BinaryScaleFactor;
 
-			float EE = (float) Math.Pow(2.0, E);
+			float ee = (float) Math.Pow(2.0, e);
 
 			if (mvm == 0)
 			{
 				// no missing values
-				for (int i = 0; i < Data.Length; i++)
+				for (int i = 0; i < data.Length; i++)
 				{
-					Data[i] = (R + Data[i] * EE) / DD;
+					data[i] = (r + data[i] * ee) / dd;
 				}
 			}
 			else
 			{
 				// missing value == 1
-				for (int i = 0; i < Data.Length; i++)
+				for (int i = 0; i < data.Length; i++)
 				{
-					if (Data[i] != pmv)
+					if (data[i] != pmv)
 					{
-						Data[i] = (R + Data[i] * EE) / DD;
+						data[i] = (r + data[i] * ee) / dd;
 					}
 				}
 			}
 
-			return Data;
+			return data;
 		}
 	}
 }

@@ -2,17 +2,17 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
-namespace NGrib
+namespace NGrib.Grib2.CodeTables
 {
 	[SuppressMessage("ReSharper", "IdentifierTypo")]
 	[SuppressMessage("ReSharper", "CommentTypo")]
 	[SuppressMessage("ReSharper", "StringLiteralTypo")]
-	public struct Center
+	public readonly struct Center
 	{
 		public int Id { get; }
-		public string? Name { get; }
+		public string Name { get; }
 
-		private Center(int id, string? name = null)
+		private Center(int id, string name = null)
 		{
 			Id = id;
 			Name = name;
@@ -20,7 +20,7 @@ namespace NGrib
 
 		public bool Equals(Center other) => Id == other.Id;
 
-		public override bool Equals(object? obj) => obj is Center other && Equals(other);
+		public override bool Equals(object obj) => obj is Center other && Equals(other);
 
 		public override int GetHashCode() => Id.GetHashCode();
 

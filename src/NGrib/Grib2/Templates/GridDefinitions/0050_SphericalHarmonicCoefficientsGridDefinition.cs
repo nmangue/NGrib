@@ -54,7 +54,7 @@ namespace NGrib.Grib2.Templates.GridDefinitions
 		/// </returns>
 		public int Mode { get; }
 
-		internal SphericalHarmonicCoefficientsGridDefinition(BufferedBinaryReader reader)
+		internal SphericalHarmonicCoefficientsGridDefinition(BufferedBinaryReader reader) : base(reader)
 		{
 			J = reader.ReadSingle();
 			K = reader.ReadSingle();

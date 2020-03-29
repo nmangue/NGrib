@@ -87,7 +87,7 @@ namespace NGrib.Grib2.Templates.GridDefinitions
 		/// </returns>
 		public long N { get; }
 
-		internal TriangularGridBasedOnAnIcosahedronGridDefinition(BufferedBinaryReader reader)
+		internal TriangularGridBasedOnAnIcosahedronGridDefinition(BufferedBinaryReader reader) : base(reader)
 		{
 			N2 = reader.ReadUInt8();
 			N3 = reader.ReadUInt8();

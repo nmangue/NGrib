@@ -26,8 +26,7 @@ namespace NGrib.Grib2.Templates.ProductDefinitions
 	/// or other statistically processed values at a horizontal level or in a horizontal
 	/// layer in a continuous or non-continuous time interval
 	/// </summary>
-	public class
-		StatisticallyProcessedPointInTimeHorizontalLevelProductDefinition : PointInTimeHorizontalLevelProductDefinition
+	public class StatisticallyProcessedPointInTimeHorizontalLevelProductDefinition : PointInTimeHorizontalLevelProductDefinition
 	{
 		private DateTime endTime;
 		private int timeRanges;
@@ -44,14 +43,7 @@ namespace NGrib.Grib2.Templates.ProductDefinitions
 		internal StatisticallyProcessedPointInTimeHorizontalLevelProductDefinition(BufferedBinaryReader reader) :
 			base(reader)
 		{
-			int year = reader.ReadUInt16();
-			int month = reader.ReadUInt8();
-			int day = reader.ReadUInt8();
-			int hour = reader.ReadUInt8();
-			int minute = reader.ReadUInt8();
-			int second = reader.ReadUInt8();
-
-			endTime = new DateTime(year, month, day, hour, minute, second, DateTimeKind.Utc);
+			endTime = reader.ReadDateTime();
 
 			// 42
 			timeRanges = reader.ReadUInt8();

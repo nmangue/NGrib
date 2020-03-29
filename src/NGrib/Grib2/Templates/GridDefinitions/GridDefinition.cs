@@ -23,8 +23,14 @@ namespace NGrib.Grib2.Templates.GridDefinitions
 {
 	public abstract class GridDefinition
 	{
-		protected GridDefinition()
+    /// <summary>
+    /// Grid Definition Offset.
+    /// </summary>
+		public long Offset { get; }
+
+		private protected GridDefinition(BufferedBinaryReader reader)
 		{
+			Offset = reader.Position;
 		}
 
 		public abstract IEnumerable<Coordinate> EnumerateGridPoints();
