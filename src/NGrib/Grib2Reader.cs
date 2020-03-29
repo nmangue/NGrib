@@ -17,28 +17,31 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using NGrib.Grib2;
 using NGrib.Grib2.Sections;
 
 namespace NGrib
 {
 	public class Grib2Reader
 	{
-		public IReadOnlyCollection<Grib2Record> Records => records;
+		private readonly BufferedBinaryReader reader;
 
-		private readonly Stream gribStream;
-		private BufferedBinaryReader reader;
-		private List<Grib2Record> records = new List<Grib2Record>();
-
-		private Grib2Reader(Stream gribStream)
+		public Grib2Reader(Stream gribStream)
 		{
-			this.gribStream = gribStream;
-			reader = new BufferedBinaryReader(gribStream, 4096);
+			if (gribStream == null) throw new ArgumentNullException(nameof(gribStream));
+			if (!gribStream.CanRead) throw new ArgumentException("The stream must support reading.", nameof(gribStream));
+			if (!gribStream.CanSeek) throw new ArgumentException("The stream must support seeking.", nameof(gribStream));
+
+			reader = new BufferedBinaryReader(gribStream);
 		}
 
-		private void MapGrib()
+		public IList<Message> ReadMessages()
 		{
+			var messages = new List<Message>();
 			reader.Seek(0, SeekOrigin.Begin);
 
 			do
@@ -46,12 +49,15 @@ namespace NGrib
 				var indicatorSection = IndicatorSection.BuildFrom(reader);
 				var identificationSection = IdentificationSection.BuildFrom(reader);
 
-				LocalUseSection localSection = null;
+				var message = new Message(indicatorSection, identificationSection);
+				messages.Add(message);
+
+				LocalUseSection localUseSection = null;
 				do
 				{
 					if (reader.PeekSection().Is(SectionCode.LocalUseSection))
 					{
-						localSection = LocalUseSection.BuildFrom(reader);
+						localUseSection = LocalUseSection.BuildFrom(reader);
 					}
 
 					while (reader.PeekSection().Is(SectionCode.GridDefinitionSection))
@@ -65,33 +71,26 @@ namespace NGrib
 
 							var bitmapSection = BitmapSection.BuildFrom(reader, dataRepresentationSection.DataPointsNumber);
 
-							var dataSection = Grib2DataSection.BuildFrom(reader);
+							var dataSection = DataSection.BuildFrom(reader);
 
-							var record = new Grib2Record(
-								indicatorSection,
-								identificationSection,
-								localSection,
+							message.AddDataset(
+								localUseSection,
 								gridDefinitionSection,
 								productDefinitionSection,
 								dataRepresentationSection,
 								bitmapSection,
 								dataSection);
-
-							records.Add(record);
 						}
 					}
 				} while (!reader.PeekSection().Is(SectionCode.EndSection));
 				EndSection.BuildFrom(reader);
 			} while (!reader.HasReachedStreamEnd && reader.PeekSection().Is(SectionCode.IndicatorSection));
+
+			return messages;
 		}
 
-		public IEnumerable<KeyValuePair<Coordinate, float?>> ReadRecordData(Grib2Record record) => record.GetData(reader);
+		public IEnumerable<DataSet> ReadAllDatasets() => ReadMessages().SelectMany(m => m.DataSets);
 
-		public static Grib2Reader Open(Stream gribStream)
-		{
-			var reader = new Grib2Reader(gribStream);
-			reader.MapGrib();
-			return reader;
-		}
+		public IEnumerable<KeyValuePair<Coordinate, float?>> ReadRecordData(DataSet record) => record.GetData(reader);
 	}
 }

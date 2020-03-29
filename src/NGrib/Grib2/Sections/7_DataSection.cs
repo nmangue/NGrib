@@ -22,7 +22,7 @@ namespace NGrib.Grib2.Sections
 	/// <summary>
 	/// Section 6 - Data Section
 	/// </summary>
-	public sealed class Grib2DataSection
+	public sealed class DataSection
 	{
 		/// <summary>
 		/// Length of section in octets.
@@ -39,14 +39,14 @@ namespace NGrib.Grib2.Sections
 		/// </summary>
 		public long DataOffset { get; }
 
-		private Grib2DataSection(long length, int section, long dataOffset)
+		private DataSection(long length, int section, long dataOffset)
 		{
 			DataOffset = dataOffset;
 			Length = length;
 			Section = section;
 		}
 
-		internal static Grib2DataSection BuildFrom(BufferedBinaryReader reader)
+		internal static DataSection BuildFrom(BufferedBinaryReader reader)
 		{
 			// octets 1-4 (Length of DS)
 			var length = reader.ReadUInt32();
@@ -62,7 +62,7 @@ namespace NGrib.Grib2.Sections
 
 			reader.Skip((int) (length - 5));
 
-			return new Grib2DataSection(length, section, dataOffset);
+			return new DataSection(length, section, dataOffset);
 		}
 	}
 }
