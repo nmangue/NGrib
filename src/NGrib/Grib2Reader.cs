@@ -89,8 +89,10 @@ namespace NGrib
 			return messages;
 		}
 
-		public IEnumerable<DataSet> ReadAllDatasets() => ReadMessages().SelectMany(m => m.DataSets);
+		public IEnumerable<DataSet> ReadAllDataSets() => ReadMessages().SelectMany(m => m.DataSets);
 
+		public IEnumerable<float?> ReadDataSetRawData(DataSet record) => record.GetRawData(reader);
+		
 		public IEnumerable<KeyValuePair<Coordinate, float?>> ReadRecordData(DataSet record) => record.GetData(reader);
 	}
 }

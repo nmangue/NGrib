@@ -42,6 +42,31 @@ namespace NGrib.Tests
 			CheckDataSection(record);
 		}
 
+		[Fact]
+		public void Data_Check()
+		{
+			// Expected values retrieved from Panoply
+			var expectedValues = new[]
+			{
+				5407.5f, 5416.5f, 5360.6f, 5470.8f, 5512.7f,
+				5449.3f, 5376.0f, 5503.3f, 5515.2f, 5448.4f,
+				5405.9f, 5467.4f, 5440.7f, 5448.5f, 5403.4f,
+				5348.1f, 5378.2f, 5417.6f, 5388.2f, 5520.9f,
+				5367.6f, 5465.7f, 5357.2f, 5475.4f, 5407.3f
+			};
+
+			using var stream = File.OpenRead(GribFileSamples.WmoOneDataSetMessage);
+			var reader = new Grib2Reader(stream);
+
+			var dataSets = reader.ReadAllDataSets().ToArray();
+
+			Check.That(dataSets).HasOneElementOnly();
+
+			var data = reader.ReadDataSetRawData(dataSets.Single()).ToArray();
+
+			Check.That(data).ContainsExactly(expectedValues);
+		}
+
 		private static void CheckIndicatorSection(DataSet record)
 		{
 			var indicatorSection = record.Message.IndicatorSection;
