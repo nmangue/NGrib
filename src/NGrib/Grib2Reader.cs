@@ -60,10 +60,10 @@ namespace NGrib
 
 						while (reader.PeekSection().Is(SectionCode.ProductDefinitionSection))
 						{
-							var productDefinitionSection = Grib2ProductDefinitionSection.BuildFrom(reader);
+							var productDefinitionSection = ProductDefinitionSection.BuildFrom(reader);
 							var dataRepresentationSection = DataRepresentationSection.BuildFrom(reader);
 
-							var bitmapSection = Grib2BitMapSection.BuildFrom(reader, dataRepresentationSection.DataPointsNumber);
+							var bitmapSection = BitmapSection.BuildFrom(reader, dataRepresentationSection.DataPointsNumber);
 
 							var dataSection = Grib2DataSection.BuildFrom(reader);
 
@@ -81,7 +81,7 @@ namespace NGrib
 						}
 					}
 				} while (!reader.PeekSection().Is(SectionCode.EndSection));
-				Grib2EndSection.BuildFrom(reader);
+				EndSection.BuildFrom(reader);
 			} while (!reader.HasReachedStreamEnd && reader.PeekSection().Is(SectionCode.IndicatorSection));
 		}
 

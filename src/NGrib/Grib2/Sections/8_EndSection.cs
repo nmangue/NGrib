@@ -1,4 +1,4 @@
-﻿/*
+/*
  * This file is part of NGrib.
  *
  * Copyright © 2020 Nicolas Mangué
@@ -19,54 +19,36 @@
 
 namespace NGrib.Grib2.Sections
 {
-  /// <summary>
-  /// Section Codes.
-  /// </summary>
-	public enum SectionCode
+	/// <summary>
+	/// Section 8 - End Section
+	/// </summary>
+	public sealed class EndSection
 	{
-    /// <summary>
-    /// Indicator Section Code.
-    /// </summary>
-		IndicatorSection,
-
-    /// <summary>
-    /// Identification Section Code.
-    /// </summary>
-    IdentificationSection,
-
-    /// <summary>
-    /// Local Use Section Code.
-    /// </summary>
-		LocalUseSection,
+		/// <summary>
+		/// Length of section in octets.
+		/// </summary>
+		public long Length { get; }
 
 		/// <summary>
-		/// Grid Definition Section Code.
+		/// Number of section.
 		/// </summary>
-		GridDefinitionSection,
+		public int Section { get; }
 
-		/// <summary>
-		/// Product Definition Section Code.
-		/// </summary>
-		ProductDefinitionSection,
+		private EndSection(long length, int section)
+		{
+			Length = length;
+			Section = section;
+		}
 
-		/// <summary>
-		/// Data Representation Section Code.
-		/// </summary>
-		DataRepresentationSection,
+		internal static EndSection BuildFrom(BufferedBinaryReader reader)
+		{
+			var sectionInfos = reader.ReadSectionInfo();
+			if (!sectionInfos.Is(SectionCode.EndSection))
+			{
+				throw new NoValidGribException("");
+			}
 
-		/// <summary>
-		/// Bitmap Section Code.
-		/// </summary>
-		BitmapSection,
-
-		/// <summary>
-		/// Data Section Code.
-		/// </summary>
-		DataSection,
-
-		/// <summary>
-		/// End Section Code.
-		/// </summary>
-		EndSection
-  }
+			return new EndSection(sectionInfos.Length, sectionInfos.SectionCode);
+		}
+	}
 }

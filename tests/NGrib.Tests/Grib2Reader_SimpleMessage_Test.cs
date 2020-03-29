@@ -100,7 +100,7 @@ namespace NGrib.Tests
 		{
 			Check.That(record.PDS.Length).Equals(34);
 			Check.That(record.PDS.Section).Equals(4);
-			Check.That(record.PDS.Coordinates).Equals(0);
+			Check.That(record.PDS.CoordinatesAfterTemplateNumber).Equals(0);
 			Check.That(record.PDS.ProductDefinitionTemplateNumber).Equals(0);
 
 			Check.That(record.PDS.ProductDefinition).IsInstanceOf<PointInTimeHorizontalLevelProductDefinition>();
@@ -138,7 +138,7 @@ namespace NGrib.Tests
 		{
 			Check.That(record.Bms.Length).Equals(6);
 			Check.That(record.Bms.Section).Equals(6);
-			Check.That(record.Bms.BitMapIndicator).Equals(byte.MaxValue);
+			Check.That(record.Bms.BitMapIndicatorCode).Equals(byte.MaxValue);
 		}
 
 		private static void CheckDataSection(Grib2Record record)

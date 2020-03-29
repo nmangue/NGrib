@@ -45,14 +45,14 @@ namespace NGrib
 		/// <summary> returns PDS.</summary>
 		/// <returns> pds
 		/// </returns>
-		public Grib2ProductDefinitionSection PDS { get; }
+		public ProductDefinitionSection PDS { get; }
 
 		/// <summary> returns Data Representation Section.</summary>
 		/// <returns> DataRepresentationSection
 		/// </returns>
 		public DataRepresentationSection DRS { get; }
 
-		public Grib2BitMapSection Bms { get; }
+		public BitmapSection Bms { get; }
 		public long GdsOffset { get; }
 		public long PdsOffset { get; }
 
@@ -82,8 +82,8 @@ namespace NGrib
 		/// </param>
 		public Grib2Record(IndicatorSection is_Renamed,
 			IdentificationSection id, GridDefinitionSection gds,
-			Grib2ProductDefinitionSection pds, DataRepresentationSection drs,
-			Grib2BitMapSection bms, long gdsOffset, long pdsOffset,
+			ProductDefinitionSection pds, DataRepresentationSection drs,
+			BitmapSection bms, long gdsOffset, long pdsOffset,
 			LocalUseSection lus)
 		{
 			Is = is_Renamed;
@@ -102,9 +102,9 @@ namespace NGrib
 			IdentificationSection identificationSection, 
 			LocalUseSection localSection, 
 			GridDefinitionSection gridDefinitionSection, 
-			Grib2ProductDefinitionSection productDefinitionSection, 
+			ProductDefinitionSection productDefinitionSection, 
 			DataRepresentationSection dataRepresentationSection, 
-			Grib2BitMapSection bitmapSection,
+			BitmapSection bitmapSection,
 			Grib2DataSection dataSection)
 		{
 			Is = indicatorSection;

@@ -121,7 +121,7 @@ namespace NGrib.Grib2.Sections
 			var length = reader.ReadUInt32();
 
 			var section = reader.ReadUInt8();
-			if (section != 1)
+			if (section != (int) SectionCode.IdentificationSection)
 			{
 				return null;
 			}

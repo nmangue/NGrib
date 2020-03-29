@@ -23,7 +23,7 @@ using NGrib.Grib2.Sections.Templates.DataRepresentationTemplates;
 namespace NGrib.Grib2.Sections
 {
 	/// <summary>
-	/// Section 4 - Data Representation Section
+	/// Section 5 - Data Representation Section
 	/// </summary>
 	public sealed class DataRepresentationSection
 	{
@@ -53,7 +53,11 @@ namespace NGrib.Grib2.Sections
 		/// </summary>
 		public DataRepresentation DataRepresentation { get; }
 
-		private DataRepresentationSection(long length, int section, long dataPointsNumber, int templateNumber,
+		private DataRepresentationSection(
+			long length,
+			int section,
+			long dataPointsNumber,
+			int templateNumber,
 			DataRepresentation dataRepresentation)
 		{
 			Section = section;
@@ -63,18 +67,16 @@ namespace NGrib.Grib2.Sections
 			DataRepresentation = dataRepresentation;
 		}
 
-		/// <summary> Constructs a <tt>Grib2DataRepresentationSection</tt> object from a raf.
-		/// 
-		/// </summary>
-		/// <param name="reader">RandomAccessFile with Section DRS content
-		/// </param>
-		/// <throws>  IOException  if stream contains no valid GRIB file </throws>
 		internal static DataRepresentationSection BuildFrom(BufferedBinaryReader reader)
 		{
 			// octets 1-4 (Length of DRS)
 			var length = reader.ReadUInt32();
 
 			var section = reader.ReadUInt8();
+			if (section != (int) SectionCode.DataRepresentationSection)
+			{
+				throw new NoValidGribException("");
+			}
 
 			var dataPoints = reader.ReadUInt32();
 
@@ -88,11 +90,11 @@ namespace NGrib.Grib2.Sections
 		private static readonly TemplateFactory<DataRepresentation> DataRepresentationFactory =
 			new TemplateFactory<DataRepresentation>
 			{
-				{0, r => new GridPointDataSimplePacking(r)},
-				{2, r => new GridPointDataComplexPacking(r)},
-				{3, r => new GridPointDataComplexPackingAndSpatialDifferencing(r)},
-				{40, r => new GridPointDataJpeg2000CodeStream(r)},
-				{40000, r => new GridPointDataJpeg2000CodeStream(r)},
+				{ 0, r => new GridPointDataSimplePacking(r) },
+				{ 2, r => new GridPointDataComplexPacking(r) },
+				{ 3, r => new GridPointDataComplexPackingAndSpatialDifferencing(r) },
+				{ 40, r => new GridPointDataJpeg2000CodeStream(r) },
+				{ 40000, r => new GridPointDataJpeg2000CodeStream(r) },
 			};
 	}
 }
