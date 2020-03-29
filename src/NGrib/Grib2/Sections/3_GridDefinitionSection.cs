@@ -18,8 +18,8 @@
  */
 
 using System.IO;
-using NGrib.Grib2.Sections.Templates;
-using NGrib.Grib2.Sections.Templates.GridDefinitionTemplates;
+using NGrib.Grib2.Templates;
+using NGrib.Grib2.Templates.GridDefinitions;
 
 namespace NGrib.Grib2.Sections
 {

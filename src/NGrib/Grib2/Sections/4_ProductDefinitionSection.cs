@@ -17,8 +17,8 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using NGrib.Grib2.Sections.Templates;
-using NGrib.Grib2.Sections.Templates.ProductDefinitionTemplates;
+using NGrib.Grib2.Templates;
+using NGrib.Grib2.Templates.ProductDefinitions;
 
 namespace NGrib.Grib2.Sections
 {

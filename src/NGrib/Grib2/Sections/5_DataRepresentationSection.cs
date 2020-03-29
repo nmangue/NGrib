@@ -17,8 +17,8 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using NGrib.Grib2.Sections.Templates;
-using NGrib.Grib2.Sections.Templates.DataRepresentationTemplates;
+using NGrib.Grib2.Templates;
+using NGrib.Grib2.Templates.DataRepresentations;
 
 namespace NGrib.Grib2.Sections
 {

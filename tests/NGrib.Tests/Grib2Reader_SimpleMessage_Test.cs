@@ -4,9 +4,9 @@ using System.Linq;
 using System.Numerics;
 using NFluent;
 using NGrib.Grib2.CodeTables;
-using NGrib.Grib2.Sections.Templates.DataRepresentationTemplates;
-using NGrib.Grib2.Sections.Templates.GridDefinitionTemplates;
-using NGrib.Grib2.Sections.Templates.ProductDefinitionTemplates;
+using NGrib.Grib2.Templates.DataRepresentations;
+using NGrib.Grib2.Templates.GridDefinitions;
+using NGrib.Grib2.Templates.ProductDefinitions;
 using Xunit;
 
 namespace NGrib.Tests
