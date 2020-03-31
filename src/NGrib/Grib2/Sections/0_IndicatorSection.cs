@@ -42,14 +42,9 @@ namespace NGrib.Grib2.Sections
 		public int Section { get; }
 
 		/// <summary>
-		/// Discipline - GRIB Master Table Number.
-		/// </summary>
-		public int DisciplineCode { get; }
-
-		/// <summary>
 		/// Discipline from the GRIB Code Table 0.0.
 		/// </summary>
-		public Discipline? Discipline { get; }
+		public Discipline Discipline { get; }
 
 		/// <summary>
 		/// GRIB Edition Number.
@@ -65,12 +60,7 @@ namespace NGrib.Grib2.Sections
 		{
 			Length = INDICATOR_SECTION_LENGTH;
 			Section = (int) SectionCode.IndicatorSection;
-			DisciplineCode = disciplineCode;
-
-			if (Enum.IsDefined(typeof(Discipline), disciplineCode))
-			{
-				Discipline = (Discipline) disciplineCode;
-			}
+			Discipline = (Discipline)disciplineCode;
 
 			GribEdition = gribEdition;
 			TotalLength = totalLength;

@@ -17,18 +17,21 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using NGrib.Grib2.CodeTables;
+
 namespace NGrib.Grib2.Templates.ProductDefinitions
 {
-    public class WithBackgroundProductDefinition : ProductDefinition
-    {
-        /// <summary> backGenProcess.</summary>
-        /// <returns> BackGenProcess
-        /// </returns>
-        public int BackGenProcess { get; }
+	public class WithBackgroundProductDefinition : ProductDefinition
+	{
+		/// <summary>
+		/// Background generating process identifier.
+		/// </summary>
+		public int BackgroundGeneratingProcessIdentifier { get; }
 
-        internal WithBackgroundProductDefinition(BufferedBinaryReader reader) : base(reader)
-        {
-            BackGenProcess = reader.ReadUInt8();
-        }
-    }
+		internal WithBackgroundProductDefinition(BufferedBinaryReader reader, Discipline discipline) : base(reader,
+			discipline)
+		{
+			BackgroundGeneratingProcessIdentifier = reader.ReadUInt8();
+		}
+	}
 }

@@ -50,5 +50,13 @@ namespace NGrib.Tests
 			Check.That(BigEndianBitConverter.ToSingle(data, startIndex)).Equals(value);
 		}
 
+		[Theory]
+		[InlineData(new byte[] { 0b1000_0001 }, 0, -1)]
+		[InlineData(new byte[] { 0, 0b0000_0011 }, 1, 3)]
+		[InlineData(new byte[] { 0b1110_0111 }, 0, -103)]
+		public void ToInt8_Test(byte[] data, int startIndex, float value)
+		{
+			Check.That(BigEndianBitConverter.ToInt8(data, startIndex)).Equals(value);
+		}
 	}
 }

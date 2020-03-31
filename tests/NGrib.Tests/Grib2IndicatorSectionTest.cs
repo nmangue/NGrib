@@ -18,7 +18,6 @@ namespace NGrib.Tests
 
 			Check.That(indicatorSection).IsNotNull();
 			Check.That(indicatorSection.GribEdition).Equals(2);
-			Check.That(indicatorSection.DisciplineCode).Equals(0);
 			Check.That(indicatorSection.Discipline).Equals(Discipline.MeteorologicalProducts);
 			Check.That(indicatorSection.TotalLength.Sign).IsStrictlyPositive();
 		}

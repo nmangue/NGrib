@@ -19,75 +19,74 @@
 
 using System;
 using System.Collections.Generic;
+using NGrib.Grib2.CodeTables;
 
 namespace NGrib.Grib2.Templates.DataRepresentations
 {
-    /// <summary>
-    /// Data Representation Template 5.0: Grid point data - simple packing
-    /// </summary>
-    public class GridPointDataSimplePacking : DataRepresentation
-    {
-        /// <summary> Reference value (R) (IEEE 32-bit floating-point value).</summary>
-        /// <returns> ReferenceValue
-        /// </returns>
-        public float ReferenceValue { get; }
+	/// <summary>
+	/// Data Representation Template 5.0: Grid point data - simple packing
+	/// </summary>
+	public class GridPointDataSimplePacking : DataRepresentation
+	{
+		/// <summary>
+		/// Reference value (R) .
+		/// </summary>
+		public float ReferenceValue { get; }
 
-        /// <summary> Binary scale factor (E).</summary>
-        /// <returns> BinaryScaleFactor
-        /// </returns>
-        public int BinaryScaleFactor { get; }
+		/// <summary>
+		/// Binary scale factor (E).
+		/// </summary>
+		public int BinaryScaleFactor { get; }
 
-        /// <summary> Decimal scale factor (D).</summary>
-        /// <returns> DecimalScaleFactor
-        /// </returns>
-        public int DecimalScaleFactor { get; }
+		/// <summary>
+		/// Decimal scale factor (D).
+		/// </summary>
+		public int DecimalScaleFactor { get; }
 
-        /// <summary> Number of bits used for each packed value..</summary>
-        /// <returns> NumberOfBits NB
-        /// </returns>
-        public int NumberOfBits { get; }
+		/// <summary>
+		/// Number of bits used for each packed value for simple packing, or for each group reference value for complex packing or spatial differencing.
+		/// </summary>
+		public int NumberOfBits { get; }
 
-        /// <summary> Type of original field values.</summary>
-        /// <returns> OriginalType dataType
-        /// </returns>
-        public int OriginalType { get; }
+		/// <summary>
+		/// Type of original field values.
+		/// </summary>
+		public OriginalFieldValuesType OriginalFieldValuesType { get; }
 
-        internal GridPointDataSimplePacking(BufferedBinaryReader reader)
-        {
-            ReferenceValue = reader.ReadSingle();
-            BinaryScaleFactor = reader.ReadInt16();
-            DecimalScaleFactor = reader.ReadInt16();
-            NumberOfBits = reader.ReadUInt8();
+		internal GridPointDataSimplePacking(BufferedBinaryReader reader)
+		{
+			ReferenceValue = reader.ReadSingle();
+			BinaryScaleFactor = reader.ReadInt16();
+			DecimalScaleFactor = reader.ReadInt16();
+			NumberOfBits = reader.ReadUInt8();
 
-            OriginalType = reader.ReadUInt8();
-        }
+			OriginalFieldValuesType = (OriginalFieldValuesType) reader.ReadUInt8();
+		}
 
-        internal override IEnumerable<float> EnumerateDataValues(BufferedBinaryReader reader, long numberDataPoints)
-        {
-            var d = DecimalScaleFactor;
+		internal override IEnumerable<float> EnumerateDataValues(BufferedBinaryReader reader, long numberDataPoints)
+		{
+			var d = DecimalScaleFactor;
 
-            var dd = (float)Math.Pow(10, d);
+			var dd = Math.Pow(10, d);
 
-            var r = ReferenceValue;
+			var r = ReferenceValue;
 
-            var e = BinaryScaleFactor;
+			var e = BinaryScaleFactor;
 
-            var ee = (float)Math.Pow(2.0, e);
+			var ee = Math.Pow(2.0, e);
 
-            //  Y * 10**D = R + (X1 + X2) * 2**E
-            //   E = binary scale factor
-            //   D = decimal scale factor
-            //   R = reference value
-            //   X1 = 0
-            //   X2 = scaled encoded value 
+			//  Y * 10**D = R + (X1 + X2) * 2**E
+			//   E = binary scale factor
+			//   D = decimal scale factor
+			//   R = reference value
+			//   X1 = 0
+			//   X2 = scaled encoded value 
 
-            for (var i = 0; i < numberDataPoints; i++)
-            {
-                // (R + ( X1 + X2) * EE)/DD ;
-                yield return (r + reader.ReadUIntN(NumberOfBits) * ee) / dd;
-            }
-        }
-
-				internal override float? MissingValueSubstitute { get; } = null;
-    }
+			for (var i = 0; i < numberDataPoints; i++)
+			{
+				// (R + ( X1 + X2) * EE)/DD ;
+				yield return (float) ((r + reader.ReadUIntN(NumberOfBits) * ee) / dd);
+			}
+		}
+	}
 }

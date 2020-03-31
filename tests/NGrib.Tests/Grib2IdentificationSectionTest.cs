@@ -25,11 +25,8 @@ namespace NGrib.Tests
 			Check.That(section.SubCenterCode).Equals(0);
 			Check.That(section.MasterTableVersion).Equals(2);
 			Check.That(section.LocalTableVersion).Equals(1);
-			Check.That(section.ProductStatusCode).Equals(0);
 			Check.That(section.ProductStatus).Equals(ProductStatus.OperationalProducts);
-			Check.That(section.ProductTypeCode).Equals(0);
 			Check.That(section.ProductType).Equals(ProductType.AnalysisProducts);
-			Check.That(section.ReferenceTimeSignificanceCode).Equals(0);
 			Check.That(section.ReferenceTimeSignificance).Equals(ReferenceTimeSignificance.Analysis);
 			Check.That(section.ReferenceTime).Equals(new DateTime(2020, 3, 14, 0, 0, 0, 0, DateTimeKind.Utc));
 		}

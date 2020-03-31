@@ -20,53 +20,44 @@
 namespace NGrib.Grib2.CodeTables
 {
 	/// <summary>
-	/// Code Table 1.4: Type of data
+	/// Code Table 3.2: Shape of the Earth
 	/// </summary>
-	public enum ProductType
+	public enum EarthShape
 	{
 		/// <summary>
-		/// Analysis products
+		/// Earth assumed spherical with radius = 6,367,470.0 m.
 		/// </summary>
-		AnalysisProducts = 0,
+		DefaultSpherical,
 
 		/// <summary>
-		/// Forecast products
+		/// Earth assumed spherical with radius specified by data producer.
 		/// </summary>
-		ForecastProducts = 1,
+		CustomSpherical,
 
 		/// <summary>
-		/// Analysis and forecast products
+		/// Earth assumed oblate spheroid with size as determined by IAU in 1965 (major axis = 6,378,160.0 m, minor axis = 6,356,775.0 m, f = 1/297.0).
 		/// </summary>
-		AnalysisAndForecastProducts = 2,
+		Iau1965OblateSpheroid,
 
 		/// <summary>
-		/// Control forecast products
+		/// Earth assumed oblate spheroid with major and minor axes specified by data producer.
 		/// </summary>
-		ControlForecastProducts = 3,
+		CustomOblateSpheroid,
 
 		/// <summary>
-		/// Perturbed forecast products
+		/// Earth assumed oblate spheroid as defined in IAG-GRS80 model (major axis = 6,378,137.0 m, minor axis = 6,356,752.314 m, f = 1/298.257222101).
 		/// </summary>
-		PerturbedForecastProducts = 4,
+		IagGr80OblateSpheroid,
 
 		/// <summary>
-		/// Control and perturbed forecast products
+		/// Earth assumed represented by WGS84 (as used by ICAO since 1998).
 		/// </summary>
-		ControlAndPerturbedForecastProducts = 5,
+		Wgs84,
 
 		/// <summary>
-		/// Processed satellite observations
+		/// Earth model assumed spherical with radius 6,371,200.0 m,
+		/// but the horizontal datum of the resulting Latitude/Longitude field is the WGS84 reference frame.
 		/// </summary>
-		ProcessedSatelliteObservations = 6,
-
-		/// <summary>
-		/// Processed radar observations
-		/// </summary>
-		ProcessedRadarObservations = 7,
-
-		/// <summary>
-		/// Missing
-		/// </summary>
-		Missing = 255
+		Wgs84Spherical
 	}
 }

@@ -17,11 +17,20 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using System;
+using NGrib.Grib2.CodeTables;
+
 namespace NGrib.Grib2.Templates.GridDefinitions
 {
 	public abstract class Earth
 	{
-    }
+		public EarthShape Shape { get; }
+
+		protected Earth(int shapeCode)
+		{
+			Shape = shapeCode.As<EarthShape>() ?? throw new ArgumentException("Unknown shape code.", nameof(shapeCode));
+		}
+	}
 
 	public class SphericalEarth : Earth
 	{
@@ -29,9 +38,9 @@ namespace NGrib.Grib2.Templates.GridDefinitions
 		/// <returns> EarthRadius as a float
 		/// 
 		/// </returns>
-		public float Radius { get; }
+		public double Radius { get; }
 
-		public SphericalEarth(float radius)
+		public SphericalEarth(int shapeCode, double radius) : base(shapeCode)
 		{
 			Radius = radius;
 		}
@@ -43,15 +52,15 @@ namespace NGrib.Grib2.Templates.GridDefinitions
 		/// <returns> MajorAxis as a float
 		/// 
 		/// </returns>
-		public float MajorAxis { get; }
+		public double MajorAxis { get; }
 
 		/// <summary> .</summary>
 		/// <returns> MinorAxis as a float
 		/// 
 		/// </returns>
-		public float MinorAxis { get; }
+		public double MinorAxis { get; }
 
-		public OblateSpheroidEarth(float majorAxis, float minorAxis)
+		public OblateSpheroidEarth(int shapeCode, double majorAxis, double minorAxis) : base(shapeCode)
 		{
 			MajorAxis = majorAxis;
 			MinorAxis = minorAxis;

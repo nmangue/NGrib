@@ -26,73 +26,60 @@ namespace NGrib.Grib2.Templates.GridDefinitions
 {
 	public class LatLonGridDefinition : XyEarthGridDefinition
 	{
-		/// <summary> .</summary>
-		/// <returns> Angle as a int
-		/// 
-		/// </returns>
+		/// <summary>
+		/// Basic angle of the initial production domain.
+		/// </summary>
 		public long Angle { get; }
 
-		/// <summary> .</summary>
-		/// <returns> Subdivisionsangle as a int
-		/// 
-		/// </returns>
-		public long Subdivisionsangle { get; }
+		/// <summary>
+		/// Subdivisions of basic angle used to define extreme longitudes and latitudes, and direction increments.
+		/// </summary>
+		public long SubdivisionsAngle { get; }
 
-		/// <summary> .</summary>
-		/// <returns> La1 as a float
-		/// 
-		/// </returns>
+		/// <summary>
+		/// Latitude of first grid point.
+		/// </summary>
 		public double La1 { get; }
 
-		/// <summary> .</summary>
-		/// <returns> Lo1 as a float
-		/// 
-		/// </returns>
+		/// <summary>
+		/// Longitude of first grid point.
+		/// </summary>
 		public double Lo1 { get; }
 
-		/// <summary> .</summary>
-		/// <returns> Resolution as a int
-		/// 
-		/// </returns>
-		public int Resolution { get; }
+		/// <summary>
+		/// Resolution and component flags value.
+		/// </summary>
+		public ResolutionAndComponent ResolutionAndComponent { get; }
 
-		/// <summary> .</summary>
-		/// <returns> La2 as a float
-		/// 
-		/// </returns>
+		/// <summary>
+		/// Latitude of last grid point.
+		/// </summary>
 		public double La2 { get; }
 
-		/// <summary> .</summary>
-		/// <returns> Lo2 as a float
-		/// 
-		/// </returns>
+		/// <summary>
+		/// Longitude of last grid point.
+		/// </summary>
 		public double Lo2 { get; }
 
-		/// <summary> Get x-increment/distance between two grid points.
-		/// 
+		/// <summary>
+		/// X-direction increment.
 		/// </summary>
-		/// <returns> x-increment
-		/// </returns>
 		public double Dx { get; }
 
-		/// <summary> Get y-increment/distance between two grid points.
-		/// 
+		/// <summary>
+		/// Y-direction increment.
 		/// </summary>
-		/// <returns> y-increment
-		/// </returns>
 		public double Dy { get; }
 
-		/// <summary> Get scan mode.
-		/// 
+		/// <summary>
+		/// Scanning mode.
 		/// </summary>
-		/// <returns> scan mode
-		/// </returns>
 		public int ScanMode { get; }
-		
+
 		internal LatLonGridDefinition(BufferedBinaryReader reader) : base(reader)
 		{
 			Angle = reader.ReadUInt32();
-			Subdivisionsangle = reader.ReadUInt32();
+			SubdivisionsAngle = reader.ReadUInt32();
 			double ratio;
 			if (Angle == 0)
 			{
@@ -100,72 +87,50 @@ namespace NGrib.Grib2.Templates.GridDefinitions
 			}
 			else
 			{
-				ratio = Angle / (double)Subdivisionsangle;
+				ratio = Angle / (double) SubdivisionsAngle;
 			}
 
 			La1 = reader.ReadInt32() * ratio;
-			Lo1 = reader.ReadUInt32() * ratio;
-			Resolution = reader.ReadUInt8();
+			Lo1 = reader.ReadInt32() * ratio;
+			ResolutionAndComponent = (ResolutionAndComponent) reader.ReadUInt8();
 			La2 = reader.ReadInt32() * ratio;
-			Lo2 = reader.ReadUInt32() * ratio;
-			Dx = reader.ReadUInt32() * ratio;
-			Dy = reader.ReadUInt32() * ratio;
+			Lo2 = reader.ReadInt32() * ratio;
+			Dx = reader.ReadInt32() * ratio;
+			Dy = reader.ReadInt32() * ratio;
 			ScanMode = reader.ReadUInt8();
 		}
 
 		public override IEnumerable<Coordinate> EnumerateGridPoints()
 		{
 			var scanningMode = (ScanningMode) ScanMode;
-			var resolution = (ResolutionAndComponents) Resolution;
+			var resolution = ResolutionAndComponent;
 
-			if (resolution != (ResolutionAndComponents.JDirectionIncrementGiven | ResolutionAndComponents.IDirectionIncrementGiven) ||
+			if (resolution != (ResolutionAndComponent.JDirectionIncrementGiven | ResolutionAndComponent.IDirectionIncrementGiven) ||
 			    (scanningMode & ~(ScanningMode.ScanJPositive | ScanningMode.ScanIReverse)) != ScanningMode.Default)
 			{
 				throw new NotImplementedException();
 			}
-			
-			double southLatitude, northLatitude, eastLongitude, westLongitude;
 
-			if (scanningMode.HasFlag(ScanningMode.ScanJPositive))
-			{
-				southLatitude = La1;
-				northLatitude = La2;
-			}
-			else
-			{
-				southLatitude = La2;
-				northLatitude = La1;
-			}
+			var firstGridPoint = new Coordinate(La1, Lo1);
+			var lastGridPoint = new Coordinate(La2, Lo2);
 
-			if (!scanningMode.HasFlag(ScanningMode.ScanIReverse))
-			{
-				westLongitude = Lo1;
-				eastLongitude = Lo2;
-			}
-			else
-			{
-				westLongitude = Lo2;
-				eastLongitude = Lo1;
-			}
-			
-			var firstGridPoint = new Coordinate(northLatitude, westLongitude);
-			var lastGridPoint = new Coordinate(southLatitude, eastLongitude);
-
+			var xStep = Dx * (scanningMode.HasFlag(ScanningMode.ScanIReverse) ? -1 : 1);
+			var yStep = Dy * (scanningMode.HasFlag(ScanningMode.ScanJPositive) ? 1 : -1);
 			var currentGridPoint = firstGridPoint;
 
-			var longitudeOffset = 0d;
-			for (var x = 0; x < Nx; x++)
+			// Adjacent points in x direction are consecutive 
+			var latitudeOffset = 0d;
+			for (var y = 0; y < Ny; y++)
 			{
-				var latitudeOffset = 0d;
-				for (var y = 0; y < Ny; y++)
+				var longitudeOffset = 0d;
+				for (var x = 0; x < Nx; x++)
 				{
 					currentGridPoint = firstGridPoint.Add(latitudeOffset, longitudeOffset);
 					yield return currentGridPoint;
 
-					latitudeOffset += Dy;
+					longitudeOffset += xStep;
 				}
-
-				longitudeOffset += Dx;
+				latitudeOffset += yStep;
 			}
 
 			Debug.Assert(lastGridPoint.Equals(currentGridPoint));

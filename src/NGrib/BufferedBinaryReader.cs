@@ -91,7 +91,9 @@ namespace NGrib
 
 		public int ReadUInt8() => ReadByte();
 
-    public int ReadUInt16()
+		public int ReadInt8() => BigEndianBitConverter.ToInt8(ReadByte());
+
+		public int ReadUInt16()
 		{
 			EnsureAvailable(sizeof(short));
 			var val = BigEndianBitConverter.ToUInt16(buffer, bufferOffset);
@@ -121,6 +123,27 @@ namespace NGrib
 			var val = BigEndianBitConverter.ToInt32(buffer, bufferOffset);
 			bufferOffset += sizeof(int);
 			return val;
+		}
+
+		/// <summary>
+		/// Read a <c>double</c> value (L) represented by :
+		///   - a scale factor F (UInt8);
+		///   - a scaled value V (UInt32);
+		/// where L * 10^F = V.
+		/// </summary>
+		/// <returns>Original value</returns>
+		public double? ReadScaledValue()
+		{
+			var scaleFactor = ReadInt8();
+			var scaledValue = ReadInt32();
+
+			if (scaleFactor == BigEndianBitConverter.Int8MinValue && scaledValue == BigEndianBitConverter.Int32MinValue)
+			{
+				// All bits set to 1 means that no value is provided.
+				return null;
+			}
+
+			return scaledValue * Math.Pow(10, -scaleFactor);
 		}
 
 		public void NextUIntN()

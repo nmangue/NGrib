@@ -17,6 +17,7 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using NGrib.Grib2.CodeTables;
 using NGrib.Grib2.Templates;
 using NGrib.Grib2.Templates.ProductDefinitions;
 
@@ -66,7 +67,7 @@ namespace NGrib.Grib2.Sections
 			Section = section;
 		}
 
-		internal static ProductDefinitionSection BuildFrom(BufferedBinaryReader reader)
+		internal static ProductDefinitionSection BuildFrom(BufferedBinaryReader reader, Discipline discipline)
 		{
 			// octets 1-4 (Length of PDS)
 			var length = reader.ReadUInt32();
@@ -80,17 +81,17 @@ namespace NGrib.Grib2.Sections
 			// octet 8-9
 			var productDefinitionTemplateNumber = reader.ReadUInt16();
 
-			var productDefinition = ProductDefinitionFactories.Build(reader, productDefinitionTemplateNumber);
+			var productDefinition = ProductDefinitionFactories.Build(reader, productDefinitionTemplateNumber, discipline);
 
 			return new ProductDefinitionSection(length, section, coordinates, productDefinitionTemplateNumber,
 				productDefinition);
 		}
 
 		private static readonly TemplateFactory<ProductDefinition> ProductDefinitionFactories =
-			new TemplateFactory<ProductDefinition>()
+			new TemplateFactory<ProductDefinition>
 			{
-				{ 0, r => new PointInTimeHorizontalLevelProductDefinition(r) },
-				{ 8, r => new StatisticallyProcessedPointInTimeHorizontalLevelProductDefinition(r) }
+				{ 0, (r, args) => new PointInTimeHorizontalLevelProductDefinition(r, (Discipline) args[0]) },
+				{ 8, (r, args) => new StatisticallyProcessedPointInTimeHorizontalLevelProductDefinition(r, (Discipline) args[0]) }
 			};
 	}
 }

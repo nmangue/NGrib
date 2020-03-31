@@ -17,84 +17,74 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System;
+using NGrib.Grib2.CodeTables;
 
 namespace NGrib.Grib2.Templates.ProductDefinitions
 {
+	/// <summary>
+	/// Product Definition Template 4.0: Analysis or forecast at a horizontal level or in a horizontal layer at a point in time
+	/// </summary>
+	public class PointInTimeHorizontalLevelProductDefinition : WithBackgroundProductDefinition
+	{
+		/// <summary>
+		/// Analysis or forecast generating processes identifier.
+		/// </summary>
+		public int GeneratingProcessIdentifier { get; }
 
-    /// <summary>
-    /// Product Definition Template 4.0: Analysis or forecast at a horizontal level or in a horizontal layer at a point in time
-    /// </summary>
-    public class PointInTimeHorizontalLevelProductDefinition : WithBackgroundProductDefinition
-    {
-        /// <summary> analysisGenProcess.</summary>
-        /// <returns> analysisGenProcess
-        /// </returns>
-        public int AnalysisGenProcess { get; }
+		/// <summary>
+		/// Hours of observational data cutoff after reference time.
+		/// </summary>
+		public int HoursAfter { get; }
 
-        /// <summary> hoursAfter.</summary>
-        /// <returns> HoursAfter
-        /// </returns>
-        public int HoursAfter { get; }
+		/// <summary>
+		/// Minutes of observational data cutoff after reference time.
+		/// </summary>
+		public int MinutesAfter { get; }
 
-        /// <summary> minutesAfter.</summary>
-        /// <returns>  MinutesAfter
-        /// </returns>
-        public int MinutesAfter { get; }
+		/// <summary>
+		/// Indicator of unit of time range.
+		/// </summary>
+		public TimeRangeUnit TimeRangeUnit { get; }
 
-        /// <summary> returns timeRangeUnit .</summary>
-        /// <returns> TimeRangeUnitName
-        /// </returns>
-        public int TimeRangeUnit { get; }
+		/// <summary>
+		/// Forecast time in units defined by indicator of unit of time range.
+		/// </summary>
+		public int ForecastTime { get; }
 
-        /// <summary> forecastTime.</summary>
-        /// <returns> ForecastTime
-        /// </returns>
-        public long ForecastTime { get; }
+		/// <summary>
+		/// Type of first fixed surface.
+		/// </summary>
+		public FixedSurfaceType FirstFixedSurfaceType { get; }
 
-        /// <summary> typeFirstFixedSurface.</summary>
-        /// <returns> FirstFixedSurface as int
-        /// </returns>
-        public int TypeFirstFixedSurface { get; }
+		/// <summary>
+		/// Value of first fixed surface.
+		/// </summary>
+		public double? FirstFixedSurfaceValue { get; }
 
-        /// <summary> valueFirstFixedSurface.</summary>
-        /// <returns> FirstFixedSurfaceValue
-        /// </returns>
-        public float ValueFirstFixedSurface { get; }
+		/// <summary>
+		/// Type of second fixed surface.
+		/// </summary>
+		public FixedSurfaceType SecondFixedSurfaceType { get; }
 
-        /// <summary> typeSecondFixedSurface.</summary>
-        /// <returns>  SecondFixedSurface as int
-        /// </returns>
-        public int TypeSecondFixedSurface { get; }
+		/// <summary>
+		/// Value of second fixed surface.
+		/// </summary>
+		public double? SecondFixedSurfaceValue { get; }
 
-        /// <summary> valueSecondFixedSurface.</summary>
-        /// <returns> SecondFixedSurfaceValue
-        /// </returns>
-        public float ValueSecondFixedSurface { get; }
+		internal PointInTimeHorizontalLevelProductDefinition(BufferedBinaryReader reader, Discipline discipline) : base(
+			reader, discipline)
+		{
+			GeneratingProcessIdentifier = reader.ReadUInt8();
+			HoursAfter = reader.ReadUInt16();
+			MinutesAfter = reader.ReadUInt8();
+			TimeRangeUnit = (TimeRangeUnit) reader.ReadUInt8();
+			ForecastTime = reader.ReadInt32();
 
-        internal PointInTimeHorizontalLevelProductDefinition(BufferedBinaryReader reader) : base(reader)
-        {
-            AnalysisGenProcess = reader.ReadUInt8();
-            HoursAfter = reader.ReadUInt16();
-            MinutesAfter = reader.ReadUInt8();
-            TimeRangeUnit = reader.ReadUInt8();
-            ForecastTime = reader.ReadUInt32();
+			FirstFixedSurfaceType = (FixedSurfaceType) reader.ReadUInt8();
+			FirstFixedSurfaceValue = reader.ReadScaledValue();
 
-            TypeFirstFixedSurface = reader.ReadUInt8();
-            int scaleFirstFixedSurface = reader.ReadUInt8();
-            long valueFirstFixedSurface = reader.ReadUInt32();
-			
-            ValueFirstFixedSurface = (float)((scaleFirstFixedSurface == 0 || valueFirstFixedSurface == 0)
-                ? valueFirstFixedSurface
-                : Math.Pow(valueFirstFixedSurface, -scaleFirstFixedSurface));
-
-            TypeSecondFixedSurface = reader.ReadUInt8();
-            int scaleSecondFixedSurface = reader.ReadUInt8();
-            long valueSecondFixedSurface = reader.ReadUInt32();
-
-            ValueSecondFixedSurface = (float)((scaleSecondFixedSurface == 0 || valueSecondFixedSurface == 0)
-                ? valueSecondFixedSurface
-                : Math.Pow(valueSecondFixedSurface, -scaleSecondFixedSurface));
-        }
-    }
+			SecondFixedSurfaceType = (FixedSurfaceType) reader.ReadUInt8();
+			SecondFixedSurfaceValue = reader.ReadScaledValue();
+		}
+	}
 }

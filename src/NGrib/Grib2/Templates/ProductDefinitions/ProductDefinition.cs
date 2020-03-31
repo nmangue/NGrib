@@ -17,33 +17,50 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using NGrib.Grib2.CodeTables;
+
 namespace NGrib.Grib2.Templates.ProductDefinitions
 {
-    public abstract class ProductDefinition
-    {
-        public long Offset { get; }
+	/// <summary>
+	/// Represents a GRIB2 Product Definition.
+	/// </summary>
+	public abstract class ProductDefinition
+	{
+		/// <summary>
+		/// Start position on the product definition.
+		/// </summary>
+		public long Offset { get; }
 
-        /// <summary> parameter Category .</summary>
-        /// <returns> parameterCategory as int
-        /// </returns>
-        public int ParameterCategory { get; }
+		/// <summary>
+		/// Parameter category.
+		/// </summary>
+		public int ParameterCategory { get; }
 
-        /// <summary> parameter Number.</summary>
-        /// <returns> ParameterNumber
-        /// </returns>
-        public int ParameterNumber { get; }
+		/// <summary>
+		/// Parameter number.
+		/// </summary>
+		public int ParameterNumber { get; }
 
-        /// <summary> typeGenProcess.</summary>
-        /// <returns> GenProcess
-        /// </returns>
-        public int TypeGenProcess { get; }
-        
-        private protected ProductDefinition(BufferedBinaryReader reader)
-        {
-            Offset = reader.Position;
-            ParameterCategory = reader.ReadUInt8();
-            ParameterNumber = reader.ReadUInt8();
-            TypeGenProcess = reader.ReadUInt8();
-        }
-    }
+		/// <summary>
+		/// Parameter informations.
+		/// </summary>
+		/// <remarks>
+		/// <c>null</c> if a unknown discipline/category/number is used.
+		/// </remarks>
+		public Parameter? Parameter { get; }
+
+		/// <summary>
+		/// Type of generating process.
+		/// </summary>
+		public GeneratingProcessType GeneratingProcessType { get; }
+
+		private protected ProductDefinition(BufferedBinaryReader reader, Discipline discipline)
+		{
+			Offset = reader.Position;
+			ParameterCategory = reader.ReadUInt8();
+			ParameterNumber = reader.ReadUInt8();
+			Parameter = CodeTables.Parameter.Get(discipline, ParameterCategory, ParameterNumber);
+			GeneratingProcessType = (GeneratingProcessType) reader.ReadUInt8();
+		}
+	}
 }

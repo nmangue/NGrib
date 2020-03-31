@@ -63,14 +63,9 @@ namespace NGrib.Grib2.Sections
 		public int LocalTableVersion { get; }
 
 		/// <summary>
-		/// Significance of Reference Time code.
-		/// </summary>
-		public int ReferenceTimeSignificanceCode { get; }
-
-		/// <summary>
 		/// Significance of Reference Time.
 		/// </summary>
-		public ReferenceTimeSignificance? ReferenceTimeSignificance { get; }
+		public ReferenceTimeSignificance ReferenceTimeSignificance { get; }
 
 		/// <summary>
 		/// Reference time of data.
@@ -78,24 +73,14 @@ namespace NGrib.Grib2.Sections
 		public DateTime ReferenceTime { get; }
 
 		/// <summary>
-		/// Production status code of processed data in this GRIB message.
-		/// </summary>
-		public int ProductStatusCode { get; }
-
-		/// <summary>
 		/// Production status of processed data in this GRIB message.
 		/// </summary>
-		public ProductStatus? ProductStatus { get; }
-
-		/// <summary>
-		/// Type of processed data code in this GRIB message.
-		/// </summary>
-		public int ProductTypeCode { get; }
+		public ProductStatus ProductStatus { get; }
 
 		/// <summary>
 		/// Type of processed data in this GRIB message.
 		/// </summary>
-		public ProductType? ProductType { get; }
+		public ProductType ProductType { get; }
 
 		private IdentificationSection(long length, int section, int centerCode, int subCenterCode, int masterTableVersion, int localTableVersion, int referenceTimeSignificanceCode, DateTime referenceTime, int productStatusCode, int productTypeCode)
 		{
@@ -106,13 +91,10 @@ namespace NGrib.Grib2.Sections
 			SubCenterCode = subCenterCode;
 			MasterTableVersion = masterTableVersion;
 			LocalTableVersion = localTableVersion;
-			ReferenceTimeSignificanceCode = referenceTimeSignificanceCode;
-			ReferenceTimeSignificance = ReferenceTimeSignificanceCode.As<ReferenceTimeSignificance>();
+			ReferenceTimeSignificance = (ReferenceTimeSignificance)referenceTimeSignificanceCode;
 			ReferenceTime = referenceTime;
-			ProductStatusCode = productStatusCode;
-			ProductStatus = ProductStatusCode.As<ProductStatus>();
-			ProductTypeCode = productTypeCode;
-			ProductType = ProductTypeCode.As<ProductType>();
+			ProductStatus = (ProductStatus)productStatusCode;
+			ProductType = (ProductType)productTypeCode;
 		}
 
 		internal static IdentificationSection BuildFrom(BufferedBinaryReader reader)

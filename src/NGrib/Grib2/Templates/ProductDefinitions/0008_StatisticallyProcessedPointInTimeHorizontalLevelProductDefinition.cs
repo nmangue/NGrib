@@ -18,6 +18,7 @@
  */
 
 using System;
+using NGrib.Grib2.CodeTables;
 
 namespace NGrib.Grib2.Templates.ProductDefinitions
 {
@@ -26,43 +27,83 @@ namespace NGrib.Grib2.Templates.ProductDefinitions
 	/// or other statistically processed values at a horizontal level or in a horizontal
 	/// layer in a continuous or non-continuous time interval
 	/// </summary>
-	public class StatisticallyProcessedPointInTimeHorizontalLevelProductDefinition : PointInTimeHorizontalLevelProductDefinition
+	public class
+		StatisticallyProcessedPointInTimeHorizontalLevelProductDefinition : PointInTimeHorizontalLevelProductDefinition
 	{
-		private DateTime endTime;
-		private int timeRanges;
-		private long missingDataValues;
-		private int outmostTimeRange;
-		private int missing;
-		private int statisticalProcess;
-		private long timeIncrementType;
-		private int indicatorTr;
-		private long lengthTr;
-		private int indicatorTuIncrement;
-		private long timeIncrement;
+		/// <summary>
+		/// Time of end of overall time interval.
+		/// </summary>
+		public DateTime OverallTimeIntervalEnd { get; }
 
-		internal StatisticallyProcessedPointInTimeHorizontalLevelProductDefinition(BufferedBinaryReader reader) :
-			base(reader)
+		/// <summary>
+		/// Number of time range specifications describing the time intervals used to calculate the statistically processed field.
+		/// </summary>
+		public int TimeRangeNumber { get; }
+
+		/// <summary>
+		/// Total number of data values missing in statistical process.
+		/// </summary>
+		public long MissingDataValuesTotalNumber { get; }
+
+		/// <summary>
+		/// Statistical process used to calculate the processed field from the field at each time increment during the time range.
+		/// </summary>
+		public int StatisticalProcess { get; }
+
+		/// <summary>
+		/// Type of time increment between successive fields used in the statistical processing.
+		/// </summary>
+		public long StatisticalProcessingTimeIncrementType { get; }
+
+		/// <summary>
+		/// Indicator of unit of time for time range over which statistical processing is done.
+		/// </summary>
+		public TimeRangeUnit StatisticalProcessingTimeRangeUnit { get; }
+
+		/// <summary>
+		///  Length of the time range over which statistical processing is done, in units defined by <c>StatisticalProcessingTimeRangeUnit</c>.
+		/// </summary>
+		public long StatisticalProcessingTimeRangeLength { get; }
+
+		/// <summary>
+		/// Indicator of unit of time for the increment between the successive fields used.
+		/// </summary>
+		public TimeRangeUnit SuccessiveFieldsIncrementUnit { get; }
+
+		/// <summary>
+		/// Time increment between successive fields, in units defined by <c>SuccessiveFieldsIncrementUnit</c>.
+		/// </summary>
+		public long SuccessiveFieldsTimeIncrement { get; }
+
+		internal StatisticallyProcessedPointInTimeHorizontalLevelProductDefinition(
+			BufferedBinaryReader reader,
+			Discipline discipline) : base(reader, discipline)
 		{
-			endTime = reader.ReadDateTime();
+			OverallTimeIntervalEnd = reader.ReadDateTime();
 
 			// 42
-			timeRanges = reader.ReadUInt8();
+			TimeRangeNumber = reader.ReadUInt8();
 
 			// 43-46  
-			missingDataValues = reader.ReadUInt32();
+			MissingDataValuesTotalNumber = reader.ReadUInt32();
 
 			//47
-			statisticalProcess = reader.ReadUInt8();
+			StatisticalProcess = reader.ReadUInt8();
+
 			//48
-			timeIncrementType = reader.ReadUInt8();
+			StatisticalProcessingTimeIncrementType = reader.ReadUInt8();
+
 			//49
-			indicatorTr = reader.ReadUInt8();
+			StatisticalProcessingTimeRangeUnit = (TimeRangeUnit) reader.ReadUInt8();
+
 			//50-53
-			lengthTr = reader.ReadUInt32();
+			StatisticalProcessingTimeRangeLength = reader.ReadUInt32();
+
 			//54
-			indicatorTuIncrement = reader.ReadUInt8();
+			SuccessiveFieldsIncrementUnit = (TimeRangeUnit) reader.ReadUInt8();
+
 			//55-58
-			timeIncrement = reader.ReadUInt32();
+			SuccessiveFieldsTimeIncrement = reader.ReadUInt32();
 		}
 	}
 }

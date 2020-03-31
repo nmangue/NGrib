@@ -21,21 +21,15 @@ namespace NGrib.Grib2.Templates.GridDefinitions
 {
 	public abstract class XyEarthGridDefinition : EarthGridDefinition
 	{
-
-		/// <summary> Get number of grid columns.
-		/// 
+		/// <summary>
+		/// Number of points along x-axis or a parallel.
 		/// </summary>
-		/// <returns> number of grid columns
-		/// </returns>
 		public long Nx { get; }
 
-		/// <summary> Get number of grid rows.
-		/// 
+		/// <summary>
+		/// Number of points along y-axis or a meridian.
 		/// </summary>
-		/// <returns> number of grid rows.
-		/// </returns>
 		public long Ny { get; }
-
 
 		private protected XyEarthGridDefinition(BufferedBinaryReader reader) : base(reader)
 		{

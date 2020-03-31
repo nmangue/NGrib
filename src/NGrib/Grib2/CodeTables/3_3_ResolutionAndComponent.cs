@@ -17,12 +17,15 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System.Collections.Generic;
+using System;
 
-namespace NGrib.Grib2.Templates.DataRepresentations
+namespace NGrib.Grib2.CodeTables
 {
-	public abstract class DataRepresentation
+	[Flags]
+	public enum ResolutionAndComponent
 	{
-		internal abstract IEnumerable<float> EnumerateDataValues(BufferedBinaryReader reader, long numberDataPoints);
+		IDirectionIncrementGiven = 32,
+		JDirectionIncrementGiven = 16,
+		RelativeDefinedGrid = 8
 	}
 }

@@ -40,6 +40,8 @@ namespace NGrib
 
 		private static double SimplifyLongitude(double longitude) => longitude >= 0 ? longitude % 360 : 360 + longitude % 360;
 
+		public static implicit operator Coordinate(ValueTuple<double, double> latLon) => new Coordinate(latLon.Item1, latLon.Item2);
+
 		public override string ToString()
 		{
 			return $"{nameof(Latitude)}: {Latitude}, {nameof(Longitude)}: {Longitude}";

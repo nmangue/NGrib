@@ -33,7 +33,7 @@ namespace NGrib.Grib2
 		/// Message in which the data set is provided.
 		/// </summary>
 		public Message Message { get; }
-		
+
 		/// <summary>
 		/// Local Use Section.
 		/// </summary>
@@ -68,9 +68,9 @@ namespace NGrib.Grib2
 		internal DataSet(
 			Message message,
 			LocalUseSection localUseSection,
-			GridDefinitionSection gridDefinitionSection, 
-			ProductDefinitionSection productDefinitionSection, 
-			DataRepresentationSection dataRepresentationSection, 
+			GridDefinitionSection gridDefinitionSection,
+			ProductDefinitionSection productDefinitionSection,
+			DataRepresentationSection dataRepresentationSection,
 			BitmapSection bitmapSection,
 			DataSection dataSection)
 		{
@@ -85,19 +85,21 @@ namespace NGrib.Grib2
 
 		internal IEnumerable<KeyValuePair<Coordinate, float?>> GetData(BufferedBinaryReader reader)
 		{
-			return GridDefinitionSection.GridDefinition.EnumerateGridPoints().Zip(GetRawData(reader), (p, v) => new KeyValuePair<Coordinate, float?>(p, v));
+			return GridDefinitionSection.GridDefinition.EnumerateGridPoints()
+				.Zip(GetRawData(reader), (p, v) => new KeyValuePair<Coordinate, float?>(p, v));
 		}
 
 		internal IEnumerable<float?> GetRawData(BufferedBinaryReader reader)
 		{
 			var bitmap = BitmapSection.GetBitmap(reader);
-			
+
 			reader.Seek(DataSection.DataOffset, SeekOrigin.Begin);
-			using var valuesEnumerator = DataRepresentationSection.DataRepresentation.EnumerateDataValues(reader, DataRepresentationSection.DataPointsNumber).GetEnumerator();
-			
+			using var valuesEnumerator = DataRepresentationSection.DataRepresentation
+				.EnumerateDataValues(reader, DataRepresentationSection.DataPointsNumber).GetEnumerator();
+
 			foreach (var isValueDefined in bitmap)
 			{
-				var v = (bool) isValueDefined && valuesEnumerator.MoveNext() ? valuesEnumerator.Current : DataRepresentationSection.DataRepresentation.MissingValueSubstitute;
+				var v = (bool) isValueDefined && valuesEnumerator.MoveNext() ? valuesEnumerator.Current : (float?) null;
 				yield return v;
 			}
 		}

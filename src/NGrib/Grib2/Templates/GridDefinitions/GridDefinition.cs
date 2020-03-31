@@ -21,11 +21,14 @@ using System.Collections.Generic;
 
 namespace NGrib.Grib2.Templates.GridDefinitions
 {
+	/// <summary>
+	/// Represents a GRIB2 Grid Definition
+	/// </summary>
 	public abstract class GridDefinition
 	{
-    /// <summary>
-    /// Grid Definition Offset.
-    /// </summary>
+		/// <summary>
+		/// Grid Definition Offset.
+		/// </summary>
 		public long Offset { get; }
 
 		private protected GridDefinition(BufferedBinaryReader reader)
@@ -33,6 +36,15 @@ namespace NGrib.Grib2.Templates.GridDefinitions
 			Offset = reader.Position;
 		}
 
+		/// <summary>
+		/// Enumerated the point coordinates within the current grid.
+		/// </summary>
+		/// <remarks>
+		/// The points are returned in the order defined by the grid (i.e. scanning mode).
+		/// </remarks>
+		/// <returns>
+		/// Grid points coordinates.
+		/// </returns>
 		public abstract IEnumerable<Coordinate> EnumerateGridPoints();
 	}
 }

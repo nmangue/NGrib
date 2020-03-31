@@ -16,18 +16,19 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
+
 namespace NGrib.Grib2.CodeTables
 {
-  /// <summary>
-  /// Discipline of processed data in the GRIB message.
-  /// </summary>
+	/// <summary>
+	/// Discipline of processed data in the GRIB message.
+	/// </summary>
 	public enum Discipline
 	{
 		MeteorologicalProducts = 0,
 		HydrologicalProducts = 1,
 		LandSurfaceProducts = 2,
 		SpaceProducts = 3,
-		OceanographicProducts = 10
+		OceanographicProducts = 10,
+		Missing = 255,
 	}
 }

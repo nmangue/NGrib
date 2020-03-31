@@ -24,6 +24,13 @@ namespace NGrib
 {
 	internal static class BigEndianBitConverter
 	{
+		public const int Int8MinValue = -127;
+		public const int Int32MinValue = -2147483647;
+
+		public static int ToInt8(byte[] data, int startIndex) => ToInt8(data[startIndex]);
+
+		public static int ToInt8(byte data) => (1 - ((data & 128) >> 6)) * (data & 127);
+
 		public static int ToUInt16(byte[] data, int startIndex)
 		{
 			var index = startIndex;

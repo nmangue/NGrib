@@ -70,7 +70,6 @@ namespace NGrib.Tests
 		private static void CheckIndicatorSection(DataSet record)
 		{
 			var indicatorSection = record.Message.IndicatorSection;
-			Check.That(indicatorSection.DisciplineCode).Equals(0);
 			Check.That(indicatorSection.Discipline).Equals(Discipline.MeteorologicalProducts);
 			Check.That(indicatorSection.GribEdition).Equals(2);
 			Check.That(indicatorSection.TotalLength).Equals(new BigInteger(207));
@@ -86,12 +85,9 @@ namespace NGrib.Tests
 			Check.That(identificationSection.SubCenterCode).Equals(0);
 			Check.That(identificationSection.MasterTableVersion).Equals(1);
 			Check.That(identificationSection.LocalTableVersion).Equals(0);
-			Check.That(identificationSection.ReferenceTimeSignificanceCode).Equals(1);
 			Check.That(identificationSection.ReferenceTimeSignificance).Equals(ReferenceTimeSignificance.ForecastStart);
 			Check.That(identificationSection.ReferenceTime).Equals(new DateTime(2020, 5, 1, 6, 0, 0, DateTimeKind.Utc));
-			Check.That(identificationSection.ProductStatusCode).Equals(0);
 			Check.That(identificationSection.ProductStatus).Equals(ProductStatus.OperationalProducts);
-			Check.That(identificationSection.ProductTypeCode).Equals(1);
 			Check.That(identificationSection.ProductType).Equals(ProductType.ForecastProducts);
 		}
 
@@ -107,13 +103,10 @@ namespace NGrib.Tests
 
 			Check.That(record.GridDefinitionSection.GridDefinition).IsInstanceOf<PolarStereographicProjectionGridDefinition>();
 			var gd = (PolarStereographicProjectionGridDefinition)record.GridDefinitionSection.GridDefinition;
-			Check.That(gd.Shape).Equals(1);
-			Check.That(gd.Scalefactorradius).Equals(3);
-			Check.That(gd.Scaledvalueradius).Equals(6350000);
-			Check.That(gd.Scalefactormajor).Equals(byte.MaxValue);
-			Check.That(gd.Scaledvaluemajor).Equals(uint.MaxValue);
-			Check.That(gd.Scalefactorminor).Equals(byte.MaxValue);
-			Check.That(gd.Scaledvalueminor).Equals(uint.MaxValue);
+			Check.That(gd.EarthShapeCode).Equals(1);
+			Check.That(gd.EarthRadius).Equals(6_350d);
+			Check.That(gd.EarthMajorAxis).IsNull();
+			Check.That(gd.EarthMinorAxis).IsNull();
 			Check.That(gd.Nx).Equals(5);
 			Check.That(gd.Ny).Equals(5);
 			Check.That(gd.La1).Equals(40.000001);
@@ -138,17 +131,17 @@ namespace NGrib.Tests
 			var pd = (PointInTimeHorizontalLevelProductDefinition)record.ProductDefinitionSection.ProductDefinition;
 			Check.That(pd.ParameterCategory).Equals(3);
 			Check.That(pd.ParameterNumber).Equals(5);
-			Check.That(pd.TypeGenProcess).Equals(2);
-			Check.That(pd.BackGenProcess).Equals(byte.MaxValue);
-			Check.That(pd.AnalysisGenProcess).Equals(byte.MaxValue);
+			Check.That(pd.GeneratingProcessType).Equals(GeneratingProcessType.Forecast);
+			Check.That(pd.BackgroundGeneratingProcessIdentifier).Equals(byte.MaxValue);
+			Check.That(pd.GeneratingProcessIdentifier).Equals(byte.MaxValue);
 			Check.That(pd.HoursAfter).Equals(3);
 			Check.That(pd.MinutesAfter).Equals(30);
 			Check.That(pd.TimeRangeUnit).Equals(1);
 			Check.That(pd.ForecastTime).Equals(12);
-			Check.That(pd.TypeFirstFixedSurface).Equals(100);
-			Check.That(pd.ValueFirstFixedSurface).Equals(500);
-			Check.That(pd.TypeSecondFixedSurface).Equals(byte.MaxValue);
-			// No need to check ValueSecondFixedSurface
+			Check.That(pd.FirstFixedSurfaceType).Equals(100);
+			Check.That(pd.FirstFixedSurfaceValue).Equals(500);
+			Check.That(pd.SecondFixedSurfaceType).Equals(FixedSurfaceType.Missing);
+			Check.That(pd.SecondFixedSurfaceValue).IsNull();
 		}
 
 		private static void CheckDataRepresentationSection(DataSet record)

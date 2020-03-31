@@ -20,7 +20,13 @@ namespace NGrib
 
 		public static T? As<T>(this int val) where T : struct, Enum, IConvertible
 		{
+			if (IsFlagEnum(typeof(T)))
+			{
+
+			}
 			return (T?) (Enum.IsDefined(typeof(T), val) ? Enum.ToObject(typeof(T), val) : null);
 		}
+
+		public static bool IsFlagEnum(Type t) => t.IsEnum && !Attribute.IsDefined(t, typeof(FlagsAttribute));
 	}
 }

@@ -17,12 +17,26 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System.Collections.Generic;
-
-namespace NGrib.Grib2.Templates.DataRepresentations
+namespace NGrib.Grib2.CodeTables
 {
-	public abstract class DataRepresentation
+	/// <summary>
+	/// Code Table 5.4: Group Splitting Method
+	/// </summary>
+	public enum GroupSplittingMethod
 	{
-		internal abstract IEnumerable<float> EnumerateDataValues(BufferedBinaryReader reader, long numberDataPoints);
+		/// <summary>
+		/// Row by row splitting
+		/// </summary>
+		RowByRow,
+
+		/// <summary>
+		/// General group splitting
+		/// </summary>
+		GeneralGroup,
+
+		/// <summary>
+		/// Missing
+		/// </summary>
+		Missing,
 	}
 }

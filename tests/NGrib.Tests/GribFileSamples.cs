@@ -2,6 +2,8 @@
 {
 	internal static class GribFileSamples
 	{
+		public static string ValidFile { get; } = "samples/gfs.20200314.t00z.pgrb2.0p25.anl";
+
 		/// <summary>
 		/// Octet No.    Octet No.      Value        Meaning
 		/// 1-4          1-4            GRIB         “GRIB” (coded according to the International Alphabet No. 5)
@@ -85,8 +87,14 @@
 		/// 6-40         169-203        ...          25 scaled integers, 25 binary data values, each using 11 bits. The binary values thus occupy 275 bits last 5 bits set to 0 5 additional bits set to zero are therefore necessary to end on an octet boundary.
 		/// 1-4          204-207        7777        “7777” coded according to the International Alphabet No. 5
 		/// </summary>
-		public static string ValidFile{ get; } = "samples/gfs.20200314.t00z.pgrb2.0p25.anl";
-
 		public static string WmoOneDataSetMessage { get; } = "samples/wmo-one_dataset-message.grb2";
+
+		/// <summary>
+		/// NCEP GFS 20200330/18+12 Forecasts (0.25 degree grid):
+		///   - lon 55 - 55.5
+		///   - lat -21 - -21.25
+		/// Contains Surface TMP and APCP.
+		/// </summary>
+		public static string NcepGfsTmpApcpFile { get; } = "samples/gfs.20200330.t18z.pgrb2.0p25.f012";
 	}
 }

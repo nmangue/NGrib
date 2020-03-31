@@ -17,12 +17,31 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System.Collections.Generic;
-
-namespace NGrib.Grib2.Templates.DataRepresentations
+namespace NGrib.Grib2.CodeTables
 {
-	public abstract class DataRepresentation
+	/// <summary>
+	/// Code Table 5.5: Missing Value Management for Complex Packing
+	/// </summary>
+	public enum ComplexPackingMissingValueManagement
 	{
-		internal abstract IEnumerable<float> EnumerateDataValues(BufferedBinaryReader reader, long numberDataPoints);
+		/// <summary>
+		/// No explicit missing values included within data values.
+		/// </summary>
+		None,
+
+		/// <summary>
+		/// Primary missing values included within data values.
+		/// </summary>
+		Primary,
+
+		/// <summary>
+		/// Primary and secondary missing values included within data values.
+		/// </summary>
+		PrimaryAndSecondary,
+
+		/// <summary>
+		/// Missing.
+		/// </summary>
+		Missing
 	}
 }

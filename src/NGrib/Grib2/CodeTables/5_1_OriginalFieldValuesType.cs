@@ -17,12 +17,26 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System.Collections.Generic;
-
-namespace NGrib.Grib2.Templates.DataRepresentations
+namespace NGrib.Grib2.CodeTables
 {
-	public abstract class DataRepresentation
+	/// <summary>
+	/// Code Table 5.1: Type of original field values
+	/// </summary>
+	public enum OriginalFieldValuesType
 	{
-		internal abstract IEnumerable<float> EnumerateDataValues(BufferedBinaryReader reader, long numberDataPoints);
+		/// <summary>
+		/// Floating point
+		/// </summary>
+		FloatingPoint,
+
+		/// <summary>
+		/// Integer
+		/// </summary>
+		Integer,
+
+		/// <summary>
+		/// Missing
+		/// </summary>
+		Missing = 255
 	}
 }

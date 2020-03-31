@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using NGrib.Grib2.CodeTables;
 
 namespace NGrib.Grib2.Templates.DataRepresentations
 {
@@ -27,27 +28,26 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 	/// </summary>
 	public class GridPointDataComplexPackingAndSpatialDifferencing : GridPointDataComplexPacking
 	{
-		/// <summary> Order of spatial differencing (see Code Table 5.6).</summary>
-		/// <returns> OrderSpatial
-		/// </returns>
-		public int OrderSpatial { get; }
-
-		/// <summary> Number of octets required in the Data Section to specify extra
-		/// descriptors needed for spatial differencing (octets 6-ww in Data Template 7.3).
+		/// <summary>
+		/// Order of spatial differencing.
 		/// </summary>
-		/// <returns> DescriptorSpatial
-		/// </returns>
-		public int DescriptorSpatial { get; }
+		public SpatialDifferencingOrder OrderSpatial { get; }
+
+		/// <summary>
+		/// Number of octets required in the Data Section to specify extra
+		/// descriptors needed for spatial differencing.
+		/// </summary>
+		public int ExtraDescriptorsLength { get; }
 
 		internal GridPointDataComplexPackingAndSpatialDifferencing(BufferedBinaryReader reader) : base(reader)
 		{
-			OrderSpatial = reader.ReadUInt8();
-			DescriptorSpatial = reader.ReadUInt8();
+			OrderSpatial = (SpatialDifferencingOrder) reader.ReadUInt8();
+			ExtraDescriptorsLength = reader.ReadUInt8();
 		}
 
 		internal override IEnumerable<float> EnumerateDataValues(BufferedBinaryReader reader, long numberDataPoints)
 		{
-			int mvm = MissingValueManagement;
+			var mvm = MissingValueManagement;
 
 			float pmv = PrimaryMissingValue;
 
@@ -55,14 +55,14 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 
 			int g1 = 0, gMin = 0, h1 = 0, h2 = 0, hMin = 0;
 			// [6-ww]   1st values of undifferenced scaled values and minimums
-			int os = OrderSpatial;
-			int ds = DescriptorSpatial;
+			var os = OrderSpatial;
+			int ds = ExtraDescriptorsLength;
 
 			reader.NextUIntN();
 			int sign;
 			// ds is number of bytes, convert to bits -1 for sign bit
 			ds = ds * 8 - 1;
-			if (os == 1)
+			if (os == SpatialDifferencingOrder.FirstOrder)
 			{
 				// first order spatial differencing g1 and gMin
 				sign = reader.ReadUIntN(1);
@@ -79,7 +79,7 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 					gMin *= (-1);
 				}
 			}
-			else if (os == 2)
+			else if (os == SpatialDifferencingOrder.SecondOrder)
 			{
 				//second order spatial differencing h1, h2, hMin
 				sign = reader.ReadUIntN(1);
@@ -153,7 +153,6 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 
 			var data = new float[countL];
 
-
 			//gds.getNumberPoints() );
 			// used to check missing values when X2 is packed with all 1's
 			int[] bitsmv1 = new int[31];
@@ -177,7 +176,7 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 							// X2 = 0
 							data[count++] = x1[i];
 						}
-						else if (mvm == 1)
+						else if (mvm == ComplexPackingMissingValueManagement.Primary)
 						{
 							data[count++] = pmv;
 						}
@@ -190,7 +189,7 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 						{
 							data[count++] = x1[i] + x2;
 						}
-						else if (mvm == 1)
+						else if (mvm == ComplexPackingMissingValueManagement.Primary)
 						{
 							// X2 is also set to missing value is all bits set to 1's
 							if (x2 == bitsmv1[nb[i]])
@@ -207,7 +206,7 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 			} // end for i
 
 			// process last group
-			int last = (int) LengthLastGroup;
+			int last = (int) LastGroupLength;
 
 			for (int j = 0; j < last; j++)
 			{
@@ -219,7 +218,7 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 						// X2 = 0
 						data[count++] = x1[ng - 1];
 					}
-					else if (mvm == 1)
+					else if (mvm == ComplexPackingMissingValueManagement.Primary)
 					{
 						data[count++] = pmv;
 					}
@@ -231,7 +230,7 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 					{
 						data[count++] = x1[ng - 1] + x2;
 					}
-					else if (mvm == 1)
+					else if (mvm == ComplexPackingMissingValueManagement.Primary)
 					{
 						// X2 is also set to missing value is all bits set to 1's
 						if (x2 == bitsmv1[nb[ng - 1]])
@@ -246,7 +245,7 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 				}
 			} // end for j
 
-			if (os == 1)
+			if (os == SpatialDifferencingOrder.FirstOrder)
 			{
 				// g1 and gMin this coding is a sort of guess, no doc
 				float sum = 0;
@@ -305,7 +304,7 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 					}
 				}
 			}
-			else if (os == 2)
+			else if (os == SpatialDifferencingOrder.SecondOrder)
 			{
 				//h1, h2, hMin
 				float hDiff = h2 - h1;
@@ -380,22 +379,22 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 
 			// formula used to create values,  Y * 10**D = R + (X1 + X2) * 2**E
 
-			int d = DecimalScaleFactor;
+			var d = DecimalScaleFactor;
 
-			float dd = (float) Math.Pow(10, d);
+			var dd = Math.Pow(10, d);
 
-			float r = ReferenceValue;
+			var r = ReferenceValue;
 
-			int e = BinaryScaleFactor;
+			var e = BinaryScaleFactor;
 
-			float ee = (float) Math.Pow(2.0, e);
+			var ee = Math.Pow(2.0, e);
 
 			if (mvm == 0)
 			{
 				// no missing values
 				for (int i = 0; i < data.Length; i++)
 				{
-					data[i] = (r + data[i] * ee) / dd;
+					data[i] = (float) ((r + data[i] * ee) / dd);
 				}
 			}
 			else
@@ -405,7 +404,7 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 				{
 					if (data[i] != pmv)
 					{
-						data[i] = (r + data[i] * ee) / dd;
+						data[i] = (float) ((r + data[i] * ee) / dd);
 					}
 				}
 			}
