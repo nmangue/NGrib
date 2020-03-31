@@ -27,6 +27,7 @@ namespace NGrib
 	internal class BufferedBinaryReader : IDisposable
 	{
 		private readonly Stream stream;
+		private readonly bool leaveOpen;
 		private readonly byte[] buffer;
 		private readonly int bufferSize;
 		private int bufferOffset;
@@ -36,9 +37,10 @@ namespace NGrib
 
 		public bool HasReachedStreamEnd => stream.Position >= stream.Length && NumBytesAvailable <= 0;
 
-		public BufferedBinaryReader(Stream stream, int bufferSize = 4096)
+		public BufferedBinaryReader(Stream stream, bool leaveOpen = false, int bufferSize = 4096)
 		{
 			this.stream = stream;
+			this.leaveOpen = leaveOpen;
 			this.bufferSize = bufferSize;
 			buffer = new byte[bufferSize];
 			MarkBufferAsUsed();
@@ -283,7 +285,10 @@ namespace NGrib
 
 		public void Dispose()
 		{
-			stream.Close();
+			if (!leaveOpen)
+			{
+				stream.Close();
+			}
 		}
 
 		public void SaveCurrentPosition()

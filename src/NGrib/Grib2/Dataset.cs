@@ -20,6 +20,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using NGrib.Grib2.CodeTables;
 using NGrib.Grib2.Sections;
 
 namespace NGrib.Grib2
@@ -64,6 +65,11 @@ namespace NGrib.Grib2
 		/// Data Section.
 		/// </summary>
 		public DataSection DataSection { get; }
+
+		/// <summary>
+		/// Parameter defined in the Product Definition Section.
+		/// </summary>
+		public Parameter? Parameter => ProductDefinitionSection.ProductDefinition.Parameter;
 
 		internal DataSet(
 			Message message,

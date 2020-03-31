@@ -17,16 +17,17 @@ namespace NGrib.Tests
 
 			var datasets = reader.ReadAllDataSets().ToArray();
 			
-			Check.That(datasets.Select(d => d.ProductDefinitionSection.ProductDefinition.Parameter)).ContainsExactly(
+			Check.That(datasets.Select(d => d.Parameter)).ContainsExactly(
 				Parameter.Temperature,
 				Parameter.TotalPrecipitation, // APCP 6 hours accumulation
 				Parameter.TotalPrecipitation // APCP 96 hours accumulation
 			);
 
-			var temperatureDs = datasets.Single(d => d.ProductDefinitionSection.ProductDefinition.Parameter.Equals(Parameter.Temperature));
+			var temperatureDs = datasets.Single(d => d.Parameter.Equals(Parameter.Temperature));
 
-			var data = reader.ReadRecordData(temperatureDs).ToList();
-
+			var data = reader.ReadDataSetValues(temperatureDs).ToList();
+			
+			// Excepted values read using Panoply
 			Check.That(data).ContainsExactly(new Dictionary<Coordinate, float?>
 			{
 				{ (-21.25, 55), 301.405579f },

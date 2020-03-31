@@ -26,17 +26,20 @@ using NGrib.Grib2.Sections;
 
 namespace NGrib
 {
-	public class Grib2Reader
+	public class Grib2Reader : IDisposable
 	{
 		private readonly BufferedBinaryReader reader;
 
-		public Grib2Reader(Stream gribStream)
+		public Grib2Reader(string filePath) : this(File.OpenRead(filePath))
+		{ }
+
+		public Grib2Reader(Stream gribStream, bool leaveOpen = false)
 		{
 			if (gribStream == null) throw new ArgumentNullException(nameof(gribStream));
 			if (!gribStream.CanRead) throw new ArgumentException("The stream must support reading.", nameof(gribStream));
 			if (!gribStream.CanSeek) throw new ArgumentException("The stream must support seeking.", nameof(gribStream));
 
-			reader = new BufferedBinaryReader(gribStream);
+			reader = new BufferedBinaryReader(gribStream, leaveOpen);
 		}
 
 		public IList<Message> ReadMessages()
@@ -93,6 +96,11 @@ namespace NGrib
 
 		public IEnumerable<float?> ReadDataSetRawData(DataSet record) => record.GetRawData(reader);
 		
-		public IEnumerable<KeyValuePair<Coordinate, float?>> ReadRecordData(DataSet record) => record.GetData(reader);
+		public IEnumerable<KeyValuePair<Coordinate, float?>> ReadDataSetValues(DataSet record) => record.GetData(reader);
+
+		public void Dispose()
+		{
+			reader?.Dispose();
+		}
 	}
 }
