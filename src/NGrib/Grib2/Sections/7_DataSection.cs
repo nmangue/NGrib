@@ -55,7 +55,10 @@ namespace NGrib.Grib2.Sections
 			var section = reader.ReadUInt8();
 			if (section != (int) SectionCode.DataSection)
 			{
-				throw new NoValidGribException("");
+				throw new UnexpectedGribSectionException(
+					SectionCode.DataSection,
+					section
+				);
 			}
 
 			var dataOffset = reader.Position;

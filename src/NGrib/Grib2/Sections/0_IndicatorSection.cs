@@ -71,7 +71,7 @@ namespace NGrib.Grib2.Sections
 			var fileStart = reader.Read(Constants.GribFileStart.Length);
 			if (!Constants.GribFileStart.SequenceEqual(fileStart))
 			{
-				throw new NoValidGribException("Grib2Input.scan failed to find header");
+				throw new BadGribFormatException("Invalid file start.");
 			}
 
 			// Ignore the 2 reserved bytes

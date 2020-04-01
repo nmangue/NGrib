@@ -17,41 +17,23 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace NGrib.Grib2.Sections
+using System;
+
+namespace NGrib
 {
 	/// <summary>
-	/// Section 8 - End Section
+	/// The exception that is thrown when the read stream does not
+	/// respect the GRIB 2 data format.
 	/// </summary>
-	public sealed class EndSection
+	public class BadGribFormatException : Exception
 	{
-		/// <summary>
-		/// Length of section in octets.
-		/// </summary>
-		public long Length { get; }
-
-		/// <summary>
-		/// Number of section.
-		/// </summary>
-		public int Section { get; }
-
-		private EndSection(long length, int section)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BadGribFormatException"/> class
+    /// with a specified error message.
+    /// </summary>
+    /// <param name="message">The message that describes the error.</param>
+    public BadGribFormatException(string message) : base(message)
 		{
-			Length = length;
-			Section = section;
-		}
-
-		internal static EndSection BuildFrom(BufferedBinaryReader reader)
-		{
-			var sectionInfos = reader.ReadSectionInfo();
-			if (!sectionInfos.Is(SectionCode.EndSection))
-			{
-				throw new UnexpectedGribSectionException(
-					SectionCode.DataSection,
-					sectionInfos.SectionCode
-				);
-			}
-
-			return new EndSection(sectionInfos.Length, sectionInfos.SectionCode);
 		}
 	}
 }

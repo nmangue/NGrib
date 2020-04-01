@@ -26,25 +26,42 @@ using NGrib.Grib2.Sections;
 
 namespace NGrib
 {
+	/// <summary>
+	/// Reads GRIB 2 data format.
+	/// </summary>
 	public class Grib2Reader : IDisposable
 	{
 		private readonly BufferedBinaryReader reader;
 
+		/// <summary>
+		/// Initializes a new instance of the <c>Grib2Reader</c> class
+		/// based on the specified file.
+		/// </summary>
+		/// <param name="filePath">The GRIB 2 file path.</param>
 		public Grib2Reader(string filePath) : this(File.OpenRead(filePath))
 		{ }
 
-		public Grib2Reader(Stream gribStream, bool leaveOpen = false)
+		/// <summary>
+		/// Initializes a new instance of the <c>Grib2Reader</c> class
+		/// based on the specified stream.
+		/// </summary>
+		/// <param name="input">The GRIB 2 input stream.</param>
+		/// <param name="leaveOpen"><c>true</c>to leave the stream open after the <see cref="Grib2Reader"/> object is disposed; otherwise, <c>false</c>.</param>
+		public Grib2Reader(Stream input, bool leaveOpen = false)
 		{
-			if (gribStream == null) throw new ArgumentNullException(nameof(gribStream));
-			if (!gribStream.CanRead) throw new ArgumentException("The stream must support reading.", nameof(gribStream));
-			if (!gribStream.CanSeek) throw new ArgumentException("The stream must support seeking.", nameof(gribStream));
+			if (input == null) throw new ArgumentNullException(nameof(input));
+			if (!input.CanRead) throw new ArgumentException("The stream must support reading.", nameof(input));
+			if (!input.CanSeek) throw new ArgumentException("The stream must support seeking.", nameof(input));
 
-			reader = new BufferedBinaryReader(gribStream, leaveOpen);
+			reader = new BufferedBinaryReader(input, leaveOpen);
 		}
 
-		public IList<Message> ReadMessages()
+		/// <summary>
+		/// Enumerates the messages in the underlying stream.
+		/// </summary>
+		/// <returns>The messages in the GRIB 2 stream.</returns>
+		public IEnumerable<Message> ReadMessages()
 		{
-			var messages = new List<Message>();
 			reader.Seek(0, SeekOrigin.Begin);
 
 			do
@@ -53,7 +70,6 @@ namespace NGrib
 				var identificationSection = IdentificationSection.BuildFrom(reader);
 
 				var message = new Message(indicatorSection, identificationSection);
-				messages.Add(message);
 
 				LocalUseSection localUseSection = null;
 				do
@@ -87,17 +103,40 @@ namespace NGrib
 					}
 				} while (!reader.PeekSection().Is(SectionCode.EndSection));
 				EndSection.BuildFrom(reader);
-			} while (!reader.HasReachedStreamEnd && reader.PeekSection().Is(SectionCode.IndicatorSection));
 
-			return messages;
+				// Saves and restore the current position
+				// to avoid losing track of the current message
+				// if a data set read happens during the enumeration
+				var currentPosition = reader.Position;
+				yield return message;
+				reader.Seek(currentPosition, SeekOrigin.Begin);
+
+			} while (!reader.HasReachedStreamEnd && reader.PeekSection().Is(SectionCode.IndicatorSection));
 		}
 
+		/// <summary>
+		/// Enumerates every data sets for each messages in the underlying GRIB 2 stream.
+		/// </summary>
+		/// <returns>Enumeration of every data sets in the underlying GRIB 2 stream.</returns>
 		public IEnumerable<DataSet> ReadAllDataSets() => ReadMessages().SelectMany(m => m.DataSets);
 
-		public IEnumerable<float?> ReadDataSetRawData(DataSet record) => record.GetRawData(reader);
-		
-		public IEnumerable<KeyValuePair<Coordinate, float?>> ReadDataSetValues(DataSet record) => record.GetData(reader);
+		/// <summary>
+		/// Read the data set floating point values.
+		/// </summary>
+		/// <param name="dataSet">The data set to read.</param>
+		/// <returns>The data set point values.</returns>
+		public IEnumerable<float?> ReadDataSetRawData(DataSet dataSet) => dataSet.GetRawData(reader);
 
+		/// <summary>
+		/// Read the data set grid value.
+		/// </summary>
+		/// <param name="dataSet">The data set to read.</param>
+		/// <returns>The data set grid points and the corresponding values.</returns>
+		public IEnumerable<KeyValuePair<Coordinate, float?>> ReadDataSetValues(DataSet dataSet) => dataSet.GetData(reader);
+
+		/// <summary>
+		/// Releases the resources used by the <see cref="Grib2Reader"/>.
+		/// </summary>
 		public void Dispose()
 		{
 			reader?.Dispose();

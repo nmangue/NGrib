@@ -105,7 +105,7 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 			}
 			else
 			{
-				throw new NoValidGribException("DS Error");
+				throw new BadGribFormatException("DS Error");
 			}
 
 			// [ww +1]-xx  Get reference values for groups (X1's)
@@ -290,7 +290,7 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 
 					if (lastOne == pmv)
 					{
-						throw new NoValidGribException("DS bad spatial differencing data");
+						throw new BadGribFormatException("DS bad spatial differencing data");
 					}
 
 					for (int i = idx; i < data.Length; i++)
@@ -361,7 +361,7 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 
 					if (lastOne == pmv)
 					{
-						throw new NoValidGribException("DS bad spatial differencing data");
+						throw new BadGribFormatException("DS bad spatial differencing data");
 					}
 
 					for (int i = idx; i < data.Length; i++)

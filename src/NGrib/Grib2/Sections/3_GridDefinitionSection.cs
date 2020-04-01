@@ -97,7 +97,7 @@ namespace NGrib.Grib2.Sections
 
 			if (section != (int) SectionCode.GridDefinitionSection)
 			{
-				throw new NoValidGribException("Expected section 3");
+				throw new UnexpectedGribSectionException(SectionCode.GridDefinitionSection, section);
 			}
 
 			var source = reader.ReadUInt8();

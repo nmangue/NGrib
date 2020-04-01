@@ -72,7 +72,10 @@ namespace NGrib.Grib2.Sections
 			var section = raf.ReadUInt8();
 			if (section != (int) SectionCode.BitmapSection)
 			{
-				throw new NoValidGribException("");
+				throw new UnexpectedGribSectionException(
+					SectionCode.BitmapSection,
+					section
+				);
 			}
 
 			var bitmapIndicator = raf.ReadUInt8();

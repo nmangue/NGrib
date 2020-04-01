@@ -75,7 +75,10 @@ namespace NGrib.Grib2.Sections
 			var section = reader.ReadUInt8();
 			if (section != (int) SectionCode.DataRepresentationSection)
 			{
-				throw new NoValidGribException("");
+				throw new UnexpectedGribSectionException(
+					SectionCode.DataRepresentationSection,
+					section
+					);
 			}
 
 			var dataPoints = reader.ReadUInt32();

@@ -67,15 +67,15 @@ namespace NGrib.Grib2.Templates.GridDefinitions
 					earthShape = new SphericalEarth(EarthShapeCode, 6367470);
 					break;
 				case (int) CodeTables.EarthShape.CustomSpherical:
-					earthShape = new SphericalEarth(EarthShapeCode, EarthRadius ?? throw new NoValidGribException(""));
+					earthShape = new SphericalEarth(EarthShapeCode, EarthRadius ?? throw new BadGribFormatException("Missing Earth radius value."));
 					break;
 				case (int) CodeTables.EarthShape.Iau1965OblateSpheroid:
 					earthShape = new OblateSpheroidEarth(EarthShapeCode, 6378160.0f, 6356775.0f);
 					break;
 				case (int) CodeTables.EarthShape.CustomOblateSpheroid:
 					earthShape = new OblateSpheroidEarth(EarthShapeCode,
-						EarthMajorAxis ?? throw new NoValidGribException(""),
-						EarthMinorAxis ?? throw new NoValidGribException("")
+						EarthMajorAxis ?? throw new BadGribFormatException("Missing Earth major axis value."),
+						EarthMinorAxis ?? throw new BadGribFormatException("Missing Earth minor axis value.")
 					);
 					break;
 				case (int) CodeTables.EarthShape.IagGr80OblateSpheroid:
