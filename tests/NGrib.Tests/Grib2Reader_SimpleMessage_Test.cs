@@ -136,9 +136,9 @@ namespace NGrib.Tests
 			Check.That(pd.GeneratingProcessIdentifier).Equals(byte.MaxValue);
 			Check.That(pd.HoursAfter).Equals(3);
 			Check.That(pd.MinutesAfter).Equals(30);
-			Check.That(pd.TimeRangeUnit).Equals(1);
+			Check.That(pd.TimeRangeUnit).Equals(TimeRangeUnit.Hour);
 			Check.That(pd.ForecastTime).Equals(12);
-			Check.That(pd.FirstFixedSurfaceType).Equals(100);
+			Check.That(pd.FirstFixedSurfaceType).Equals(FixedSurfaceType.IsobaricSurface);
 			Check.That(pd.FirstFixedSurfaceValue).Equals(500);
 			Check.That(pd.SecondFixedSurfaceType).Equals(FixedSurfaceType.Missing);
 			Check.That(pd.SecondFixedSurfaceValue).IsNull();
