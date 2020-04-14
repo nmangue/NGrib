@@ -3,6 +3,13 @@
  *
  * Copyright © 2020 Nicolas Mangué
  * 
+ * Copyright 2006-2010 Seaware AB, PO Box 1244, SE-131 28 
+ * Nacka Strand, Sweden, info@seaware.se.
+ * 
+ * Copyright 1997-2006 Unidata Program Center/University 
+ * Corporation for Atmospheric Research, P.O. Box 3000, Boulder, CO 80307,
+ * support@unidata.ucar.edu.
+ * 
  * NGrib is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either

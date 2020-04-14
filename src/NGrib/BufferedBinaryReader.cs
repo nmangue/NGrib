@@ -24,6 +24,9 @@ using NGrib.Grib2.Sections;
 
 namespace NGrib
 {
+	/// <remarks>
+	/// Based on Jackson Dunstan implementation <see cref="https://jacksondunstan.com/articles/3568"/>.
+	/// </remarks>
 	internal class BufferedBinaryReader : IDisposable
 	{
 		private readonly Stream stream;

@@ -3,6 +3,16 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>latest</LangVersion>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.1.0</Version>
+    <Authors>Nicolas Mangué</Authors>
+    <Company />
+    <Description>NGrib is a .NET library to read GRIB (GRid in Binary) files. GRIB is a gridded data standard from WMO (World Meteorological Organisation) and is used by many meteorological organisation.</Description>
+    <Copyright>Copyright ©2020</Copyright>
+    <PackageLicenseExpression>LGPL</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/nmangue/NGrib</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/nmangue/NGrib</RepositoryUrl>
+    <RepositoryType>Github</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
