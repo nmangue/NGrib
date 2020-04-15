@@ -44,8 +44,9 @@ namespace NGrib
 		/// <param name="longitude">Longitude of the point.</param>
 		public Coordinate(double latitude, double longitude)
 		{
-			Latitude = -90d <= latitude && latitude <= 90d ? latitude : SimplifyLatitude(latitude);
-			Longitude = longitude >= 0d && longitude < 360d ? longitude : SimplifyLongitude(longitude);
+			const int coordinateMaxPrecision = 9; // 9 decimals means a 110 microns precision.
+			Latitude = Math.Round(-90d <= latitude && latitude <= 90d ? latitude : SimplifyLatitude(latitude), coordinateMaxPrecision);
+			Longitude = Math.Round(longitude >= 0d && longitude < 360d ? longitude : SimplifyLongitude(longitude), coordinateMaxPrecision);
 		}
 
 		public bool Equals(Coordinate other)

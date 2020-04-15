@@ -1,6 +1,8 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using NFluent;
+using NGrib.Grib1;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace NGrib.Tests
 {
@@ -9,17 +11,17 @@ namespace NGrib.Tests
 		[Fact]
 		public void Read_Test()
 		{
-			using var stream = File.OpenRead(@"grib1_sample.grb");
+			using var stream = File.OpenRead(@"samples\marine-lion_corse.grb");
 
 			var reader = new Grib1Reader(stream);
-			using var writer = new StreamWriter(@"grib1_read_test.txt");
+			var data = new Dictionary<Grib1Record, Dictionary<Coordinate, float>>();
 			foreach (var record in reader.ReadRecords())
 			{
-				foreach (var kv in reader.ReadRecordValues(record))
-				{
-					writer.WriteLine($"{kv.Key} : {kv.Value}");
-				}
+				var recordData = new Dictionary<Coordinate, float>(reader.ReadRecordValues(record));
+				data[record] = recordData;
 			}
+
+			Check.That(data).HasSize(34);
 		}
 	}
 }

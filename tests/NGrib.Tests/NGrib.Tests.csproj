@@ -10,6 +10,7 @@
     <None Remove="samples\gfs.20200325.t18z.pgrb2.0p25.f006" />
     <None Remove="samples\gfs.20200325.t18z.pgrb2.0p25.f018" />
     <None Remove="samples\gfs.20200330.t18z.pgrb2.0p25.f012" />
+    <None Remove="samples\marine-lion_corse.grb" />
     <None Remove="samples\wmo-one_dataset-message.grb2" />
   </ItemGroup>
 
@@ -21,6 +22,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="samples\gfs.20200330.t18z.pgrb2.0p25.f012">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="samples\marine-lion_corse.grb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
