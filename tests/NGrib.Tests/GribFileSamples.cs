@@ -96,5 +96,11 @@
 		/// Contains Surface TMP and APCP.
 		/// </summary>
 		public static string NcepGfsTmpApcpFile { get; } = "samples/gfs.20200330.t18z.pgrb2.0p25.f012";
+
+		/// <summary>
+		/// NCEP GEFS 20200815/06+06 Forecasts (0.5 degree grid)
+		/// Contains all variable on subregion
+		/// </summary>
+		public static string NcepGefsFile { get; } = "samples/geavg.t06z.pgrb2a.0p50.f006";
 	}
 }

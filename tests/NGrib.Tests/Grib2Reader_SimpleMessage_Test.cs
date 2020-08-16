@@ -127,8 +127,8 @@ namespace NGrib.Tests
 			Check.That(record.ProductDefinitionSection.CoordinatesAfterTemplateNumber).Equals(0);
 			Check.That(record.ProductDefinitionSection.ProductDefinitionTemplateNumber).Equals(0);
 
-			Check.That(record.ProductDefinitionSection.ProductDefinition).IsInstanceOf<PointInTimeHorizontalLevelProductDefinition>();
-			var pd = (PointInTimeHorizontalLevelProductDefinition)record.ProductDefinitionSection.ProductDefinition;
+			Check.That(record.ProductDefinitionSection.ProductDefinition).IsInstanceOf<ProductDefinition0000>();
+			var pd = (ProductDefinition0000)record.ProductDefinitionSection.ProductDefinition;
 			Check.That(pd.ParameterCategory).Equals(3);
 			Check.That(pd.ParameterNumber).Equals(5);
 			Check.That(pd.GeneratingProcessType).Equals(GeneratingProcessType.Forecast);

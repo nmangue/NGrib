@@ -18,13 +18,15 @@
  */
 
 using NGrib.Grib2.CodeTables;
+using System;
 
 namespace NGrib.Grib2.Templates.ProductDefinitions
 {
+
 	/// <summary>
 	/// Product Definition Template 4.0: Analysis or forecast at a horizontal level or in a horizontal layer at a point in time
 	/// </summary>
-	public class PointInTimeHorizontalLevelProductDefinition : WithBackgroundProductDefinition
+	public class ProductDefinition0000 : WithBackgroundProductDefinition
 	{
 		/// <summary>
 		/// Analysis or forecast generating processes identifier.
@@ -40,6 +42,11 @@ namespace NGrib.Grib2.Templates.ProductDefinitions
 		/// Minutes of observational data cutoff after reference time.
 		/// </summary>
 		public int MinutesAfter { get; }
+
+		/// <summary>
+		/// Timespan of observational data cutoff after reference time.
+		/// </summary>
+		public TimeSpan ObservationalDataCutoff { get; }
 
 		/// <summary>
 		/// Indicator of unit of time range.
@@ -71,12 +78,13 @@ namespace NGrib.Grib2.Templates.ProductDefinitions
 		/// </summary>
 		public double? SecondFixedSurfaceValue { get; }
 
-		internal PointInTimeHorizontalLevelProductDefinition(BufferedBinaryReader reader, Discipline discipline) : base(
+		internal ProductDefinition0000(BufferedBinaryReader reader, Discipline discipline) : base(
 			reader, discipline)
 		{
 			GeneratingProcessIdentifier = reader.ReadUInt8();
 			HoursAfter = reader.ReadUInt16();
 			MinutesAfter = reader.ReadUInt8();
+			ObservationalDataCutoff = TimeSpan.FromHours(HoursAfter) + TimeSpan.FromMinutes(MinutesAfter);
 			TimeRangeUnit = (TimeRangeUnit) reader.ReadUInt8();
 			ForecastTime = reader.ReadInt32();
 
@@ -85,6 +93,24 @@ namespace NGrib.Grib2.Templates.ProductDefinitions
 
 			SecondFixedSurfaceType = (FixedSurfaceType) reader.ReadUInt8();
 			SecondFixedSurfaceValue = reader.ReadScaledValue();
+
+			RegisterContent(ProductDefinitionContent.GeneratingProcessId, () => GeneratingProcessIdentifier);
+			RegisterContent(ProductDefinitionContent.ObservationalDataCutoff, () => ObservationalDataCutoff);
+			var forecastTime = CalculateTimeRangeFrom(TimeRangeUnit, ForecastTime);
+			if (forecastTime.HasValue) {
+				RegisterContent(ProductDefinitionContent.ForecastTime, () => forecastTime.Value);
+			}
+
+			RegisterContent(ProductDefinitionContent.FirstFixedSurfaceType, () => FirstFixedSurfaceType);
+			if (FirstFixedSurfaceValue.HasValue)
+			{
+				RegisterContent(ProductDefinitionContent.FirstFixedSurfaceValue, () => FirstFixedSurfaceValue.Value);
+			}
+			RegisterContent(ProductDefinitionContent.SecondFixedSurfaceType, () => SecondFixedSurfaceType);
+			if (SecondFixedSurfaceValue.HasValue)
+			{
+				RegisterContent(ProductDefinitionContent.SecondFixedSurfaceValue, () => SecondFixedSurfaceValue.Value);
+			}
 		}
 	}
 }

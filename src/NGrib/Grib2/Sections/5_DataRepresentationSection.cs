@@ -26,6 +26,7 @@
 
 using NGrib.Grib2.Templates;
 using NGrib.Grib2.Templates.DataRepresentations;
+using System.IO;
 
 namespace NGrib.Grib2.Sections
 {
@@ -76,6 +77,8 @@ namespace NGrib.Grib2.Sections
 
 		internal static DataRepresentationSection BuildFrom(BufferedBinaryReader reader)
 		{
+			var currentPosition = reader.Position;
+
 			// octets 1-4 (Length of DRS)
 			var length = reader.ReadUInt32();
 
@@ -93,6 +96,9 @@ namespace NGrib.Grib2.Sections
 			var dataTemplateNumber = reader.ReadUInt16();
 
 			var dataRepresentation = DataRepresentationFactory.Build(reader, dataTemplateNumber);
+
+			// Prevent from over-reading the stream
+			reader.Seek(currentPosition + length, SeekOrigin.Begin);
 
 			return new DataRepresentationSection(length, section, dataPoints, dataTemplateNumber, dataRepresentation);
 		}

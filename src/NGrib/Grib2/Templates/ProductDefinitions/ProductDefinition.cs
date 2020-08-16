@@ -24,7 +24,7 @@ namespace NGrib.Grib2.Templates.ProductDefinitions
 	/// <summary>
 	/// Represents a GRIB2 Product Definition.
 	/// </summary>
-	public abstract class ProductDefinition
+	public abstract class ProductDefinition : Template
 	{
 		/// <summary>
 		/// Start position on the product definition.
@@ -61,6 +61,16 @@ namespace NGrib.Grib2.Templates.ProductDefinitions
 			ParameterNumber = reader.ReadUInt8();
 			Parameter = CodeTables.Parameter.Get(discipline, ParameterCategory, ParameterNumber);
 			GeneratingProcessType = (GeneratingProcessType) reader.ReadUInt8();
+
+			RegisterContent(ProductDefinitionContent.ParameterCategory, () => ParameterCategory);
+			RegisterContent(ProductDefinitionContent.ParameterNumber, () => ParameterNumber);
+
+			if (Parameter.HasValue)
+			{
+				RegisterContent(ProductDefinitionContent.Parameter, () => Parameter.Value);
+			}
+			
+			RegisterContent(ProductDefinitionContent.GeneratingProcessType, () => GeneratingProcessType);
 		}
 	}
 }

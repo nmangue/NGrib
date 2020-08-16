@@ -27,6 +27,8 @@
 using NGrib.Grib2.CodeTables;
 using NGrib.Grib2.Templates;
 using NGrib.Grib2.Templates.ProductDefinitions;
+using System.IO;
+using System.Runtime.InteropServices;
 
 namespace NGrib.Grib2.Sections
 {
@@ -76,6 +78,8 @@ namespace NGrib.Grib2.Sections
 
 		internal static ProductDefinitionSection BuildFrom(BufferedBinaryReader reader, Discipline discipline)
 		{
+			var currentPosition = reader.Position;
+
 			// octets 1-4 (Length of PDS)
 			var length = reader.ReadUInt32();
 
@@ -90,15 +94,22 @@ namespace NGrib.Grib2.Sections
 
 			var productDefinition = ProductDefinitionFactories.Build(reader, productDefinitionTemplateNumber, discipline);
 
+			// Prevent from over-reading the stream
+			reader.Seek(currentPosition + length, SeekOrigin.Begin);
+
 			return new ProductDefinitionSection(length, section, coordinates, productDefinitionTemplateNumber,
 				productDefinition);
 		}
 
+		public bool TryGet<T>(TemplateContent<T> content, out T value) => ProductDefinition.TryGet(content, out value);
+
 		private static readonly TemplateFactory<ProductDefinition> ProductDefinitionFactories =
 			new TemplateFactory<ProductDefinition>
 			{
-				{ 0, (r, args) => new PointInTimeHorizontalLevelProductDefinition(r, (Discipline) args[0]) },
-				{ 8, (r, args) => new StatisticallyProcessedPointInTimeHorizontalLevelProductDefinition(r, (Discipline) args[0]) }
+				{ 0, (r, args) => new ProductDefinition0000(r, (Discipline) args[0]) },
+				{ 2, (r, args) => new ProductDefinition0002(r, (Discipline) args[0]) },
+				{ 8, (r, args) => new ProductDefinition0008(r, (Discipline) args[0]) },
+				{ 12, (r, args) => new ProductDefinition0012(r, (Discipline) args[0]) }
 			};
 	}
 }

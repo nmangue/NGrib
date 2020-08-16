@@ -61,7 +61,7 @@ namespace NGrib.Grib2.Templates
 		{
 			return factories.TryGetValue(templateNumber, out var factory)
 				? factory(reader, args)
-				: throw new NotSupportedException();
+				: default;
 		}
 
 		public IEnumerator<KeyValuePair<int, Func<BufferedBinaryReader, object[], T>>> GetEnumerator() =>

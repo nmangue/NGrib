@@ -17,21 +17,19 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System;
 using NGrib.Grib2.CodeTables;
+using System;
 
 namespace NGrib.Grib2.Templates.ProductDefinitions
 {
 	/// <summary>
-	/// Product Definition Template 4.8:  Average, accumulation, and/or extreme values
-	/// or other statistically processed values at a horizontal level or in a horizontal
-	/// layer in a continuous or non-continuous time interval
+	/// Product definition template 4.12: Derived forecasts based on all ensemble members at a horizontal level 
+	/// or in a horizontal layer in a continuous or non-continuous time interval.
 	/// </summary>
-	public class
-		StatisticallyProcessedPointInTimeHorizontalLevelProductDefinition : PointInTimeHorizontalLevelProductDefinition
+	public class ProductDefinition0012 : ProductDefinition0002
 	{
 		/// <summary>
-		/// Time of end of overall time interval.
+		/// Time of end of overall time interval
 		/// </summary>
 		public DateTime OverallTimeIntervalEnd { get; }
 
@@ -75,11 +73,10 @@ namespace NGrib.Grib2.Templates.ProductDefinitions
 		/// </summary>
 		public long SuccessiveFieldsTimeIncrement { get; }
 
-		internal StatisticallyProcessedPointInTimeHorizontalLevelProductDefinition(
-			BufferedBinaryReader reader,
-			Discipline discipline) : base(reader, discipline)
+		internal ProductDefinition0012(BufferedBinaryReader reader, Discipline discipline) : base(reader, discipline)
 		{
 			OverallTimeIntervalEnd = reader.ReadDateTime();
+			RegisterContent(ProductDefinitionContent.OverallTimeIntervalEnd, () => OverallTimeIntervalEnd);
 
 			// 42
 			TimeRangeNumber = reader.ReadUInt8();
@@ -94,16 +91,28 @@ namespace NGrib.Grib2.Templates.ProductDefinitions
 			StatisticalProcessingTimeIncrementType = reader.ReadUInt8();
 
 			//49
-			StatisticalProcessingTimeRangeUnit = (TimeRangeUnit) reader.ReadUInt8();
+			StatisticalProcessingTimeRangeUnit = (TimeRangeUnit)reader.ReadUInt8();
 
 			//50-53
 			StatisticalProcessingTimeRangeLength = reader.ReadUInt32();
 
+			var timeRange = CalculateTimeRangeFrom(StatisticalProcessingTimeRangeUnit, StatisticalProcessingTimeRangeLength);
+			if (timeRange.HasValue)
+			{
+				RegisterContent(ProductDefinitionContent.StatisticalProcessingTimeRange, () => timeRange.Value);
+			}
+
 			//54
-			SuccessiveFieldsIncrementUnit = (TimeRangeUnit) reader.ReadUInt8();
+			SuccessiveFieldsIncrementUnit = (TimeRangeUnit)reader.ReadUInt8();
 
 			//55-58
 			SuccessiveFieldsTimeIncrement = reader.ReadUInt32();
+
+			var successiveFieldsTimeIncrement = CalculateTimeRangeFrom(SuccessiveFieldsIncrementUnit, SuccessiveFieldsTimeIncrement);
+			if (successiveFieldsTimeIncrement.HasValue)
+			{
+				RegisterContent(ProductDefinitionContent.StatisticalProcessingTimeRange, () => successiveFieldsTimeIncrement.Value);
+			}
 		}
 	}
 }

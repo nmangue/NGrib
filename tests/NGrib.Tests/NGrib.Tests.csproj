@@ -54,6 +54,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="samples\geavg.t06z.pgrb2a.0p50.f006">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="samples\gfs.20200314.t00z.pgrb2.0p25.anl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
