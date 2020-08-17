@@ -13,8 +13,17 @@
     <PackageProjectUrl>https://github.com/nmangue/NGrib</PackageProjectUrl>
     <RepositoryUrl>https://github.com/nmangue/NGrib.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>Add GRIB 1 support.</PackageReleaseNotes>
+    <PackageReleaseNotes>Add Product Definition Template 2 and 12.
+Add Product Definition content access with ProductDefinition.TryGet()</PackageReleaseNotes>
+    <AssemblyVersion>0.3.0.0</AssemblyVersion>
+    <FileVersion>0.3.0.0</FileVersion>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
 
   <ItemGroup>
     <PackageReference Include="System.Collections.Immutable" Version="1.7.0" />
