@@ -392,6 +392,14 @@ namespace NGrib.Grib1
 
 		private Grib1WaveSpectra2DDirFreq waveSpectra2DDirFreq;
 
+		/// <summary>
+		/// Data reserved for originating centre use
+		/// at the end of the section.
+		/// </summary>
+		/// <remarks>
+		/// Each byte is stored as an item in the array.
+		/// </remarks>
+		public int[] CustomData { get; }
 
 		// *** constructors *******************************************************
 
@@ -610,12 +618,16 @@ parameter = parameter_table.getParameter(parameterNumber);
 
 			if (center_id == 7 && subcenter_id == 2)
 			{
+				CustomData = new int[0];
+
 				// ensemble product
 				epds = new Grib1Ensemble(raf, parameterNumber);
 			}
 			// Special handling of 2D Wave Spectra (single)
 			else if (table_version == 140 && parameterNumber == 251)
 			{
+				CustomData = new int[0];
+
 				SupportClass.Skip(raf, 12);
 				int extDef = raf.ReadByte(); // Extension definition
 
@@ -625,13 +637,20 @@ parameter = parameter_table.getParameter(parameterNumber);
 					waveSpectra2DDirFreq = new Grib1WaveSpectra2DDirFreq(raf);
 				}
 			}
-			else if (length != 28)
+			else
 			{
-				// check if all bytes read in section
-				//lengthErr = true;
-				int extra;
-				for (int i = 29; i <= length; i++)
-					extra = raf.ReadByte();
+				// Ignore reserved bytes 29-40
+				for (int i = 29; i <= Math.Min(length, 40); i++)
+				{
+					raf.ReadByte();
+				}
+
+				// Try to read extra bytes
+				CustomData = new int[Math.Max(length - 40, 0)];
+				for (int i = 0; i < CustomData.Length; i++)
+				{
+					CustomData[i] = raf.ReadByte();
+				}
 			}
 		} // end Grib1ProductDefinitionSection
 
