@@ -76,7 +76,7 @@ namespace NGrib.Grib2
 		/// <summary>
 		/// Parameter defined in the Product Definition Section.
 		/// </summary>
-		public Parameter? Parameter => ProductDefinitionSection.ProductDefinition.Parameter;
+		public Parameter? Parameter => ProductDefinitionSection.ProductDefinition?.Parameter;
 
 		internal DataSet(
 			Message message,

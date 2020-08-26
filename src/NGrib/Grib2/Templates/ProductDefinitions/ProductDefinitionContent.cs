@@ -90,7 +90,7 @@ namespace NGrib.Grib2.Templates.ProductDefinitions
 		/// <summary>
 		/// Type of ensemble forecast (see Code Table 4.6).
 		/// </summary>
-		public static TemplateContent<int> EnsembleForecastType { get; } = new TemplateContent<int>();
+		public static TemplateContent<EnsembleForecastType> EnsembleForecastType { get; } = new TemplateContent<EnsembleForecastType>();
 
 		/// <summary>
 		/// Perturbation number.

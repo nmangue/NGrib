@@ -101,6 +101,12 @@
 		/// NCEP GEFS 20200815/06+06 Forecasts (0.5 degree grid)
 		/// Contains all variable on subregion
 		/// </summary>
-		public static string NcepGefsFile { get; } = "samples/geavg.t06z.pgrb2a.0p50.f006";
+		public static string NcepGefsAvgFile { get; } = "samples/geavg.t06z.pgrb2a.0p50.f006";
+
+		/// <summary>
+		/// NCEP GEFS P8 20200825/06+02 Forecasts (0.5 degree grid)
+		/// Contains all variable on subregion
+		/// </summary>
+		public static string NcepGefsPerturbationFile { get; } = "samples/gep08.t00z.pgrb2a.0p50.f012";
 	}
 }

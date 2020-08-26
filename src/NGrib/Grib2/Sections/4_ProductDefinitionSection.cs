@@ -107,8 +107,10 @@ namespace NGrib.Grib2.Sections
 			new TemplateFactory<ProductDefinition>
 			{
 				{ 0, (r, args) => new ProductDefinition0000(r, (Discipline) args[0]) },
+				{ 1, (r, args) => new ProductDefinition0001(r, (Discipline) args[0]) },
 				{ 2, (r, args) => new ProductDefinition0002(r, (Discipline) args[0]) },
 				{ 8, (r, args) => new ProductDefinition0008(r, (Discipline) args[0]) },
+				{ 11, (r, args) => new ProductDefinition0011(r, (Discipline) args[0]) },
 				{ 12, (r, args) => new ProductDefinition0012(r, (Discipline) args[0]) }
 			};
 	}
