@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.3.0</Version>
+    <Version>0.4.0</Version>
     <Authors>Nicolas Mangué</Authors>
     <Company />
     <Description>NGrib is a .NET Standard library to read GRIB (GRid in Binary) files. GRIB is a gridded data standard from WMO (World Meteorological Organisation) and is used by many meteorological organisation.</Description>
@@ -15,8 +15,8 @@
     <RepositoryType>git</RepositoryType>
     <PackageReleaseNotes>Add Product Definition Template 2 and 12.
 Add Product Definition content access with ProductDefinition.TryGet()</PackageReleaseNotes>
-    <AssemblyVersion>0.3.0.0</AssemblyVersion>
-    <FileVersion>0.3.0.0</FileVersion>
+    <AssemblyVersion>0.4.0.0</AssemblyVersion>
+    <FileVersion>0.4.0.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup>
