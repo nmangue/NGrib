@@ -26,6 +26,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 
 namespace NGrib.Grib2.Sections
@@ -95,27 +96,27 @@ namespace NGrib.Grib2.Sections
 			return new BitmapSection(length, section, bitmapIndicator, dataPointsNumber, bitmapOffset);
 		}
 
-		internal BitArray GetBitmap(BufferedBinaryReader reader)
+		internal IEnumerable<bool> GetBitmap(BufferedBinaryReader reader)
 		{
-			reader.Seek(BitmapOffset, SeekOrigin.Begin);
-
-			var bitmap = new BitArray((int) dataPointsNumber, true);
-
-			void TrySet(int i, bool value)
-			{
-				if (i < bitmap.Length)
-				{
-					bitmap[i] = value;
-				}
-			}
-
 			if (BitMapIndicatorCode == 0)
 			{
+				reader.Seek(BitmapOffset, SeekOrigin.Begin);
+
+				var bitmap = new BitArray((int)dataPointsNumber, true);
+
+				void TrySet(int i, bool value)
+				{
+					if (i < bitmap.Length)
+					{
+						bitmap[i] = value;
+					}
+				}
+
 				// create new bit map, octet 4 contains number of unused bits at the end
 				var i = 0;
 				while (i < bitmap.Length)
 				{
-					var bitmapByte = (Bitmask) reader.ReadByte();
+					var bitmapByte = (Bitmask)reader.ReadByte();
 
 					TrySet(i++, bitmapByte.HasFlag(Bitmask.Bit1));
 					TrySet(i++, bitmapByte.HasFlag(Bitmask.Bit2));
@@ -126,9 +127,19 @@ namespace NGrib.Grib2.Sections
 					TrySet(i++, bitmapByte.HasFlag(Bitmask.Bit7));
 					TrySet(i++, bitmapByte.HasFlag(Bitmask.Bit8));
 				}
-			}
 
-			return bitmap;
+				foreach (bool item in bitmap)
+				{
+					yield return item;
+				}
+			}
+			else
+			{
+				for (int i = 0; i < dataPointsNumber; i++)
+				{
+					yield return true;
+				}
+			}
 		}
 
 		[Flags]

@@ -112,7 +112,7 @@ namespace NGrib.Grib2
 
 			foreach (var isValueDefined in bitmap)
 			{
-				var v = (bool) isValueDefined && valuesEnumerator.MoveNext() ? valuesEnumerator.Current : (float?) null;
+				var v = isValueDefined && valuesEnumerator.MoveNext() ? valuesEnumerator.Current : (float?) null;
 				yield return v;
 			}
 		}
