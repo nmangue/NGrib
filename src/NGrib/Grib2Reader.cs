@@ -45,7 +45,7 @@ namespace NGrib
 		/// based on the specified file.
 		/// </summary>
 		/// <param name="filePath">The GRIB 2 file path.</param>
-		public Grib2Reader(string filePath) : this(File.OpenRead(filePath))
+		public Grib2Reader(string filePath, int bufferSize = 4096) : this(File.OpenRead(filePath), false, bufferSize)
 		{ }
 
 		/// <summary>
@@ -54,13 +54,13 @@ namespace NGrib
 		/// </summary>
 		/// <param name="input">The GRIB 2 input stream.</param>
 		/// <param name="leaveOpen"><c>true</c>to leave the stream open after the <see cref="Grib2Reader"/> object is disposed; otherwise, <c>false</c>.</param>
-		public Grib2Reader(Stream input, bool leaveOpen = false)
+		public Grib2Reader(Stream input, bool leaveOpen = false, int bufferSize = 4096)
 		{
 			if (input == null) throw new ArgumentNullException(nameof(input));
 			if (!input.CanRead) throw new ArgumentException("The stream must support reading.", nameof(input));
 			if (!input.CanSeek) throw new ArgumentException("The stream must support seeking.", nameof(input));
 
-			reader = new BufferedBinaryReader(input, leaveOpen);
+			reader = new BufferedBinaryReader(input, leaveOpen, bufferSize);
 		}
 
 		/// <summary>
