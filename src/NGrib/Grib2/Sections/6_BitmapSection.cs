@@ -69,7 +69,7 @@ namespace NGrib.Grib2.Sections
 			Length = length;
 			Section = section;
 			BitMapIndicatorCode = bitmapIndicatorCode;
-			this.dataPointsNumber = bitmapIndicatorCode == 0 ? length - 6 : dataPointsNumber;
+			this.dataPointsNumber = bitmapIndicatorCode == 0 ? (length - 6) * 8 : dataPointsNumber;
 		}
 
 		internal static BitmapSection BuildFrom(BufferedBinaryReader raf, long dataPointsNumber)
