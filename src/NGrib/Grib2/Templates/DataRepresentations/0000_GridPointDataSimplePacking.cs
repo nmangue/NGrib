@@ -89,6 +89,7 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 			//   X1 = 0
 			//   X2 = scaled encoded value 
 
+			reader.NextUIntN();
 			for (var i = 0; i < numberDataPoints; i++)
 			{
 				// (R + ( X1 + X2) * EE)/DD ;
