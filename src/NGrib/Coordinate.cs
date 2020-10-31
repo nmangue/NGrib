@@ -26,6 +26,9 @@ namespace NGrib
 	/// </summary>
 	public readonly struct Coordinate
 	{
+		private const int CoordinateNbDecimals = 9; // 9 decimals means a 110 microns precision.
+		private const double CoordinatePrecision = 1e-9;
+
 		/// <summary>
 		/// Specifies the north–south position.
 		/// </summary>
@@ -44,20 +47,19 @@ namespace NGrib
 		/// <param name="longitude">Longitude of the point.</param>
 		public Coordinate(double latitude, double longitude)
 		{
-			const int coordinateMaxPrecision = 9; // 9 decimals means a 110 microns precision.
-			Latitude = Math.Round(-90d <= latitude && latitude <= 90d ? latitude : SimplifyLatitude(latitude), coordinateMaxPrecision);
-			Longitude = Math.Round(longitude >= 0d && longitude < 360d ? longitude : SimplifyLongitude(longitude), coordinateMaxPrecision);
+			Latitude = Math.Round(Math.Max(Math.Min(latitude, 90d), -90d), CoordinateNbDecimals);
+			Longitude = Math.Round(-180d <= longitude && longitude <= 180d ? longitude : SimplifyLongitude(longitude), CoordinateNbDecimals);
 		}
 
-		public bool Equals(Coordinate other)
-		{
-			return Latitude.Equals(other.Latitude) && Longitude.Equals(other.Longitude);
-		}
+		private bool IsOnSameLongitude(Coordinate other) => EqualsWithTolerance(Longitude, other.Longitude) || IsAntimeridian(Longitude) && IsAntimeridian(other.Longitude);
 
-		public override bool Equals(object obj)
-		{
-			return obj is Coordinate other && Equals(other);
-		}
+		private static bool IsAntimeridian(double longitude) => EqualsWithTolerance(Math.Abs(longitude), 180);
+
+		public bool Equals(Coordinate other) => EqualsWithTolerance(Latitude, other.Latitude) && IsOnSameLongitude(other);
+
+		public override bool Equals(object obj) => obj is Coordinate other && Equals(other);
+
+		private static bool EqualsWithTolerance(double a, double b) => Math.Abs(a - b) <= CoordinatePrecision;
 
 		public override int GetHashCode()
 		{
@@ -72,9 +74,11 @@ namespace NGrib
 			return new Coordinate(Latitude + latitudeIncrement, Longitude + longitudeIncrement);
 		}
 
-		private static double SimplifyLatitude(double latitude) => Math.Abs(latitude % 180) < 0.0000001 ? 0 : Math.Asin(Math.Sin(latitude.ToRadians())).ToDegrees();
-
-		private static double SimplifyLongitude(double longitude) => longitude >= 0 ? longitude % 360 : 360 + longitude % 360;
+		private static double SimplifyLongitude(double longitude)
+		{
+			var radians = longitude.ToRadians();
+			return Math.Atan2(Math.Sin(radians), Math.Cos(radians)).ToDegrees();
+		}
 
 		public static implicit operator Coordinate(ValueTuple<double, double> latLon) => new Coordinate(latLon.Item1, latLon.Item2);
 
