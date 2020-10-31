@@ -23,6 +23,6 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 {
 	public abstract class DataRepresentation
 	{
-		internal abstract IEnumerable<float> EnumerateDataValues(BufferedBinaryReader reader, long numberDataPoints);
+		internal abstract IEnumerable<float> EnumerateDataValues(BufferedBinaryReader reader, long numberDataPoints, long dataLength);
 	}
 }

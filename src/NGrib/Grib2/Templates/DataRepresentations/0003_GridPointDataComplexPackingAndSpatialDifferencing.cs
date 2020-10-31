@@ -52,7 +52,7 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 			ExtraDescriptorsLength = reader.ReadUInt8();
 		}
 
-		internal override IEnumerable<float> EnumerateDataValues(BufferedBinaryReader reader, long numberDataPoints)
+		internal override IEnumerable<float> EnumerateDataValues(BufferedBinaryReader reader, long numberDataPoints, long dataLength)
 		{
 			var mvm = MissingValueManagement;
 

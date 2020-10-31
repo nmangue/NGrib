@@ -108,5 +108,12 @@
 		/// Contains all variable on subregion
 		/// </summary>
 		public static string NcepGefsPerturbationFile { get; } = "samples/gep08.t00z.pgrb2a.0p50.f012";
+
+
+		/// <summary>
+		/// Météo France AROME
+		/// Contains Temperature data with a Jpeg2000 Data Representation.
+		/// </summary>
+		public static string MfAromeTemperatureFile { get; } = "samples/W_fr-meteofrance,MODEL,AROME+0025+SP1+00H06H_C_LFPW_202010310600--Temperature.grib2";
 	}
 }

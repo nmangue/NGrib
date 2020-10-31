@@ -24,6 +24,9 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using CSJ2K;
+using System.Collections.Generic;
+
 namespace NGrib.Grib2.Templates.DataRepresentations
 {
 	public class GridPointDataJpeg2000CodeStream : GridPointDataSimplePacking
@@ -43,6 +46,21 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 			CompressionMethod = reader.ReadUInt8();
 
 			CompressionRatio = reader.ReadUInt8();
+		}
+
+		internal override IEnumerable<float> EnumerateDataValues(BufferedBinaryReader reader, long numberDataPoints, long dataLength)
+		{
+			var data = reader.Read((int) dataLength);
+			var img = J2kImage.FromBytes(data);
+
+			if (img.NumberOfComponents <= 0)
+			{
+				return new float[0];
+			}
+
+			var values = img.GetComponent(0);
+
+			return Unpack(values);
 		}
 	}
 }

@@ -46,11 +46,17 @@ namespace NGrib.Grib2.Sections
 		/// </summary>
 		public long DataOffset { get; }
 
-		private DataSection(long length, int section, long dataOffset)
+		/// <summary>
+		/// Data part length.
+		/// </summary>
+		public long DataLength { get; }
+
+		private DataSection(long length, int section, long dataOffset, long dataLength)
 		{
 			DataOffset = dataOffset;
 			Length = length;
 			Section = section;
+			DataLength = dataLength;
 		}
 
 		internal static DataSection BuildFrom(BufferedBinaryReader reader)
@@ -70,9 +76,10 @@ namespace NGrib.Grib2.Sections
 
 			var dataOffset = reader.Position;
 
-			reader.Skip((int) (length - 5));
+			var dataLength = length - 5;
+			reader.Skip((int) dataLength);
 
-			return new DataSection(length, section, dataOffset);
+			return new DataSection(length, section, dataOffset, dataLength);
 		}
 	}
 }

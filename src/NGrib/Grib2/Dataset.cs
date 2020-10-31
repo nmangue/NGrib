@@ -108,7 +108,7 @@ namespace NGrib.Grib2
 
 			reader.Seek(DataSection.DataOffset, SeekOrigin.Begin);
 			using var valuesEnumerator = DataRepresentationSection.DataRepresentation
-				.EnumerateDataValues(reader, DataRepresentationSection.DataPointsNumber).GetEnumerator();
+				.EnumerateDataValues(reader, DataRepresentationSection.DataPointsNumber, DataSection.DataLength).GetEnumerator();
 
 			foreach (var isValueDefined in bitmap)
 			{

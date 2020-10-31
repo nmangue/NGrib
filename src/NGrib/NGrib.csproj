@@ -27,7 +27,8 @@ Fix wrong value read bug when multiple datasets are read</PackageReleaseNotes>
 
 
   <ItemGroup>
-    <PackageReference Include="System.Collections.Immutable" Version="1.7.0" />
+    <PackageReference Include="CSJ2K.NetCore" Version="3.0.0" />
+    <PackageReference Include="System.Collections.Immutable" Version="1.7.1" />
   </ItemGroup>
 
   <ItemGroup>
