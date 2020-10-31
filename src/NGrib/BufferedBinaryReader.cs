@@ -213,11 +213,22 @@ namespace NGrib
 
 		public byte[] Read(int numBytes)
 		{
-			if (numBytes == 0) return new byte[0];
-			EnsureAvailable(numBytes);
 			var result = new byte[numBytes];
-			Buffer.BlockCopy(buffer, bufferOffset, result, 0, numBytes);
-			bufferOffset += numBytes;
+
+			var numBytesLeftToRead = numBytes;
+			var resultOffset = 0;
+			while (numBytesLeftToRead > 0)
+			{
+				var numBytesRead = Math.Min(bufferSize, numBytesLeftToRead);
+
+				EnsureAvailable(numBytesRead);
+				Buffer.BlockCopy(buffer, bufferOffset, result, resultOffset, numBytesRead);
+				bufferOffset += numBytesRead;
+
+				resultOffset += numBytesRead;
+				numBytesLeftToRead -= numBytesRead;
+			}
+
 			return result;
 		}
 
