@@ -1,4 +1,7 @@
-﻿namespace NGrib.Tests
+﻿using System;
+using System.Collections;
+
+namespace NGrib.Tests
 {
 	internal static class GribFileSamples
 	{
@@ -115,5 +118,11 @@
 		/// Contains Temperature data with a Jpeg2000 Data Representation.
 		/// </summary>
 		public static string MfAromeTemperatureFile { get; } = "samples/W_fr-meteofrance,MODEL,AROME+0025+SP1+00H06H_C_LFPW_202010310600--Temperature.grib2";
+
+		/// <summary>
+		/// DWD COSMO
+		/// Uses a bitmap section.
+		/// </summary>
+		public static string DwdCosmoTotalPrecipitationFile { get; } = "samples/cosmo-d2_germany_regular-lat-lon_single-level_2020103112_012_TOT_PREC.grib2";
 	}
 }

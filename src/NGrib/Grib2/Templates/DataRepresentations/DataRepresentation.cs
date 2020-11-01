@@ -17,12 +17,20 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using NGrib.Grib2.Sections;
 using System.Collections.Generic;
+using System.IO;
 
 namespace NGrib.Grib2.Templates.DataRepresentations
 {
 	public abstract class DataRepresentation
 	{
-		internal abstract IEnumerable<float> EnumerateDataValues(BufferedBinaryReader reader, long numberDataPoints, long dataLength);
+		internal IEnumerable<float> EnumerateDataValues(BufferedBinaryReader reader, DataSection dataSection, long dataPointsNumber)
+		{
+			reader.Seek(dataSection.DataOffset, SeekOrigin.Begin);
+			return DoEnumerateDataValues(reader, dataSection, dataPointsNumber);
+		}
+
+		private protected abstract IEnumerable<float> DoEnumerateDataValues(BufferedBinaryReader reader, DataSection dataSection, long dataPointsNumber);
 	}
 }

@@ -25,6 +25,7 @@
  */
 
 using CSJ2K;
+using NGrib.Grib2.Sections;
 using System.Collections.Generic;
 
 namespace NGrib.Grib2.Templates.DataRepresentations
@@ -48,9 +49,9 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 			CompressionRatio = reader.ReadUInt8();
 		}
 
-		internal override IEnumerable<float> EnumerateDataValues(BufferedBinaryReader reader, long numberDataPoints, long dataLength)
+		private protected override IEnumerable<float> DoEnumerateDataValues(BufferedBinaryReader reader, DataSection dataSection, long dataPointsNumber)
 		{
-			var data = reader.Read((int) dataLength);
+			var data = reader.Read((int) dataSection.DataLength);
 			var img = J2kImage.FromBytes(data);
 
 			if (img.NumberOfComponents <= 0)

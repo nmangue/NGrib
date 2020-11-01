@@ -128,17 +128,27 @@ namespace NGrib.Grib2.Sections
 					TrySet(i++, bitmapByte.HasFlag(Bitmask.Bit8));
 				}
 
-				foreach (bool item in bitmap)
+				IEnumerable<bool> EnumerateBitArray()
 				{
-					yield return item;
+					foreach (bool item in bitmap)
+					{
+						yield return item;
+					}
 				}
+
+				return EnumerateBitArray();
 			}
 			else
 			{
-				for (int i = 0; i < dataPointsNumber; i++)
+				IEnumerable<bool> EnumerateTrue()
 				{
-					yield return true;
+					for (int i = 0; i < dataPointsNumber; i++)
+					{
+						yield return true;
+					}
 				}
+
+				return EnumerateTrue();
 			}
 		}
 

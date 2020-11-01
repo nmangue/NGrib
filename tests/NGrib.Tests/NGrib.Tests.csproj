@@ -54,6 +54,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="references\DWD-COSMO-Total_precipitation_rate_surface_12_Hour_Accumulation.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="samples\cosmo-d2_germany_regular-lat-lon_single-level_2020103112_012_TOT_PREC.grib2">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="samples\geavg.t06z.pgrb2a.0p50.f006">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -27,6 +27,7 @@
 using System;
 using System.Collections.Generic;
 using NGrib.Grib2.CodeTables;
+using NGrib.Grib2.Sections;
 
 namespace NGrib.Grib2.Templates.DataRepresentations
 {
@@ -118,7 +119,7 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 			BitsScaledGroupLength = reader.ReadUInt8();
 		}
 
-		internal override IEnumerable<float> EnumerateDataValues(BufferedBinaryReader reader, long numberDataPoints, long dataLength)
+		private protected override IEnumerable<float> DoEnumerateDataValues(BufferedBinaryReader reader, DataSection dataSection, long dataPointsNumber)
 		{
 			var mvm = MissingValueManagement;
 
