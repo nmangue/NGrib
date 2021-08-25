@@ -138,6 +138,62 @@ namespace NGrib.Grib2.CodeTables
 		public static Parameter VirtualPotentialTemperature { get; } =
 			new Parameter(ParameterCategory.Temperature, 15, "Virtual potential temperature", "K");
 
+		///<summary>Snow Phase Change Heat Flux (W m-2)</summary>
+		public static Parameter SnowPhaseChangeHeatFlux { get; } =
+			new Parameter(ParameterCategory.Temperature, 16, "Snow Phase Change Heat Flux", "W m-2");
+
+		///<summary>Skin Temperature (K)</summary>
+		public static Parameter SkinTemperature { get; } =
+			new Parameter(ParameterCategory.Temperature, 17, "Skin Temperature", "K");
+
+		///<summary>Snow Temperature (top of snow) (K)</summary>
+		public static Parameter SnowTemperature { get; } =
+			new Parameter(ParameterCategory.Temperature, 18, "Snow Temperature (top of snow)", "K");
+
+		///<summary>Turbulent Transfer Coefficient for Heat (Numeric)</summary>
+		public static Parameter TurbulentTransferCoefficientForHeat { get; } =
+			new Parameter(ParameterCategory.Temperature, 19, "Turbulent Transfer Coefficient for Heat", "Numeric");
+
+		///<summary>Turbulent Diffusion Coefficient for Heat (m2s-1)</summary>
+		public static Parameter TurbulentDiffusionCoefficientForHeat { get; } =
+			new Parameter(ParameterCategory.Temperature, 20, "Turbulent Diffusion Coefficient for Heat", "m2s-1");
+
+		///<summary>Apparent Temperature  (K)</summary>
+		public static Parameter ApparentTemperature { get; } =
+			new Parameter(ParameterCategory.Temperature, 21, "Apparent Temperature ", "K");
+
+		///<summary>Temperature Tendency due to Short-Wave Radiation (K s-1)</summary>
+		public static Parameter TemperatureTendencyDueToShortWaveRadiation { get; } =
+			new Parameter(ParameterCategory.Temperature, 22, "Temperature Tendency due to Short-Wave Radiation", "K s-1");
+
+		///<summary>Temperature Tendency due to Long-Wave Radiation (K s-1)</summary>
+		public static Parameter TemperatureTendencyDueToLongWaveRadiation { get; } =
+			new Parameter(ParameterCategory.Temperature, 23, "Temperature Tendency due to Long-Wave Radiation", "K s-1");
+
+		///<summary>Temperature Tendency due to Short-Wave Radiation,Clear Sky (K s-1)</summary>
+		public static Parameter TemperatureTendencyDueToShortWaveRadiationClearSky { get; } =
+			new Parameter(ParameterCategory.Temperature, 24, "Temperature Tendency due to Short-Wave Radiation,Clear Sky", "K s-1");
+
+		///<summary>Temperature Tendency due to Long-Wave Radiation,Clear Sky (K s-1)</summary>
+		public static Parameter TemperatureTendencyDueToLongWaveRadiationClearSky { get; } =
+			new Parameter(ParameterCategory.Temperature, 25, "Temperature Tendency due to Long-Wave Radiation,Clear Sky", "K s-1");
+
+		///<summary>Temperature Tendency due to parameterizations (K s-1)</summary>
+		public static Parameter TemperatureTendencyDueToParameterizations { get; } =
+			new Parameter(ParameterCategory.Temperature, 26, "Temperature Tendency due to parameterizations", "K s-1");
+
+		///<summary>Wet Bulb Temperature (K)</summary>
+		public static Parameter WetBulbTemperature { get; } =
+			new Parameter(ParameterCategory.Temperature, 27, "Wet Bulb Temperature", "K");
+
+		///<summary>Unbalanced Component of Temperature (K)</summary>
+		public static Parameter UnbalancedComponentOfTemperature { get; } =
+			new Parameter(ParameterCategory.Temperature, 28, "Unbalanced Component of Temperature", "K");
+
+		///<summary>Temperature Advection (K s-1)</summary>
+		public static Parameter TemperatureAdvection { get; } =
+			new Parameter(ParameterCategory.Temperature, 29, "Temperature Advection", "K s-1");
+
 		#endregion
 
 		#region Product Discipline 0: Meteorological products, Parameter Category 1: Moisture
@@ -1391,6 +1447,20 @@ namespace NGrib.Grib2.CodeTables
 				.Add(WindChillFactor)
 				.Add(MinimumDewPointDepression)
 				.Add(VirtualPotentialTemperature)
+				.Add(SnowPhaseChangeHeatFlux)
+				.Add(SkinTemperature)
+				.Add(SnowTemperature)
+				.Add(TurbulentTransferCoefficientForHeat)
+				.Add(TurbulentDiffusionCoefficientForHeat)
+				.Add(ApparentTemperature)
+				.Add(TemperatureTendencyDueToShortWaveRadiation)
+				.Add(TemperatureTendencyDueToLongWaveRadiation)
+				.Add(TemperatureTendencyDueToShortWaveRadiationClearSky)
+				.Add(TemperatureTendencyDueToLongWaveRadiationClearSky)
+				.Add(TemperatureTendencyDueToParameterizations)
+				.Add(WetBulbTemperature)
+				.Add(UnbalancedComponentOfTemperature)
+				.Add(TemperatureAdvection)
 				.Add(SpecificHumidity)
 				.Add(RelativeHumidity)
 				.Add(HumidityMixingRatio)
