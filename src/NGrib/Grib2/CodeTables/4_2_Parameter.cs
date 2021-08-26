@@ -138,6 +138,62 @@ namespace NGrib.Grib2.CodeTables
 		public static Parameter VirtualPotentialTemperature { get; } =
 			new Parameter(ParameterCategory.Temperature, 15, "Virtual potential temperature", "K");
 
+		///<summary>Snow Phase Change Heat Flux (W m-2)</summary>
+		public static Parameter SnowPhaseChangeHeatFlux { get; } =
+			new Parameter(ParameterCategory.Temperature, 16, "Snow Phase Change Heat Flux", "W m-2");
+
+		///<summary>Skin Temperature (K)</summary>
+		public static Parameter SkinTemperature { get; } =
+			new Parameter(ParameterCategory.Temperature, 17, "Skin Temperature", "K");
+
+		///<summary>Snow Temperature (top of snow) (K)</summary>
+		public static Parameter SnowTemperature { get; } =
+			new Parameter(ParameterCategory.Temperature, 18, "Snow Temperature (top of snow)", "K");
+
+		///<summary>Turbulent Transfer Coefficient for Heat (Numeric)</summary>
+		public static Parameter TurbulentTransferCoefficientForHeat { get; } =
+			new Parameter(ParameterCategory.Temperature, 19, "Turbulent Transfer Coefficient for Heat", "Numeric");
+
+		///<summary>Turbulent Diffusion Coefficient for Heat (m2s-1)</summary>
+		public static Parameter TurbulentDiffusionCoefficientForHeat { get; } =
+			new Parameter(ParameterCategory.Temperature, 20, "Turbulent Diffusion Coefficient for Heat", "m2s-1");
+
+		///<summary>Apparent Temperature  (K)</summary>
+		public static Parameter ApparentTemperature { get; } =
+			new Parameter(ParameterCategory.Temperature, 21, "Apparent Temperature ", "K");
+
+		///<summary>Temperature Tendency due to Short-Wave Radiation (K s-1)</summary>
+		public static Parameter TemperatureTendencyDueToShortWaveRadiation { get; } =
+			new Parameter(ParameterCategory.Temperature, 22, "Temperature Tendency due to Short-Wave Radiation", "K s-1");
+
+		///<summary>Temperature Tendency due to Long-Wave Radiation (K s-1)</summary>
+		public static Parameter TemperatureTendencyDueToLongWaveRadiation { get; } =
+			new Parameter(ParameterCategory.Temperature, 23, "Temperature Tendency due to Long-Wave Radiation", "K s-1");
+
+		///<summary>Temperature Tendency due to Short-Wave Radiation,Clear Sky (K s-1)</summary>
+		public static Parameter TemperatureTendencyDueToShortWaveRadiationClearSky { get; } =
+			new Parameter(ParameterCategory.Temperature, 24, "Temperature Tendency due to Short-Wave Radiation,Clear Sky", "K s-1");
+
+		///<summary>Temperature Tendency due to Long-Wave Radiation,Clear Sky (K s-1)</summary>
+		public static Parameter TemperatureTendencyDueToLongWaveRadiationClearSky { get; } =
+			new Parameter(ParameterCategory.Temperature, 25, "Temperature Tendency due to Long-Wave Radiation,Clear Sky", "K s-1");
+
+		///<summary>Temperature Tendency due to parameterizations (K s-1)</summary>
+		public static Parameter TemperatureTendencyDueToParameterizations { get; } =
+			new Parameter(ParameterCategory.Temperature, 26, "Temperature Tendency due to parameterizations", "K s-1");
+
+		///<summary>Wet Bulb Temperature (K)</summary>
+		public static Parameter WetBulbTemperature { get; } =
+			new Parameter(ParameterCategory.Temperature, 27, "Wet Bulb Temperature", "K");
+
+		///<summary>Unbalanced Component of Temperature (K)</summary>
+		public static Parameter UnbalancedComponentOfTemperature { get; } =
+			new Parameter(ParameterCategory.Temperature, 28, "Unbalanced Component of Temperature", "K");
+
+		///<summary>Temperature Advection (K s-1)</summary>
+		public static Parameter TemperatureAdvection { get; } =
+			new Parameter(ParameterCategory.Temperature, 29, "Temperature Advection", "K s-1");
+
 		#endregion
 
 		#region Product Discipline 0: Meteorological products, Parameter Category 1: Moisture
@@ -264,6 +320,354 @@ namespace NGrib.Grib2.CodeTables
 		///<summary>Graupel (snow pellets) (kg kg-1)</summary>
 		public static Parameter Graupel { get; } =
 			new Parameter(ParameterCategory.Moisture, 32, "Graupel (snow pellets)", "kg kg-1");
+
+		///<summary>Categorical Rain (Code table 4.222)</summary>
+		public static Parameter CategoricalRain { get; } =
+			new Parameter(ParameterCategory.Moisture, 33, "Categorical Rain", "");
+
+		///<summary>Categorical Freezing Rain (Code table 4.222)</summary>
+		public static Parameter CategoricalFreezingRain { get; } =
+			new Parameter(ParameterCategory.Moisture, 34, "Categorical Freezing Rain", "");
+
+		///<summary>Categorical Ice Pellets (Code table 4.222)</summary>
+		public static Parameter CategoricalIcePellets { get; } =
+			new Parameter(ParameterCategory.Moisture, 35, "Categorical Ice Pellets", "");
+
+		///<summary>Categorical Snow (Code table 4.222)</summary>
+		public static Parameter CategoricalSnow { get; } =
+			new Parameter(ParameterCategory.Moisture, 36, "Categorical Snow", "");
+
+		///<summary>Convective Precipitation Rate (kg m-2 s-1)</summary>
+		public static Parameter ConvectivePrecipitationRate { get; } =
+			new Parameter(ParameterCategory.Moisture, 37, "Convective Precipitation Rate", "kg m-2 s-1");
+
+		///<summary>Horizontal Moisture Divergence (kg kg-1 s-1)</summary>
+		public static Parameter HorizontalMoistureDivergence { get; } =
+			new Parameter(ParameterCategory.Moisture, 38, "Horizontal Moisture Divergence", "kg kg-1 s-1");
+
+		///<summary>Percent frozen precipitation (%)</summary>
+		public static Parameter PercentFrozenPrecipitation { get; } =
+			new Parameter(ParameterCategory.Moisture, 39, "Percent frozen precipitation", "%");
+
+		///<summary>Potential Evaporation (kg m-2)</summary>
+		public static Parameter PotentialEvaporation { get; } =
+			new Parameter(ParameterCategory.Moisture, 40, "Potential Evaporation", "kg m-2");
+
+		///<summary>Potential Evaporation Rate (W m-2)</summary>
+		public static Parameter PotentialEvaporationRate { get; } =
+			new Parameter(ParameterCategory.Moisture, 41, "Potential Evaporation Rate", "W m-2");
+
+		///<summary>Snow Cover (%)</summary>
+		public static Parameter SnowCover { get; } =
+			new Parameter(ParameterCategory.Moisture, 42, "Snow Cover", "%");
+
+		///<summary>Rain Fraction of Total Cloud Water (Proportion)</summary>
+		public static Parameter RainFractionOfTotalCloudWater { get; } =
+			new Parameter(ParameterCategory.Moisture, 43, "Rain Fraction of Total Cloud Water", "Proportion");
+
+		///<summary>Rime Factor (Numeric)</summary>
+		public static Parameter RimeFactor { get; } =
+			new Parameter(ParameterCategory.Moisture, 44, "Rime Factor", "Numeric");
+
+		///<summary>Total Column Integrated Rain (kg m-2)</summary>
+		public static Parameter TotalColumnIntegratedRain { get; } =
+			new Parameter(ParameterCategory.Moisture, 45, "Total Column Integrated Rain", "kg m-2");
+
+		///<summary>Total Column Integrated Snow (kg m-2)</summary>
+		public static Parameter TotalColumnIntegratedSnow { get; } =
+			new Parameter(ParameterCategory.Moisture, 46, "Total Column Integrated Snow", "kg m-2");
+
+		///<summary>Large Scale Water Precipitation (Non-Convective)  (kg m-2)</summary>
+		public static Parameter LargeScaleWaterPrecipitation { get; } =
+			new Parameter(ParameterCategory.Moisture, 47, "Large Scale Water Precipitation (Non-Convective) ", "kg m-2");
+
+		///<summary>Convective Water Precipitation  (kg m-2)</summary>
+		public static Parameter ConvectiveWaterPrecipitation { get; } =
+			new Parameter(ParameterCategory.Moisture, 48, "Convective Water Precipitation ", "kg m-2");
+
+		///<summary>Total Water Precipitation  (kg m-2)</summary>
+		public static Parameter TotalWaterPrecipitation { get; } =
+			new Parameter(ParameterCategory.Moisture, 49, "Total Water Precipitation ", "kg m-2");
+
+		///<summary>Total Snow Precipitation  (kg m-2)</summary>
+		public static Parameter TotalSnowPrecipitation { get; } =
+			new Parameter(ParameterCategory.Moisture, 50, "Total Snow Precipitation ", "kg m-2");
+
+		///<summary>Total Column Water(Vertically integrated total water (vapour+cloud water/ice) (kg m-2)</summary>
+		public static Parameter TotalColumnWater { get; } =
+			new Parameter(ParameterCategory.Moisture, 51, "Total Column Water(Vertically integrated total water (vapour+cloud water/ice)", "kg m-2");
+
+		///<summary>Total Precipitation Rate  (kg m-2 s-1)</summary>
+		public static Parameter TotalPrecipitationRate { get; } =
+			new Parameter(ParameterCategory.Moisture, 52, "Total Precipitation Rate ", "kg m-2 s-1");
+
+		///<summary>Total Snowfall Rate Water Equivalent  (kg m-2 s-1)</summary>
+		public static Parameter TotalSnowfallRateWaterEquivalent { get; } =
+			new Parameter(ParameterCategory.Moisture, 53, "Total Snowfall Rate Water Equivalent ", "kg m-2 s-1");
+
+		///<summary>Large Scale Precipitation Rate (kg m-2 s-1)</summary>
+		public static Parameter LargeScalePrecipitationRate { get; } =
+			new Parameter(ParameterCategory.Moisture, 54, "Large Scale Precipitation Rate", "kg m-2 s-1");
+
+		///<summary>Convective Snowfall Rate Water Equivalent (kg m-2 s-1)</summary>
+		public static Parameter ConvectiveSnowfallRateWaterEquivalent { get; } =
+			new Parameter(ParameterCategory.Moisture, 55, "Convective Snowfall Rate Water Equivalent", "kg m-2 s-1");
+
+		///<summary>Large Scale Snowfall Rate Water Equivalent (kg m-2 s-1)</summary>
+		public static Parameter LargeScaleSnowfallRateWaterEquivalent { get; } =
+			new Parameter(ParameterCategory.Moisture, 56, "Large Scale Snowfall Rate Water Equivalent", "kg m-2 s-1");
+
+		///<summary>Total Snowfall Rate (m s-1)</summary>
+		public static Parameter TotalSnowfallRate { get; } =
+			new Parameter(ParameterCategory.Moisture, 57, "Total Snowfall Rate", "m s-1");
+
+		///<summary>Convective Snowfall Rate (m s-1)</summary>
+		public static Parameter ConvectiveSnowfallRate { get; } =
+			new Parameter(ParameterCategory.Moisture, 58, "Convective Snowfall Rate", "m s-1");
+
+		///<summary>Large Scale Snowfall Rate (m s-1)</summary>
+		public static Parameter LargeScaleSnowfallRate { get; } =
+			new Parameter(ParameterCategory.Moisture, 59, "Large Scale Snowfall Rate", "m s-1");
+
+		///<summary>Snow Depth Water Equivalent (kg m-2)</summary>
+		public static Parameter SnowDepthWaterEquivalent { get; } =
+			new Parameter(ParameterCategory.Moisture, 60, "Snow Depth Water Equivalent", "kg m-2");
+
+		///<summary>Snow Density (kg m-3)</summary>
+		public static Parameter SnowDensity { get; } =
+			new Parameter(ParameterCategory.Moisture, 61, "Snow Density", "kg m-3");
+
+		///<summary>Snow Evaporation (kg m-2)</summary>
+		public static Parameter SnowEvaporation { get; } =
+			new Parameter(ParameterCategory.Moisture, 62, "Snow Evaporation", "kg m-2");
+
+		///<summary>Total Column Integrated Water Vapour (kg m-2)</summary>
+		public static Parameter TotalColumnIntegratedWaterVapour { get; } =
+			new Parameter(ParameterCategory.Moisture, 64, "Total Column Integrated Water Vapour", "kg m-2");
+
+		///<summary>Rain Precipitation Rate (kg m-2 s-1)</summary>
+		public static Parameter RainPrecipitationRate { get; } =
+			new Parameter(ParameterCategory.Moisture, 65, "Rain Precipitation Rate", "kg m-2 s-1");
+
+		///<summary>Snow Precipitation Rate (kg m-2 s-1)</summary>
+		public static Parameter SnowPrecipitationRate { get; } =
+			new Parameter(ParameterCategory.Moisture, 66, "Snow Precipitation Rate", "kg m-2 s-1");
+
+		///<summary>Freezing Rain Precipitation Rate (kg m-2 s-1)</summary>
+		public static Parameter FreezingRainPrecipitationRate { get; } =
+			new Parameter(ParameterCategory.Moisture, 67, "Freezing Rain Precipitation Rate", "kg m-2 s-1");
+
+		///<summary>Ice Pellets Precipitation Rate (kg m-2 s-1)</summary>
+		public static Parameter IcePelletsPrecipitationRate { get; } =
+			new Parameter(ParameterCategory.Moisture, 68, "Ice Pellets Precipitation Rate", "kg m-2 s-1");
+
+		///<summary>Total Column Integrate Cloud Water (kg m-2)</summary>
+		public static Parameter TotalColumnIntegrateCloudWater { get; } =
+			new Parameter(ParameterCategory.Moisture, 69, "Total Column Integrate Cloud Water", "kg m-2");
+
+		///<summary>Total Column Integrate Cloud Ice (kg m-2)</summary>
+		public static Parameter TotalColumnIntegrateCloudIce { get; } =
+			new Parameter(ParameterCategory.Moisture, 70, "Total Column Integrate Cloud Ice", "kg m-2");
+
+		///<summary>Hail Mixing Ratio (kg kg-1)</summary>
+		public static Parameter HailMixingRatio { get; } =
+			new Parameter(ParameterCategory.Moisture, 71, "Hail Mixing Ratio", "kg kg-1");
+
+		///<summary>Total Column Integrate Hail (kg m-2)</summary>
+		public static Parameter TotalColumnIntegrateHail { get; } =
+			new Parameter(ParameterCategory.Moisture, 72, "Total Column Integrate Hail", "kg m-2");
+
+		///<summary>Hail Prepitation Rate (kg m-2 s-1)</summary>
+		public static Parameter HailPrepitationRate { get; } =
+			new Parameter(ParameterCategory.Moisture, 73, "Hail Prepitation Rate", "kg m-2 s-1");
+
+		///<summary>Total Column Integrate Graupel (kg m-2)</summary>
+		public static Parameter TotalColumnIntegrateGraupel { get; } =
+			new Parameter(ParameterCategory.Moisture, 74, "Total Column Integrate Graupel", "kg m-2");
+
+		///<summary>Graupel (Snow Pellets) Prepitation Rate (kg m-2 s-1)</summary>
+		public static Parameter GraupelPrecipitationRate { get; } =
+			new Parameter(ParameterCategory.Moisture, 75, "Graupel (Snow Pellets) Prepitation Rate", "kg m-2 s-1");
+
+		///<summary>Convective Rain Rate (kg m-2 s-1)</summary>
+		public static Parameter ConvectiveRainRate { get; } =
+			new Parameter(ParameterCategory.Moisture, 76, "Convective Rain Rate", "kg m-2 s-1");
+
+		///<summary>Large Scale Rain Rate (kg m-2 s-1)</summary>
+		public static Parameter LargeScaleRainRate { get; } =
+			new Parameter(ParameterCategory.Moisture, 77, "Large Scale Rain Rate", "kg m-2 s-1");
+
+		///<summary>Total Column Integrate Water (Allcomponents including precipitation) (kg m-2)</summary>
+		public static Parameter TotalColumnIntegrateWater { get; } =
+			new Parameter(ParameterCategory.Moisture, 78, "Total Column Integrate Water (Allcomponents including precipitation)", "kg m-2");
+
+		///<summary>Evaporation Rate (kg m-2 s-1)</summary>
+		public static Parameter EvaporationRate { get; } =
+			new Parameter(ParameterCategory.Moisture, 79, "Evaporation Rate", "kg m-2 s-1");
+
+		///<summary>Total Condensate (kg kg-1)</summary>
+		public static Parameter TotalCondensate { get; } =
+			new Parameter(ParameterCategory.Moisture, 80, "Total Condensate", "kg kg-1");
+
+		///<summary>Total Column-Integrate Condensate (kg m-2)</summary>
+		public static Parameter TotalColumnIntegrateCondensate { get; } =
+			new Parameter(ParameterCategory.Moisture, 81, "Total Column-Integrate Condensate", "kg m-2");
+
+		///<summary>Cloud Ice Mixing Ratio (kg kg-1)</summary>
+		public static Parameter CloudIceMixingRatio { get; } =
+			new Parameter(ParameterCategory.Moisture, 82, "Cloud Ice Mixing Ratio", "kg kg-1");
+
+		///<summary>Specific Cloud Liquid Water Content (kg kg-1)</summary>
+		public static Parameter SpecificCloudLiquidWaterContent { get; } =
+			new Parameter(ParameterCategory.Moisture, 83, "Specific Cloud Liquid Water Content", "kg kg-1");
+
+		///<summary>Specific Cloud Ice Water Content (kg kg-1)</summary>
+		public static Parameter SpecificCloudIceWaterContent { get; } =
+			new Parameter(ParameterCategory.Moisture, 84, "Specific Cloud Ice Water Content", "kg kg-1");
+
+		///<summary>Specific Rain Water Content (kg kg-1)</summary>
+		public static Parameter SpecificRainWaterContent { get; } =
+			new Parameter(ParameterCategory.Moisture, 85, "Specific Rain Water Content", "kg kg-1");
+
+		///<summary>Specific Snow Water Content (kg kg-1)</summary>
+		public static Parameter SpecificSnowWaterContent { get; } =
+			new Parameter(ParameterCategory.Moisture, 86, "Specific Snow Water Content", "kg kg-1");
+
+		///<summary>Stratiform Precipitation Rate (kg m-2 s-1)</summary>
+		public static Parameter StratiformPrecipitationRate { get; } =
+			new Parameter(ParameterCategory.Moisture, 87, "Stratiform Precipitation Rate", "kg m-2 s-1");
+
+		///<summary>Categorical Convective Precipitation (Code table 4.222)</summary>
+		public static Parameter CategoricalConvectivePrecipitation { get; } =
+			new Parameter(ParameterCategory.Moisture, 88, "Categorical Convective Precipitation", "");
+
+		///<summary>Total Kinematic Moisture Flux (kg kg-1 m s-1)</summary>
+		public static Parameter TotalKinematicMoistureFlux { get; } =
+			new Parameter(ParameterCategory.Moisture, 90, "Total Kinematic Moisture Flux", "kg kg-1 m s-1");
+
+		///<summary>U-component (zonal) Kinematic Moisture Flux (kg kg-1 m s-1)</summary>
+		public static Parameter Ucomponent { get; } =
+			new Parameter(ParameterCategory.Moisture, 91, "U-component (zonal) Kinematic Moisture Flux", "kg kg-1 m s-1");
+
+		///<summary>V-component (meridional) Kinematic Moisture Flux (kg kg-1 m s-1)</summary>
+		public static Parameter Vcomponent { get; } =
+			new Parameter(ParameterCategory.Moisture, 92, "V-component (meridional) Kinematic Moisture Flux", "kg kg-1 m s-1");
+
+		///<summary>Relative Humidity With Respect to Water (%)</summary>
+		public static Parameter RelativeHumidityWithRespectToWater { get; } =
+			new Parameter(ParameterCategory.Moisture, 93, "Relative Humidity With Respect to Water", "%");
+
+		///<summary>Relative Humidity With Respect to Ice (%)</summary>
+		public static Parameter RelativeHumidityWithRespectToIce { get; } =
+			new Parameter(ParameterCategory.Moisture, 94, "Relative Humidity With Respect to Ice", "%");
+
+		///<summary>Freezing or Frozen Precipitation Rate (kg m-2 s-1)</summary>
+		public static Parameter FreezingOrFrozenPrecipitationRate { get; } =
+			new Parameter(ParameterCategory.Moisture, 95, "Freezing or Frozen Precipitation Rate", "kg m-2 s-1");
+
+		///<summary>Mass Density of Rain (kg m-3)</summary>
+		public static Parameter MassDensityOfRain { get; } =
+			new Parameter(ParameterCategory.Moisture, 96, "Mass Density of Rain", "kg m-3");
+
+		///<summary>Mass Density of Snow (kg m-3)</summary>
+		public static Parameter MassDensityOfSnow { get; } =
+			new Parameter(ParameterCategory.Moisture, 97, "Mass Density of Snow", "kg m-3");
+
+		///<summary>Mass Density of Graupel (kg m-3)</summary>
+		public static Parameter MassDensityOfGraupel { get; } =
+			new Parameter(ParameterCategory.Moisture, 98, "Mass Density of Graupel", "kg m-3");
+
+		///<summary>Mass Density of Hail (kg m-3)</summary>
+		public static Parameter MassDensityOfHail { get; } =
+			new Parameter(ParameterCategory.Moisture, 99, "Mass Density of Hail", "kg m-3");
+
+		///<summary>Specific Number Concentration of Rain (kg-1)</summary>
+		public static Parameter SpecificNumberConcentrationOfRain { get; } =
+			new Parameter(ParameterCategory.Moisture, 100, "Specific Number Concentration of Rain", "kg-1");
+
+		///<summary>Specific Number Concentration of Snow (kg-1)</summary>
+		public static Parameter SpecificNumberConcentrationOfSnow { get; } =
+			new Parameter(ParameterCategory.Moisture, 101, "Specific Number Concentration of Snow", "kg-1");
+
+		///<summary>Specific Number Concentration of Graupel (kg-1)</summary>
+		public static Parameter SpecificNumberConcentrationOfGraupel { get; } =
+			new Parameter(ParameterCategory.Moisture, 102, "Specific Number Concentration of Graupel", "kg-1");
+
+		///<summary>Specific Number Concentration of Hail (kg-1)</summary>
+		public static Parameter SpecificNumberConcentrationOfHail { get; } =
+			new Parameter(ParameterCategory.Moisture, 103, "Specific Number Concentration of Hail", "kg-1");
+
+		///<summary>Number Density of Rain (m-3)</summary>
+		public static Parameter NumberDensityOfRain { get; } =
+			new Parameter(ParameterCategory.Moisture, 104, "Number Density of Rain", "m-3");
+
+		///<summary>Number Density of Snow (m-3)</summary>
+		public static Parameter NumberDensityOfSnow { get; } =
+			new Parameter(ParameterCategory.Moisture, 105, "Number Density of Snow", "m-3");
+
+		///<summary>Number Density of Graupel (m-3)</summary>
+		public static Parameter NumberDensityOfGraupel { get; } =
+			new Parameter(ParameterCategory.Moisture, 106, "Number Density of Graupel", "m-3");
+
+		///<summary>Number Density of Hail (m-3)</summary>
+		public static Parameter NumberDensityOfHail { get; } =
+			new Parameter(ParameterCategory.Moisture, 107, "Number Density of Hail", "m-3");
+
+		///<summary>Specific Humidity Tendency due to Parameterizations (kg kg-1 s-1)</summary>
+		public static Parameter SpecificHumidityTendencyDueToParameterizations { get; } =
+			new Parameter(ParameterCategory.Moisture, 108, "Specific Humidity Tendency due to Parameterizations", "kg kg-1 s-1");
+
+		///<summary>Mass Density of Liquid Water Coating on Hail Expressed as Mass of Liquid Water per Unit Volume of Air (kg m-3)</summary>
+		public static Parameter MassDensityOfLiquidWaterCoatingOnHail { get; } =
+			new Parameter(ParameterCategory.Moisture, 109, "Mass Density of Liquid Water Coating on Hail Expressed as Mass of Liquid Water per Unit Volume of Air", "kg m-3");
+
+		///<summary>Specific Mass of Liquid Water Coating on HailExpressed as Mass of Liquid Water per Unit Mass of Moist Air (kg kg-1)</summary>
+		public static Parameter SpecificMassOfLiquidWaterCoatingOnHail { get; } =
+			new Parameter(ParameterCategory.Moisture, 110, "Specific Mass of Liquid Water Coating on HailExpressed as Mass of Liquid Water per Unit Mass of Moist Air", "kg kg-1");
+
+		///<summary>Mass Mixing Ratio of Liquid Water Coating on Hail Expressed as Mass of Liquid Water per Unit Mass of Dry Air (kg kg-1)</summary>
+		public static Parameter MassMixingRatioOfLiquidWaterCoatingOnHail { get; } =
+			new Parameter(ParameterCategory.Moisture, 111, "Mass Mixing Ratio of Liquid Water Coating on Hail Expressed as Mass of Liquid Water per Unit Mass of Dry Air", "kg kg-1");
+
+		///<summary>Mass Density of Liquid Water Coating on GraupelExpressed as Mass of Liquid Water per Unit Volume of Air (kg m-3)</summary>
+		public static Parameter MassDensityOfLiquidWaterCoatingOnGraupel { get; } =
+			new Parameter(ParameterCategory.Moisture, 112, "Mass Density of Liquid Water Coating on GraupelExpressed as Mass of Liquid Water per Unit Volume of Air", "kg m-3");
+
+		///<summary>Specific Mass of Liquid Water Coating on Graupel Expressed as Mass of Liquid Water per Unit Mass of Moist Air (kg kg-1)</summary>
+		public static Parameter SpecificMassOfLiquidWaterCoatingOnGraupel { get; } =
+			new Parameter(ParameterCategory.Moisture, 113, "Specific Mass of Liquid Water Coating on Graupel Expressed as Mass of Liquid Water per Unit Mass of Moist Air", "kg kg-1");
+
+		///<summary>Mass Mixing Ratio of Liquid Water Coating on Graupel Expressed as Mass of Liquid Water per Unit Mass of Dry Air (kg kg-1)</summary>
+		public static Parameter MassMixingRatioOfLiquidWaterCoatingOnGraupel { get; } =
+			new Parameter(ParameterCategory.Moisture, 114, "Mass Mixing Ratio of Liquid Water Coating on Graupel Expressed as Mass of Liquid Water per Unit Mass of Dry Air", "kg kg-1");
+
+		///<summary>Mass Density of Liquid Water Coating on Snow Expressed as Mass of Liquid Water per Unit Volume of Air (kg m-3)</summary>
+		public static Parameter MassDensityOfLiquidWaterCoatingOnSnow { get; } =
+			new Parameter(ParameterCategory.Moisture, 115, "Mass Density of Liquid Water Coating on Snow Expressed as Mass of Liquid Water per Unit Volume of Air", "kg m-3");
+
+		///<summary>Specific Mass of Liquid Water Coating on Snow Expressed as Mass of Liquid Water per Unit Mass of Moist Air (kg kg-1)</summary>
+		public static Parameter SpecificMassOfLiquidWaterCoatingOnSnow { get; } =
+			new Parameter(ParameterCategory.Moisture, 116, "Specific Mass of Liquid Water Coating on Snow Expressed as Mass of Liquid Water per Unit Mass of Moist Air", "kg kg-1");
+
+		///<summary>Mass Mixing Ratio of Liquid Water Coating on Snow Expressed as Mass of Liquid Water per Unit Mass of Dry Air (kg kg-1)</summary>
+		public static Parameter MassMixingRatioOfLiquidWaterCoatingOnSnow { get; } =
+			new Parameter(ParameterCategory.Moisture, 117, "Mass Mixing Ratio of Liquid Water Coating on Snow Expressed as Mass of Liquid Water per Unit Mass of Dry Air", "kg kg-1");
+
+		///<summary>Unbalanced Component of Specific Humidity (kg kg-1)</summary>
+		public static Parameter UnbalancedComponentOfSpecificHumidity { get; } =
+			new Parameter(ParameterCategory.Moisture, 118, "Unbalanced Component of Specific Humidity", "kg kg-1");
+
+		///<summary>Unbalanced Component of Specific Cloud Liquid Water content (kg kg-1)</summary>
+		public static Parameter UnbalancedComponentOfSpecificCloudLiquidWaterContent { get; } =
+			new Parameter(ParameterCategory.Moisture, 119, "Unbalanced Component of Specific Cloud Liquid Water content", "kg kg-1");
+
+		///<summary>Unbalanced Component of Specific Cloud Ice Water content (kg kg-1)</summary>
+		public static Parameter UnbalancedComponentOfSpecificCloudIceWaterContent { get; } =
+			new Parameter(ParameterCategory.Moisture, 120, "Unbalanced Component of Specific Cloud Ice Water content", "kg kg-1");
+
+		///<summary>Fraction of Snow Cover (Proportion)</summary>
+		public static Parameter FractionOfSnowCover { get; } =
+			new Parameter(ParameterCategory.Moisture, 121, "Fraction of Snow Cover", "Proportion");
 
 		#endregion
 
@@ -1043,6 +1447,20 @@ namespace NGrib.Grib2.CodeTables
 				.Add(WindChillFactor)
 				.Add(MinimumDewPointDepression)
 				.Add(VirtualPotentialTemperature)
+				.Add(SnowPhaseChangeHeatFlux)
+				.Add(SkinTemperature)
+				.Add(SnowTemperature)
+				.Add(TurbulentTransferCoefficientForHeat)
+				.Add(TurbulentDiffusionCoefficientForHeat)
+				.Add(ApparentTemperature)
+				.Add(TemperatureTendencyDueToShortWaveRadiation)
+				.Add(TemperatureTendencyDueToLongWaveRadiation)
+				.Add(TemperatureTendencyDueToShortWaveRadiationClearSky)
+				.Add(TemperatureTendencyDueToLongWaveRadiationClearSky)
+				.Add(TemperatureTendencyDueToParameterizations)
+				.Add(WetBulbTemperature)
+				.Add(UnbalancedComponentOfTemperature)
+				.Add(TemperatureAdvection)
 				.Add(SpecificHumidity)
 				.Add(RelativeHumidity)
 				.Add(HumidityMixingRatio)
@@ -1076,6 +1494,93 @@ namespace NGrib.Grib2.CodeTables
 				.Add(PrecipitableWaterCategory)
 				.Add(Hail)
 				.Add(Graupel)
+				.Add(CategoricalRain)
+				.Add(CategoricalFreezingRain)
+				.Add(CategoricalIcePellets)
+				.Add(CategoricalSnow)
+				.Add(ConvectivePrecipitationRate)
+				.Add(HorizontalMoistureDivergence)
+				.Add(PercentFrozenPrecipitation)
+				.Add(PotentialEvaporation)
+				.Add(PotentialEvaporationRate)
+				.Add(SnowCover)
+				.Add(RainFractionOfTotalCloudWater)
+				.Add(RimeFactor)
+				.Add(TotalColumnIntegratedRain)
+				.Add(TotalColumnIntegratedSnow)
+				.Add(LargeScaleWaterPrecipitation)
+				.Add(ConvectiveWaterPrecipitation)
+				.Add(TotalWaterPrecipitation)
+				.Add(TotalSnowPrecipitation)
+				.Add(TotalColumnWater)
+				.Add(TotalPrecipitationRate)
+				.Add(TotalSnowfallRateWaterEquivalent)
+				.Add(LargeScalePrecipitationRate)
+				.Add(ConvectiveSnowfallRateWaterEquivalent)
+				.Add(LargeScaleSnowfallRateWaterEquivalent)
+				.Add(TotalSnowfallRate)
+				.Add(ConvectiveSnowfallRate)
+				.Add(LargeScaleSnowfallRate)
+				.Add(SnowDepthWaterEquivalent)
+				.Add(SnowDensity)
+				.Add(SnowEvaporation)
+				.Add(TotalColumnIntegratedWaterVapour)
+				.Add(RainPrecipitationRate)
+				.Add(SnowPrecipitationRate)
+				.Add(FreezingRainPrecipitationRate)
+				.Add(IcePelletsPrecipitationRate)
+				.Add(TotalColumnIntegrateCloudWater)
+				.Add(TotalColumnIntegrateCloudIce)
+				.Add(HailMixingRatio)
+				.Add(TotalColumnIntegrateHail)
+				.Add(HailPrepitationRate)
+				.Add(TotalColumnIntegrateGraupel)
+				.Add(GraupelPrecipitationRate)
+				.Add(ConvectiveRainRate)
+				.Add(LargeScaleRainRate)
+				.Add(TotalColumnIntegrateWater)
+				.Add(EvaporationRate)
+				.Add(TotalCondensate)
+				.Add(TotalColumnIntegrateCondensate)
+				.Add(CloudIceMixingRatio)
+				.Add(SpecificCloudLiquidWaterContent)
+				.Add(SpecificCloudIceWaterContent)
+				.Add(SpecificRainWaterContent)
+				.Add(SpecificSnowWaterContent)
+				.Add(StratiformPrecipitationRate)
+				.Add(CategoricalConvectivePrecipitation)
+				.Add(TotalKinematicMoistureFlux)
+				.Add(Ucomponent)
+				.Add(Vcomponent)
+				.Add(RelativeHumidityWithRespectToWater)
+				.Add(RelativeHumidityWithRespectToIce)
+				.Add(FreezingOrFrozenPrecipitationRate)
+				.Add(MassDensityOfRain)
+				.Add(MassDensityOfSnow)
+				.Add(MassDensityOfGraupel)
+				.Add(MassDensityOfHail)
+				.Add(SpecificNumberConcentrationOfRain)
+				.Add(SpecificNumberConcentrationOfSnow)
+				.Add(SpecificNumberConcentrationOfGraupel)
+				.Add(SpecificNumberConcentrationOfHail)
+				.Add(NumberDensityOfRain)
+				.Add(NumberDensityOfSnow)
+				.Add(NumberDensityOfGraupel)
+				.Add(NumberDensityOfHail)
+				.Add(SpecificHumidityTendencyDueToParameterizations)
+				.Add(MassDensityOfLiquidWaterCoatingOnHail)
+				.Add(SpecificMassOfLiquidWaterCoatingOnHail)
+				.Add(MassMixingRatioOfLiquidWaterCoatingOnHail)
+				.Add(MassDensityOfLiquidWaterCoatingOnGraupel)
+				.Add(SpecificMassOfLiquidWaterCoatingOnGraupel)
+				.Add(MassMixingRatioOfLiquidWaterCoatingOnGraupel)
+				.Add(MassDensityOfLiquidWaterCoatingOnSnow)
+				.Add(SpecificMassOfLiquidWaterCoatingOnSnow)
+				.Add(MassMixingRatioOfLiquidWaterCoatingOnSnow)
+				.Add(UnbalancedComponentOfSpecificHumidity)
+				.Add(UnbalancedComponentOfSpecificCloudLiquidWaterContent)
+				.Add(UnbalancedComponentOfSpecificCloudIceWaterContent)
+				.Add(FractionOfSnowCover)
 				.Add(WindDirection)
 				.Add(WindSpeed)
 				.Add(UComponentOfWind)
