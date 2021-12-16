@@ -24,8 +24,8 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using NGrib.Grib2.CodeTables;
 using NGrib.Grib2.Sections;
@@ -104,6 +104,11 @@ namespace NGrib.Grib2
 
 		internal IEnumerable<float?> GetRawData(BufferedBinaryReader reader)
 		{
+			if (DataRepresentationSection.DataRepresentation == null)
+			{
+				throw new NotSupportedException($"Data Representation Template {DataRepresentationSection.TemplateNumber} is not supported.");
+			}
+
 			var bitmap = BitmapSection.GetBitmap(reader);
 
 			using var valuesEnumerator = DataRepresentationSection.DataRepresentation

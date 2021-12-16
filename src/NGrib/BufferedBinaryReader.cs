@@ -194,6 +194,12 @@ namespace NGrib
 				}
 			}
 		}
+
+		public int ReadIntN(int nbBit)
+		{
+			var result = ReadUIntN(nbBit);
+			return result.AsSignedInt(nbBit);
+		}
 	
 		public BigInteger ReadUInt64()
 		{

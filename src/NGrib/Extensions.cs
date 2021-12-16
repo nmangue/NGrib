@@ -47,5 +47,31 @@ namespace NGrib
 		}
 
 		public static bool IsFlagEnum(Type t) => t.IsEnum && !Attribute.IsDefined(t, typeof(FlagsAttribute));
+				
+		public static int AsSignedInt(this int value, int nbBit)
+		{
+			if (value.GetBit(nbBit))
+			{
+				// The sign bit is on => it's negative!
+				// Reset leading bit
+				value = value.SetBit(nbBit, false);
+				// build 2's-complement
+				value = ~value;
+				value += 1;
+			}
+
+			return value;
+		}
+
+		public static bool GetBit(this int value, int index)
+		{
+			var mask = 1 << (index -1);
+			return (value & mask) > 0;
+		}
+
+		public static int SetBit(this int value, int index, bool bitValue)
+		{
+			return bitValue ? value | (1 << (index - 1)) : value & ~(1 << (index - 1));
+		}
 	}
 }
