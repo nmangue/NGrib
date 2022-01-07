@@ -1095,6 +1095,49 @@ namespace NGrib.Grib2.CodeTables
 
 		#endregion
 
+		#region Product Discipline 0 - Meteorological products, Parameter Category 16: Forecast Radar Imagery
+
+		///<summary>Equivalent radar reflectivity factor for rain (m m6 m-3)</summary>
+		public static Parameter EquivalentRadarReflectivityFactorForRain { get; } = new Parameter(ParameterCategory.ForecastRadarImagery, 0, "Equivalent radar reflectivity factor for rain", "m m6 m-3");
+
+		///<summary>Equivalent radar reflectivity factor for snow (m m6 m-3)</summary>
+		public static Parameter EquivalentRadarReflectivityFactorForSnow { get; } = new Parameter(ParameterCategory.ForecastRadarImagery, 1, "Equivalent radar reflectivity factor for snow", "m m6 m-3");
+
+		///<summary>Equivalent radar reflectivity factor for parameterized convection (m m6 m-3)</summary>
+		public static Parameter EquivalentRadarReflectivityFactorForParameterizedConvection { get; } = new Parameter(ParameterCategory.ForecastRadarImagery, 2, "Equivalent radar reflectivity factor for parameterized convection", "m m6 m-3");
+
+		///<summary>Echo Top (m)</summary>
+		public static Parameter EchoTop { get; } = new Parameter(ParameterCategory.ForecastRadarImagery, 3, "Echo Top", "m");
+
+		///<summary>Reflectivity (dB)</summary>
+		public static Parameter Reflectivity { get; } = new Parameter(ParameterCategory.ForecastRadarImagery, 4, "Reflectivity", "dB");
+
+		///<summary>Composite reflectivity (dB)</summary>
+		public static Parameter CompositeReflectivity { get; } = new Parameter(ParameterCategory.ForecastRadarImagery, 5, "Composite reflectivity", "dB");
+
+		///<summary>Equivalent radar reflectivity factor for rain (m m6 m-3)</summary>
+		public static Parameter EquivalentRadarReflectivityFactorForRain2 { get; } = new Parameter(ParameterCategory.ForecastRadarImagery, 192, "Equivalent radar reflectivity factor for rain", "m m6 m-3");
+
+		///<summary>Equivalent radar reflectivity factor for snow (m m6 m-3)</summary>
+		public static Parameter EquivalentRadarReflectivityFactorForSnow2 { get; } = new Parameter(ParameterCategory.ForecastRadarImagery, 193, "Equivalent radar reflectivity factor for snow", "m m6 m-3");
+
+		///<summary>Equivalent radar reflectivity factor for parameterized convection (m m6 m-3)</summary>
+		public static Parameter EquivalentRadarReflectivityFactorForParameterizedConvection2 { get; } = new Parameter(ParameterCategory.ForecastRadarImagery, 194, "Equivalent radar reflectivity factor for parameterized convection", "m m6 m-3");
+
+		///<summary>Reflectivity (dB)</summary>
+		public static Parameter Reflectivity2 { get; } = new Parameter(ParameterCategory.ForecastRadarImagery, 195, "Reflectivity", "dB");
+
+		///<summary>Composite reflectivity (dB)</summary>
+		public static Parameter CompositeReflectivity2 { get; } = new Parameter(ParameterCategory.ForecastRadarImagery, 196, "Composite reflectivity", "dB");
+
+		///<summary>Echo Top (m)</summary>
+		public static Parameter EchoTop2 { get; } = new Parameter(ParameterCategory.ForecastRadarImagery, 197, "Echo Top", "m");
+
+		///<summary>Hourly Maximum of Simulated Reflectivity (dB)</summary>
+		public static Parameter HourlyMaximumOfSimulatedReflectivity { get; } = new Parameter(ParameterCategory.ForecastRadarImagery, 198, "Hourly Maximum of Simulated Reflectivity", "dB");
+
+		#endregion
+
 		#region Product Discipline 0: Meteorological products, Parameter Category 18: Nuclear/radiology
 
 		///<summary>Air concentration of Caesium 137 (Bq m-3)</summary>
@@ -1766,6 +1809,19 @@ namespace NGrib.Grib2.CodeTables
 				.Add(RadarSpectra1)
 				.Add(RadarSpectra2)
 				.Add(RadarSpectra3)
+				.Add(EquivalentRadarReflectivityFactorForRain)
+				.Add(EquivalentRadarReflectivityFactorForSnow)
+				.Add(EquivalentRadarReflectivityFactorForParameterizedConvection)
+				.Add(EchoTop)
+				.Add(Reflectivity)
+				.Add(CompositeReflectivity)
+				.Add(EquivalentRadarReflectivityFactorForRain2)
+				.Add(EquivalentRadarReflectivityFactorForSnow2)
+				.Add(EquivalentRadarReflectivityFactorForParameterizedConvection2)
+				.Add(Reflectivity2)
+				.Add(CompositeReflectivity2)
+				.Add(EchoTop2)
+				.Add(HourlyMaximumOfSimulatedReflectivity)
 				.Add(AirConcentrationOfCaesium137)
 				.Add(AirConcentrationOfIodine131)
 				.Add(AirConcentrationOfRadioactivePollutant)
