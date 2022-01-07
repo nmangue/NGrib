@@ -924,6 +924,81 @@ namespace NGrib.Grib2.CodeTables
 		///<summary>Ceiling (m)</summary>
 		public static Parameter Ceiling { get; } = new Parameter(ParameterCategory.Cloud, 13, "Ceiling", "m");
 
+		///<summary>Non-Convective Cloud Cover (%)</summary>
+		public static Parameter NonConvectiveCloudCover { get; } = new Parameter(ParameterCategory.Cloud, 14, "Non-Convective Cloud Cover", "%");
+
+		///<summary>Cloud Work Function (J kg-1)</summary>
+		public static Parameter CloudWorkFunction { get; } = new Parameter(ParameterCategory.Cloud, 15, "Cloud Work Function", "J kg-1");
+
+		///<summary>Convective Cloud Efficiency (Proportion)</summary>
+		public static Parameter ConvectiveCloudEfficiency { get; } = new Parameter(ParameterCategory.Cloud, 16, "Convective Cloud Efficiency", "Proportion");
+
+		///<summary>Ice fraction of total condensate (Proportion)</summary>
+		public static Parameter IceFractionOfTotalCondensate { get; } = new Parameter(ParameterCategory.Cloud, 21, "Ice fraction of total condensate", "Proportion");
+
+		///<summary>Cloud Cover (%)</summary>
+		public static Parameter CloudCover { get; } = new Parameter(ParameterCategory.Cloud, 22, "Cloud Cover", "%");
+
+		///<summary>Sunshine (Numeric)</summary>
+		public static Parameter Sunshine { get; } = new Parameter(ParameterCategory.Cloud, 24, "Sunshine", "Numeric");
+
+		///<summary>Horizontal Extent of Cumulonimbus (CB) (%)</summary>
+		public static Parameter HorizontalExtentOfCumulonimbus { get; } = new Parameter(ParameterCategory.Cloud, 25, "Horizontal Extent of Cumulonimbus (CB)", "%");
+
+		///<summary>Height of Convective Cloud Base (m)</summary>
+		public static Parameter HeightOfConvectiveCloudBase { get; } = new Parameter(ParameterCategory.Cloud, 26, "Height of Convective Cloud Base", "m");
+
+		///<summary>Height of Convective Cloud Top (m)</summary>
+		public static Parameter HeightOfConvectiveCloudTop { get; } = new Parameter(ParameterCategory.Cloud, 27, "Height of Convective Cloud Top", "m");
+
+		///<summary>Number Concentration of Cloud Droplets (kg-1)</summary>
+		public static Parameter NumberConcentrationOfCloudDroplets { get; } = new Parameter(ParameterCategory.Cloud, 28, "Number Concentration of Cloud Droplets", "kg-1");
+
+		///<summary>Number Concentration of Cloud Ice (kg-1)</summary>
+		public static Parameter NumberConcentrationOfCloudIce { get; } = new Parameter(ParameterCategory.Cloud, 29, "Number Concentration of Cloud Ice", "kg-1");
+
+		///<summary>Number Density of Cloud Droplets (m-3)</summary>
+		public static Parameter NumberDensityOfCloudDroplets { get; } = new Parameter(ParameterCategory.Cloud, 30, "Number Density of Cloud Droplets", "m-3");
+
+		///<summary>Number Density of Cloud Ice (m-3)</summary>
+		public static Parameter NumberDensityOfCloudIce { get; } = new Parameter(ParameterCategory.Cloud, 31, "Number Density of Cloud Ice", "m-3");
+
+		///<summary>Fraction of Cloud Cover (Numeric)</summary>
+		public static Parameter FractionOfCloudCover { get; } = new Parameter(ParameterCategory.Cloud, 32, "Fraction of Cloud Cover", "Numeric");
+
+		///<summary>Sunshine Duration (s)</summary>
+		public static Parameter SunshineDuration { get; } = new Parameter(ParameterCategory.Cloud, 33, "Sunshine Duration", "s");
+
+		///<summary>Surface Long Wave Effective Total Cloudiness (Numeric)</summary>
+		public static Parameter SurfaceLongWaveEffectiveTotalCloudiness { get; } = new Parameter(ParameterCategory.Cloud, 34, "Surface Long Wave Effective Total Cloudiness", "Numeric");
+
+		///<summary>Surface Short Wave Effective Total Cloudiness (Numeric)</summary>
+		public static Parameter SurfaceShortWaveEffectiveTotalCloudiness { get; } = new Parameter(ParameterCategory.Cloud, 35, "Surface Short Wave Effective Total Cloudiness", "Numeric");
+
+		///<summary>Fraction of Stratiform Precipitation Cover (Proportion)</summary>
+		public static Parameter FractionOfStratiformPrecipitationCover { get; } = new Parameter(ParameterCategory.Cloud, 36, "Fraction of Stratiform Precipitation Cover", "Proportion");
+
+		///<summary>Fraction of Convective Precipitation Cover (Proportion)</summary>
+		public static Parameter FractionOfConvectivePrecipitationCover { get; } = new Parameter(ParameterCategory.Cloud, 37, "Fraction of Convective Precipitation Cover", "Proportion");
+
+		///<summary>Mass Density of Cloud Droplets (kg m-3)</summary>
+		public static Parameter MassDensityOfCloudDroplets { get; } = new Parameter(ParameterCategory.Cloud, 38, "Mass Density of Cloud Droplets", "kg m-3");
+
+		///<summary>Mass Density of Cloud Ice (kg m-3)</summary>
+		public static Parameter MassDensityOfCloudIce { get; } = new Parameter(ParameterCategory.Cloud, 39, "Mass Density of Cloud Ice", "kg m-3");
+
+		///<summary>Mass Density of Convective Cloud Water Droplets (kg m-3)</summary>
+		public static Parameter MassDensityOfConvectiveCloudWaterDroplets { get; } = new Parameter(ParameterCategory.Cloud, 40, "Mass Density of Convective Cloud Water Droplets", "kg m-3");
+
+		///<summary>Volume Fraction of Cloud Water Droplets (Numeric)</summary>
+		public static Parameter VolumeFractionOfCloudWaterDroplets { get; } = new Parameter(ParameterCategory.Cloud, 47, "Volume Fraction of Cloud Water Droplets", "Numeric");
+
+		///<summary>Volume Fraction of Cloud Ice Particles (Numeric)</summary>
+		public static Parameter VolumeFractionOfCloudIceParticles { get; } = new Parameter(ParameterCategory.Cloud, 48, "Volume Fraction of Cloud Ice Particles", "Numeric");
+
+		///<summary>Volume Fraction of Cloud (Ice and/or Water) (Numeric)</summary>
+		public static Parameter VolumeFractionOfCloud_IceAndOrWater { get; } = new Parameter(ParameterCategory.Cloud, 49, "Volume Fraction of Cloud (Ice and/or Water)", "Numeric");
+
 		#endregion
 
 		#region Product Discipline 0: Meteorological products, Parameter Category 7: Thermodynamic Stability Indices
@@ -1645,6 +1720,31 @@ namespace NGrib.Grib2.CodeTables
 				.Add(CloudBase)
 				.Add(CloudTop)
 				.Add(Ceiling)
+				.Add(NonConvectiveCloudCover)
+				.Add(CloudWorkFunction)
+				.Add(ConvectiveCloudEfficiency)
+				.Add(IceFractionOfTotalCondensate)
+				.Add(CloudCover)
+				.Add(Sunshine)
+				.Add(HorizontalExtentOfCumulonimbus)
+				.Add(HeightOfConvectiveCloudBase)
+				.Add(HeightOfConvectiveCloudTop)
+				.Add(NumberConcentrationOfCloudDroplets)
+				.Add(NumberConcentrationOfCloudIce)
+				.Add(NumberDensityOfCloudDroplets)
+				.Add(NumberDensityOfCloudIce)
+				.Add(FractionOfCloudCover)
+				.Add(SunshineDuration)
+				.Add(SurfaceLongWaveEffectiveTotalCloudiness)
+				.Add(SurfaceShortWaveEffectiveTotalCloudiness)
+				.Add(FractionOfStratiformPrecipitationCover)
+				.Add(FractionOfConvectivePrecipitationCover)
+				.Add(MassDensityOfCloudDroplets)
+				.Add(MassDensityOfCloudIce)
+				.Add(MassDensityOfConvectiveCloudWaterDroplets)
+				.Add(VolumeFractionOfCloudWaterDroplets)
+				.Add(VolumeFractionOfCloudIceParticles)
+				.Add(VolumeFractionOfCloud_IceAndOrWater)
 				.Add(ParcelLiftedIndex)
 				.Add(BestLiftedIndex)
 				.Add(KIndex)
