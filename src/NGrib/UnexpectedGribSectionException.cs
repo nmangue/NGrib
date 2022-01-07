@@ -1,7 +1,7 @@
 /*
  * This file is part of NGrib.
  *
- * Copyright © 2020 Nicolas Mangué
+ * Copyright Â© 2020 Nicolas ManguÃ©
  * 
  * NGrib is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
