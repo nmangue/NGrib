@@ -17,10 +17,13 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
+
+using NGrib.Grib2.Sections;
 
 namespace NGrib.Grib2.CodeTables
 {
@@ -49,7 +52,7 @@ namespace NGrib.Grib2.CodeTables
 		/// </summary>
 		public string Unit { get; }
 
-		private Parameter(ParameterCategory category, int code, string name, string unit)
+		internal Parameter(ParameterCategory category, int code, string name, string unit)
 		{
 			Category = category;
 			Code = code;
@@ -57,12 +60,14 @@ namespace NGrib.Grib2.CodeTables
 			Unit = unit;
 		}
 
-		public static Parameter? Get(Discipline d, int parameterCategory, int parameterNumber)
+		public static Parameter? Get(Discipline d, IdentificationSection identificationSection, int parameterCategory,
+		                             int parameterNumber)
 		{
 			if (ParameterCategory.CategoriesByDiscipline.TryGetValue(d, out var categories))
 			{
 				var category = categories.Where(c => c.Code == parameterCategory).ToArray();
-				if (category.Any() && ParametersByCategory.TryGetValue(category[0], out var parameters))
+				if (category.Any() && ParametersByCategoryWithLocalTables(identificationSection)
+					    .TryGetValue(category[0], out var parameters))
 				{
 					var parameter = parameters.Where(p => p.Code == parameterNumber).ToArray();
 					if (parameter.Any())
@@ -1116,27 +1121,6 @@ namespace NGrib.Grib2.CodeTables
 		///<summary>Composite reflectivity (dB)</summary>
 		public static Parameter CompositeReflectivity { get; } = new Parameter(ParameterCategory.ForecastRadarImagery, 5, "Composite reflectivity", "dB");
 
-		///<summary>Equivalent radar reflectivity factor for rain (m m6 m-3)</summary>
-		public static Parameter EquivalentRadarReflectivityFactorForRain2 { get; } = new Parameter(ParameterCategory.ForecastRadarImagery, 192, "Equivalent radar reflectivity factor for rain", "m m6 m-3");
-
-		///<summary>Equivalent radar reflectivity factor for snow (m m6 m-3)</summary>
-		public static Parameter EquivalentRadarReflectivityFactorForSnow2 { get; } = new Parameter(ParameterCategory.ForecastRadarImagery, 193, "Equivalent radar reflectivity factor for snow", "m m6 m-3");
-
-		///<summary>Equivalent radar reflectivity factor for parameterized convection (m m6 m-3)</summary>
-		public static Parameter EquivalentRadarReflectivityFactorForParameterizedConvection2 { get; } = new Parameter(ParameterCategory.ForecastRadarImagery, 194, "Equivalent radar reflectivity factor for parameterized convection", "m m6 m-3");
-
-		///<summary>Reflectivity (dB)</summary>
-		public static Parameter Reflectivity2 { get; } = new Parameter(ParameterCategory.ForecastRadarImagery, 195, "Reflectivity", "dB");
-
-		///<summary>Composite reflectivity (dB)</summary>
-		public static Parameter CompositeReflectivity2 { get; } = new Parameter(ParameterCategory.ForecastRadarImagery, 196, "Composite reflectivity", "dB");
-
-		///<summary>Echo Top (m)</summary>
-		public static Parameter EchoTop2 { get; } = new Parameter(ParameterCategory.ForecastRadarImagery, 197, "Echo Top", "m");
-
-		///<summary>Hourly Maximum of Simulated Reflectivity (dB)</summary>
-		public static Parameter HourlyMaximumOfSimulatedReflectivity { get; } = new Parameter(ParameterCategory.ForecastRadarImagery, 198, "Hourly Maximum of Simulated Reflectivity", "dB");
-
 		#endregion
 
 		#region Product Discipline 0: Meteorological products, Parameter Category 18: Nuclear/radiology
@@ -1548,21 +1532,32 @@ namespace NGrib.Grib2.CodeTables
 
 		#endregion
 
+		private static List<Parameter> GetListOfParameterProperties(Type parentClassType) {
+			PropertyInfo[] propertyInfos = parentClassType.GetProperties()
+			                                              .Where(pi => pi.PropertyType == typeof(Parameter))
+			                                              .ToArray();
+			var parameters = new List<Parameter>(propertyInfos.Length);
+			foreach (PropertyInfo propertyInfo in propertyInfos) {
+				parameters.Add((Parameter)propertyInfo.GetValue(null));
+			}
+
+			return parameters;
+		}
+
+		private static IReadOnlyDictionary<ParameterCategory, IReadOnlyCollection<Parameter>>
+			BuildParameterDictionary(IList<Parameter> parameters) {
+
+			return parameters.GroupBy(c => c.Category)
+			                 .ToDictionary(
+				                 g => g.Key,
+				                 g => (IReadOnlyCollection<Parameter>)g.ToImmutableList());
+		}
+
 		public static IReadOnlyDictionary<ParameterCategory, IReadOnlyCollection<Parameter>> ParametersByCategory {
 			get {
 				if (ParametersByCategoryCache == null) {
-					PropertyInfo[] propertyInfos = typeof(Parameter).GetProperties()
-					                                                .Where(pi => pi.PropertyType == typeof(Parameter))
-					                                                .ToArray();
-					var parameters = new List<Parameter>(propertyInfos.Length);
-					foreach (PropertyInfo propertyInfo in propertyInfos) {
-						parameters.Add((Parameter)propertyInfo.GetValue(null));
-					}
-
-					ParametersByCategoryCache = parameters.GroupBy(c => c.Category)
-					                                      .ToDictionary(
-						                                      g => g.Key,
-						                                      g => (IReadOnlyCollection<Parameter>)g.ToImmutableList());
+					List<Parameter> parameters = GetListOfParameterProperties(typeof(Parameter));
+					ParametersByCategoryCache = BuildParameterDictionary(parameters);
 				}
 
 				return ParametersByCategoryCache;
@@ -1570,5 +1565,24 @@ namespace NGrib.Grib2.CodeTables
 		}
 
 		private static IReadOnlyDictionary<ParameterCategory, IReadOnlyCollection<Parameter>> ParametersByCategoryCache = null;
+
+		public static IReadOnlyDictionary<ParameterCategory, IReadOnlyCollection<Parameter>>
+			ParametersByCategoryWithLocalTables(IdentificationSection identificationSection) {
+
+			if (identificationSection == null) return ParametersByCategory;
+
+			if (ParametersByCategoryWithLocalTablesCache == null || identificationSection != previousIdentificationSectionCache) {
+				List<Parameter> parameters = GetListOfParameterProperties(typeof(Parameter));
+				if (identificationSection.CenterCode == Center.UsNcep.Id) {
+					parameters.AddRange(GetListOfParameterProperties(typeof(LocalTables.Parameter_US_NOAA_NCEP)));
+				}
+
+				ParametersByCategoryWithLocalTablesCache = BuildParameterDictionary(parameters);
+			}
+
+			return ParametersByCategoryWithLocalTablesCache;
+		}
+		private static IReadOnlyDictionary<ParameterCategory, IReadOnlyCollection<Parameter>> ParametersByCategoryWithLocalTablesCache = null;
+		private static IdentificationSection previousIdentificationSectionCache = null;
 	}
 }

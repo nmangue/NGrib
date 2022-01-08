@@ -76,7 +76,8 @@ namespace NGrib.Grib2.Sections
 			Section = section;
 		}
 
-		internal static ProductDefinitionSection BuildFrom(BufferedBinaryReader reader, Discipline discipline)
+		internal static ProductDefinitionSection BuildFrom(BufferedBinaryReader reader, Discipline discipline,
+		                                                   IdentificationSection identificationSection)
 		{
 			var currentPosition = reader.Position;
 
@@ -92,7 +93,7 @@ namespace NGrib.Grib2.Sections
 			// octet 8-9
 			var productDefinitionTemplateNumber = reader.ReadUInt16();
 
-			var productDefinition = ProductDefinitionFactories.Build(reader, productDefinitionTemplateNumber, discipline);
+			var productDefinition = ProductDefinitionFactories.Build(reader, productDefinitionTemplateNumber, discipline, identificationSection);
 
 			// Prevent from over-reading the stream
 			reader.Seek(currentPosition + length, SeekOrigin.Begin);
@@ -106,12 +107,12 @@ namespace NGrib.Grib2.Sections
 		private static readonly TemplateFactory<ProductDefinition> ProductDefinitionFactories =
 			new TemplateFactory<ProductDefinition>
 			{
-				{ 0, (r, args) => new ProductDefinition0000(r, (Discipline) args[0]) },
-				{ 1, (r, args) => new ProductDefinition0001(r, (Discipline) args[0]) },
-				{ 2, (r, args) => new ProductDefinition0002(r, (Discipline) args[0]) },
-				{ 8, (r, args) => new ProductDefinition0008(r, (Discipline) args[0]) },
-				{ 11, (r, args) => new ProductDefinition0011(r, (Discipline) args[0]) },
-				{ 12, (r, args) => new ProductDefinition0012(r, (Discipline) args[0]) }
+				{ 0, (r, args) => new ProductDefinition0000(r, (Discipline) args[0], (IdentificationSection) args[1]) },
+				{ 1, (r, args) => new ProductDefinition0001(r, (Discipline) args[0], (IdentificationSection) args[1]) },
+				{ 2, (r, args) => new ProductDefinition0002(r, (Discipline) args[0], (IdentificationSection) args[1]) },
+				{ 8, (r, args) => new ProductDefinition0008(r, (Discipline) args[0], (IdentificationSection) args[1]) },
+				{ 11, (r, args) => new ProductDefinition0011(r, (Discipline) args[0], (IdentificationSection) args[1]) },
+				{ 12, (r, args) => new ProductDefinition0012(r, (Discipline) args[0], (IdentificationSection) args[1]) }
 			};
 	}
 }

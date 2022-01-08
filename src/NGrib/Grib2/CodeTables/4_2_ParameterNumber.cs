@@ -616,27 +616,6 @@ namespace NGrib.Grib2.CodeTables
 		///<summary>Composite reflectivity (dB)</summary>
 		[Description("Composite reflectivity (dB)")] CompositeReflectivity = 5,
 
-		///<summary>Equivalent radar reflectivity factor for rain (m m6 m-3)</summary>
-		[Description("Equivalent radar reflectivity factor for rain (m m6 m-3)")] EquivalentRadarReflectivityFactorForRain2 = 192,
-
-		///<summary>Equivalent radar reflectivity factor for snow (m m6 m-3)</summary>
-		[Description("Equivalent radar reflectivity factor for snow (m m6 m-3)")] EquivalentRadarReflectivityFactorForSnow2 = 193,
-
-		///<summary>Equivalent radar reflectivity factor for parameterized convection (m m6 m-3)</summary>
-		[Description("Equivalent radar reflectivity factor for parameterized convection (m m6 m-3)")] EquivalentRadarReflectivityFactorForParameterizedConvection2 = 194,
-
-		///<summary>Reflectivity (dB)</summary>
-		[Description("Reflectivity (dB)")] Reflectivity2 = 195,
-
-		///<summary>Composite reflectivity (dB)</summary>
-		[Description("Composite reflectivity (dB)")] CompositeReflectivity2 = 196,
-
-		///<summary>Echo Top (m)</summary>
-		[Description("Echo Top (m)")] EchoTop2 = 197,
-
-		///<summary>Hourly Maximum of Simulated Reflectivity (dB)</summary>
-		[Description("Hourly Maximum of Simulated Reflectivity (dB)")] HourlyMaximumOfSimulatedReflectivity = 198,
-
 		#endregion
 
 		#region Product Discipline 0: Meteorological products, Parameter Category 18: Nuclear/radiology

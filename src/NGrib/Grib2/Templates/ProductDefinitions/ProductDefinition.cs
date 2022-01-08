@@ -18,6 +18,7 @@
  */
 
 using NGrib.Grib2.CodeTables;
+using NGrib.Grib2.Sections;
 
 namespace NGrib.Grib2.Templates.ProductDefinitions
 {
@@ -54,12 +55,13 @@ namespace NGrib.Grib2.Templates.ProductDefinitions
 		/// </summary>
 		public GeneratingProcessType GeneratingProcessType { get; }
 
-		private protected ProductDefinition(BufferedBinaryReader reader, Discipline discipline)
+		private protected ProductDefinition(BufferedBinaryReader reader, Discipline discipline,
+		                                    IdentificationSection identificationSection)
 		{
 			Offset = reader.Position;
 			ParameterCategory = reader.ReadUInt8();
 			ParameterNumber = reader.ReadUInt8();
-			Parameter = CodeTables.Parameter.Get(discipline, ParameterCategory, ParameterNumber);
+			Parameter = CodeTables.Parameter.Get(discipline, identificationSection, ParameterCategory, ParameterNumber);
 			GeneratingProcessType = (GeneratingProcessType) reader.ReadUInt8();
 
 			RegisterContent(ProductDefinitionContent.ParameterCategory, () => ParameterCategory);

@@ -18,6 +18,7 @@
  */
 
 using NGrib.Grib2.CodeTables;
+using NGrib.Grib2.Sections;
 
 namespace NGrib.Grib2.Templates.ProductDefinitions
 {
@@ -28,8 +29,9 @@ namespace NGrib.Grib2.Templates.ProductDefinitions
 		/// </summary>
 		public int BackgroundGeneratingProcessIdentifier { get; }
 
-		internal WithBackgroundProductDefinition(BufferedBinaryReader reader, Discipline discipline) : base(reader,
-			discipline)
+		internal WithBackgroundProductDefinition(BufferedBinaryReader reader, Discipline discipline,
+		                                         IdentificationSection identificationSection)
+			: base(reader, discipline, identificationSection)
 		{
 			BackgroundGeneratingProcessIdentifier = reader.ReadUInt8();
 		}
