@@ -498,7 +498,7 @@ namespace NGrib.Grib2.CodeTables
 		[Description("Mass Density of Cloud Ice")] MassDensityOfCloudIce = 39,
 
 		///<summary>Mass Density of Convective Cloud Water Droplets (kg m-3)</summary>
-		[Description("")] MassDensityOfConvectiveCloudWaterDroplets = 40,
+		[Description("Mass Density of Convective Cloud Water Droplets (kg m-3)")] MassDensityOfConvectiveCloudWaterDroplets = 40,
 
 		///<summary>Volume Fraction of Cloud Water Droplets (Numeric)</summary>
 		[Description("Volume Fraction of Cloud Water Droplets")] VolumeFractionOfCloudWaterDroplets = 47,
