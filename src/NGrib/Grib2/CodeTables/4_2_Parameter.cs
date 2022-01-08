@@ -52,12 +52,22 @@ namespace NGrib.Grib2.CodeTables
 		/// </summary>
 		public string Unit { get; }
 
-		internal Parameter(ParameterCategory category, int code, string name, string unit)
+		/// <summary>
+		/// Local use parameter flag.
+		/// True if parameter is not part of the GRIB2 master code table, but specific to the issuing center (e.g. NCEP/NOAA or DWD).
+		/// </summary>
+		public bool LocalUse { get; }
+
+		private Parameter(ParameterCategory category, int code, string name, string unit)
+			: this(category, code, name, unit, false) { }
+
+		internal Parameter(ParameterCategory category, int code, string name, string unit, bool localUse = true)
 		{
 			Category = category;
 			Code = code;
 			Name = name;
 			Unit = unit;
+			LocalUse = localUse;
 		}
 
 		public static Parameter? Get(Discipline d, IdentificationSection identificationSection, int parameterCategory,
