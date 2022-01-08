@@ -22,7 +22,7 @@ using System.ComponentModel;
 
 namespace NGrib.Grib2.CodeTables.LocalTables;
 
-public enum ParameterNumber_DE_DWD {
+public enum DE_DWD_ParameterNumber {
 
     #region Product Discipline 0: Meteorological products, Parameter Category 19: Physical atmospheric properties
 

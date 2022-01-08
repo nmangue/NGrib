@@ -1598,9 +1598,9 @@ namespace NGrib.Grib2.CodeTables
 			if (ParametersByCategoryWithLocalTablesCache == null || identificationSection != previousIdentificationSectionCache) {
 				List<Parameter> parameters = GetListOfParameterProperties(typeof(Parameter));
 				if (identificationSection.CenterCode == Center.UsNcep.Id) {
-					parameters.AddRange(GetListOfParameterProperties(typeof(LocalTables.Parameter_US_NOAA_NCEP)));
+					parameters.AddRange(GetListOfParameterProperties(typeof(LocalTables.US_NOAA_NCEP_Parameter)));
 				} else if (identificationSection.CenterCode == Center.Offenbach.Id) {
-					parameters.AddRange(GetListOfParameterProperties(typeof(LocalTables.Parameter_DE_DWD)));
+					parameters.AddRange(GetListOfParameterProperties(typeof(LocalTables.DE_DWD_Parameter)));
 				}
 
 				ParametersByCategoryWithLocalTablesCache = BuildParameterDictionary(parameters);

@@ -20,7 +20,7 @@
 
 namespace NGrib.Grib2.CodeTables.LocalTables;
 
-public readonly struct Parameter_US_NOAA_NCEP {
+public readonly struct US_NOAA_NCEP_Parameter {
 
     #region Product Discipline 0: Meteorological products, Parameter Category 1: Moisture
 

@@ -20,7 +20,7 @@
 
 namespace NGrib.Grib2.CodeTables.LocalTables;
 
-public readonly struct Parameter_DE_DWD {
+public readonly struct DE_DWD_Parameter {
 
     #region Product Discipline 0: Meteorological products, Parameter Category 19: Physical atmospheric properties
 

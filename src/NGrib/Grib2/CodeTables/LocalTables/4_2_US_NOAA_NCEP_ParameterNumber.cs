@@ -22,7 +22,7 @@ using System.ComponentModel;
 
 namespace NGrib.Grib2.CodeTables.LocalTables;
 
-public enum ParameterNumber_US_NOAA_NCEP {
+public enum US_NOAA_NCEP_ParameterNumber {
 
     #region Product Discipline 0: Meteorological products, Parameter Category 1: Moisture
 
