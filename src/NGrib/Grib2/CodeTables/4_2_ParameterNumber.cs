@@ -821,6 +821,13 @@ namespace NGrib.Grib2.CodeTables
 
 		#endregion
 
+		#region Product Discipline 2: Land surface products, Parameter Category 4: Fire Weather
+
+		///<summary>Haines Index (Numeric)</summary>
+		[Description("Haines Index (Numeric)")] HainesIndex = 2,
+
+		#endregion
+
 		#region Product Discipline 3: Space products, Parameter Category 0: Image format products
 
 		///<summary>Scaled radiance (numeric)</summary>
@@ -964,6 +971,9 @@ namespace NGrib.Grib2.CodeTables
 
 		///<summary>Ice divergence (s-1)</summary>
 		[Description("Ice divergence")] IceDivergence = 7,
+
+		///<summary>Ice Temperature (K)</summary>
+		[Description("Ice Temperature (K)")] IceTemperature = 8,
 
 		#endregion
 

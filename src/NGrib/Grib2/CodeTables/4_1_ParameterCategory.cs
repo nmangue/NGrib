@@ -156,6 +156,9 @@ namespace NGrib.Grib2.CodeTables
 		///<summary>Soil Products</summary>
 		public static ParameterCategory SoilProducts { get; } = new ParameterCategory(Discipline.LandSurfaceProducts, 3, "Soil Products");
 
+		///<summary>Fire Weather</summary>
+		public static ParameterCategory FireWeather { get; } = new ParameterCategory(Discipline.LandSurfaceProducts, 4, "Fire Weather");
+
 
 		///<summary>Image format products</summary>
 		public static ParameterCategory ImageFormatProducts { get; } =
@@ -213,6 +216,7 @@ namespace NGrib.Grib2.CodeTables
 				.Add(AgriAquaCulturalSpecialProducts)
 				.Add(TransportationRelatedProducts)
 				.Add(SoilProducts)
+				.Add(FireWeather)
 				.Add(ImageFormatProducts)
 				.Add(QuantitativeProducts)
 				.Add(Waves)
