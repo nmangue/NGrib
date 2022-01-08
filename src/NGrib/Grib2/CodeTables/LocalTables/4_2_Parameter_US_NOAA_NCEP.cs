@@ -1,7 +1,8 @@
 /*
  * This file is part of NGrib.
+ * Created by Andreas Dekiert
  *
- * Copyright (c) 2022 Andreas Dekiert
+ * Copyright (c) 2022 Remy Webservices
  *
  * NGrib is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public

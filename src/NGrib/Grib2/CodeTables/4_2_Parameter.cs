@@ -1242,6 +1242,10 @@ namespace NGrib.Grib2.CodeTables
 		public static Parameter Contrail { get; } =
 			new Parameter(ParameterCategory.PhysicalAtmosphericProperties, 16, "Contrail", "base");
 
+		///<summary>Weather (Code Table 4.225)</summary>
+		public static Parameter Weather { get; } =
+			new Parameter(ParameterCategory.PhysicalAtmosphericProperties, 25, "Weather", "Code Table 4.225");
+
 		#endregion
 
 		#region Product Discipline 0: Meteorological products, Parameter Category 253: ASCII character string
@@ -1595,6 +1599,8 @@ namespace NGrib.Grib2.CodeTables
 				List<Parameter> parameters = GetListOfParameterProperties(typeof(Parameter));
 				if (identificationSection.CenterCode == Center.UsNcep.Id) {
 					parameters.AddRange(GetListOfParameterProperties(typeof(LocalTables.Parameter_US_NOAA_NCEP)));
+				} else if (identificationSection.CenterCode == Center.Offenbach.Id) {
+					parameters.AddRange(GetListOfParameterProperties(typeof(LocalTables.Parameter_DE_DWD)));
 				}
 
 				ParametersByCategoryWithLocalTablesCache = BuildParameterDictionary(parameters);
