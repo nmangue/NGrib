@@ -41,6 +41,9 @@ public enum US_NOAA_NCEP_ParameterNumber {
     ///<summary>Convective Precipitation Rate (kg m-2 s-1)</summary>
     [Description("Convective Precipitation Rate (kg m-2 s-1)")] ConvectivePrecipitationRate = 196,
 
+    ///<summary>Potential Evaporation Rate (W m-2)</summary>
+    [Description("Potential Evaporation Rate (W m-2)")] PotentialEvaporationRate = 200,
+
     ///<summary>Snow Cover (%)</summary>
     [Description("Snow Cover (%)")] SnowCover = 201,
 
@@ -70,6 +73,15 @@ public enum US_NOAA_NCEP_ParameterNumber {
     ///<summary>MSLP (Eta model reduction) (Pa)</summary>
     [Description("MSLP (Eta model reduction) (Pa)")] MSLP_EtaModelReduction = 192,
 
+    ///<summary>5-Wave Geopotential Height (gpm)</summary>
+    [Description("5-Wave Geopotential Height (gpm)")] FiveWaveGeopotentialHeight = 193,
+
+    ///<summary>Zonal Flux of Gravity Wave Stress (N m-2)</summary>
+    [Description("Zonal Flux of Gravity Wave Stress (N m-2)")] ZonalFluxOfGravityWaveStress = 194,
+
+    ///<summary>Meridional Flux of Gravity Wave Stress (N m-2)</summary>
+    [Description("Meridional Flux of Gravity Wave Stress (N m-2)")] MeridionalFluxOfGravityWaveStress = 195,
+
     ///<summary>Planetary Boundary Layer Height (m)</summary>
     [Description("Planetary Boundary Layer Height (m)")] PlanetaryBoundaryLayerHeight = 196,
 
@@ -78,7 +90,30 @@ public enum US_NOAA_NCEP_ParameterNumber {
 
     #endregion
 
+    #region Product Discipline 0: Meteorological products, Parameter Category 4: Short-wave Radiation
+
+    ///<summary>Downward Short-Wave Radiation Flux (W m-2)</summary>
+    [Description("Downward Short-Wave Radiation Flux (W m-2)")] DownwardShortWaveRadiationFlux = 192,
+
+    ///<summary>Upward Short-Wave Radiation Flux (W m-2)</summary>
+    [Description("Upward Short-Wave Radiation Flux (W m-2)")] UpwardShortWaveRadiationFlux = 193,
+
+    #endregion
+
+    #region Product Discipline 0: Meteorological products, Parameter Category 5: Long-wave Radiation
+
+    ///<summary>Downward Long-Wave Radiation Flux (W m-2)</summary>
+    [Description("Downward Long-Wave Radiation Flux (W m-2)")] DownwardLongWaveRadiationFlux = 192,
+
+    ///<summary>Upward Long-Wave Radiation Flux (W m-2)</summary>
+    [Description("Upward Long-Wave Radiation Flux (W m-2)")] UpwardLongWaveRadiationFlux = 193,
+
+    #endregion
+
     #region Product Discipline 0: Meteorological products, Parameter Category 6: Cloud
+
+    ///<summary>Cloud Work Function (J kg-1)</summary>
+    [Description("Cloud Work Function (J kg-1)")] CloudWorkFunction = 193,
 
     ///<summary>X-gradient of Log Pressure (m-1)</summary>
     [Description("X-gradient of Log Pressure (m-1)")] XGradientOfLogPressure = 201,
@@ -131,6 +166,9 @@ public enum US_NOAA_NCEP_ParameterNumber {
 
     ///<summary>Volumetric Soil Moisture Content (Fraction)</summary>
     [Description("Volumetric Soil Moisture Content (Fraction)")] VolumetricSoilMoistureContent = 192,
+
+    ///<summary>Ground Heat Flux (W m-2)</summary>
+    [Description("Ground Heat Flux (W m-2)")] GroundHeatFlux = 193,
 
     ///<summary>Plant Canopy Surface Water (kg m-2)</summary>
     [Description("Plant Canopy Surface Water (kg m-2)")] PlantCanopySurfaceWater = 196,

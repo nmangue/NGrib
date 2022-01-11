@@ -39,6 +39,9 @@ public readonly struct US_NOAA_NCEP_Parameter {
     ///<summary>Convective Precipitation Rate (kg m-2 s-1)</summary>
     public static Parameter ConvectivePrecipitationRate { get; } = new Parameter(ParameterCategory.Moisture, 196, "Convective Precipitation Rate", "kg m-2 s-1");
 
+    ///<summary>Potential Evaporation Rate (W m-2)</summary>
+    public static Parameter PotentialEvaporationRate { get; } = new Parameter(ParameterCategory.Moisture, 200, "Potential Evaporation Rate", "W m-2");
+
     ///<summary>Snow Cover (%)</summary>
     public static Parameter SnowCover { get; } = new Parameter(ParameterCategory.Moisture, 201, "Snow Cover", "%");
 
@@ -68,6 +71,15 @@ public readonly struct US_NOAA_NCEP_Parameter {
     ///<summary>MSLP (Eta model reduction) (Pa)</summary>
     public static Parameter MSLP_EtaModelReduction { get; } = new Parameter(ParameterCategory.Mass, 192, "MSLP (Eta model reduction)", "Pa");
 
+    ///<summary>5-Wave Geopotential Height (gpm)</summary>
+    public static Parameter FiveWaveGeopotentialHeight { get; } = new Parameter(ParameterCategory.Mass, 193, "5-Wave Geopotential Height", "gpm");
+
+    ///<summary>Zonal Flux of Gravity Wave Stress (N m-2)</summary>
+    public static Parameter ZonalFluxOfGravityWaveStress { get; } = new Parameter(ParameterCategory.Mass, 194, "Zonal Flux of Gravity Wave Stress", "N m-2");
+
+    ///<summary>Meridional Flux of Gravity Wave Stress (N m-2)</summary>
+    public static Parameter MeridionalFluxOfGravityWaveStress { get; } = new Parameter(ParameterCategory.Mass, 195, "Meridional Flux of Gravity Wave Stress", "N m-2");
+
     ///<summary>Planetary Boundary Layer Height (m)</summary>
     public static Parameter PlanetaryBoundaryLayerHeight { get; } = new Parameter(ParameterCategory.Mass, 196, "Planetary Boundary Layer Height", "m");
 
@@ -76,7 +88,30 @@ public readonly struct US_NOAA_NCEP_Parameter {
 
     #endregion
 
+    #region Product Discipline 0: Meteorological products, Parameter Category 4: Short-wave Radiation
+
+    ///<summary>Downward Short-Wave Radiation Flux (W m-2)</summary>
+    public static Parameter DownwardShortWaveRadiationFlux { get; } = new Parameter(ParameterCategory.ShortWaveRadiation, 192, "Downward Short-Wave Radiation Flux", "W m-2");
+
+    ///<summary>Upward Short-Wave Radiation Flux (W m-2)</summary>
+    public static Parameter UpwardShortWaveRadiationFlux { get; } = new Parameter(ParameterCategory.ShortWaveRadiation, 193, "Upward Short-Wave Radiation Flux", "W m-2");
+
+    #endregion
+
+    #region Product Discipline 0: Meteorological products, Parameter Category 5: Long-wave Radiation
+
+    ///<summary>Downward Long-Wave Radiation Flux (W m-2)</summary>
+    public static Parameter DownwardLongWaveRadiationFlux { get; } = new Parameter(ParameterCategory.LongWaveRadiation, 192, "Downward Long-Wave Radiation Flux", "W m-2");
+
+    ///<summary>Upward Long-Wave Radiation Flux (W m-2)</summary>
+    public static Parameter UpwardLongWaveRadiationFlux { get; } = new Parameter(ParameterCategory.LongWaveRadiation, 193, "Upward Long-Wave Radiation Flux", "W m-2");
+
+    #endregion
+
     #region Product Discipline 0: Meteorological products, Parameter Category 6: Cloud
+
+    ///<summary>Cloud Work Function (J kg-1)</summary>
+    public static Parameter CloudWorkFunction { get; } = new Parameter(ParameterCategory.Cloud, 193, "Cloud Work Function", "J kg-1");
 
     ///<summary>X-gradient of Log Pressure (m-1)</summary>
     public static Parameter XGradientOfLogPressure { get; } = new Parameter(ParameterCategory.Cloud, 201, "X-gradient of Log Pressure", "m-1");
@@ -129,6 +164,9 @@ public readonly struct US_NOAA_NCEP_Parameter {
 
     ///<summary>Volumetric Soil Moisture Content (Fraction)</summary>
     public static Parameter VolumetricSoilMoistureContent { get; } = new Parameter(ParameterCategory.VegetationBiomass, 192, "Volumetric Soil Moisture Content", "Fraction");
+
+    ///<summary>Ground Heat Flux (W m-2)</summary>
+    public static Parameter GroundHeatFlux { get; } = new Parameter(ParameterCategory.VegetationBiomass, 193, "Ground Heat Flux", "W m-2");
 
     ///<summary>Plant Canopy Surface Water (kg m-2)</summary>
     public static Parameter PlantCanopySurfaceWater { get; } = new Parameter(ParameterCategory.VegetationBiomass, 196, "Plant Canopy Surface Water", "kg m-2");
