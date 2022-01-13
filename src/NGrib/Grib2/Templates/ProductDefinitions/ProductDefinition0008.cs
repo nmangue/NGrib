@@ -114,7 +114,7 @@ namespace NGrib.Grib2.Templates.ProductDefinitions
 			var successiveFieldsTimeIncrement = CalculateTimeRangeFrom(SuccessiveFieldsIncrementUnit, SuccessiveFieldsTimeIncrement);
 			if (successiveFieldsTimeIncrement.HasValue)
 			{
-				RegisterContent(ProductDefinitionContent.StatisticalProcessingTimeRange, () => successiveFieldsTimeIncrement.Value);
+				RegisterContent(ProductDefinitionContent.SuccessiveFieldsTimeIncrement, () => successiveFieldsTimeIncrement.Value);
 			}
 		}
 	}
