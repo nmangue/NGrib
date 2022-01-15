@@ -56,6 +56,9 @@ namespace NGrib.Grib2.CodeTables
 		///<summary>Sea bottom</summary>
 		[Description("Sea bottom")] SeaBottom = 9,
 
+		///<summary>Entire Atmosphere</summary>
+		[Description("Entire Atmosphere")] EntireAtmosphere = 10,
+
 		///<summary>Isothermal level (K)</summary>
 		[Description("Isothermal level")] IsothermalLevel = 20,
 
