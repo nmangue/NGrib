@@ -36,8 +36,8 @@ public readonly struct US_NOAA_NCEP_Parameter {
     ///<summary>Categorical Snow (Code table 4.222)</summary>
     public static Parameter CategoricalSnow { get; } = new Parameter(ParameterCategory.Moisture, 195, "Categorical Snow", "Code table 4.222");
 
-    ///<summary>Convective Precipitation Rate (1 Hour Average) (kg m-2 s-1)</summary>
-    public static Parameter ConvectivePrecipitationRate_1HourAverage { get; } = new Parameter(ParameterCategory.Moisture, 196, "Convective Precipitation Rate (1 Hour Average)", "kg m-2 s-1");
+    ///<summary>Convective Precipitation Rate (kg m-2 s-1)</summary>
+    public static Parameter ConvectivePrecipitationRate { get; } = new Parameter(ParameterCategory.Moisture, 196, "Convective Precipitation Rate", "kg m-2 s-1");
 
     ///<summary>Potential Evaporation Rate (W m-2)</summary>
     public static Parameter PotentialEvaporationRate { get; } = new Parameter(ParameterCategory.Moisture, 200, "Potential Evaporation Rate", "W m-2");

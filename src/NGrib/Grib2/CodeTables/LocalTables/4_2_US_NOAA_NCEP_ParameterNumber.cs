@@ -38,8 +38,8 @@ public enum US_NOAA_NCEP_ParameterNumber {
     ///<summary>Categorical Snow (Code table 4.222)</summary>
     [Description("Categorical Snow (Code table 4.222)")] CategoricalSnow = 195,
 
-    ///<summary>Convective Precipitation Rate (1 Hour Average) (kg m-2 s-1)</summary>
-    [Description("Convective Precipitation Rate (1 Hour Average) (kg m-2 s-1)")] ConvectivePrecipitationRate_1HourAverage = 196,
+    ///<summary>Convective Precipitation Rate (kg m-2 s-1)</summary>
+    [Description("Convective Precipitation Rate (kg m-2 s-1)")] ConvectivePrecipitationRate = 196,
 
     ///<summary>Potential Evaporation Rate (W m-2)</summary>
     [Description("Potential Evaporation Rate (W m-2)")] PotentialEvaporationRate = 200,
