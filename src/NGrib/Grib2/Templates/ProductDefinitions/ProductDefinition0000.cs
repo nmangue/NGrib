@@ -20,8 +20,6 @@
 using NGrib.Grib2.CodeTables;
 using System;
 
-using NGrib.Grib2.Sections;
-
 namespace NGrib.Grib2.Templates.ProductDefinitions
 {
 
@@ -80,9 +78,8 @@ namespace NGrib.Grib2.Templates.ProductDefinitions
 		/// </summary>
 		public double? SecondFixedSurfaceValue { get; }
 
-		internal ProductDefinition0000(BufferedBinaryReader reader, Discipline discipline,
-		                               IdentificationSection identificationSection) : base(
-			reader, discipline, identificationSection)
+		internal ProductDefinition0000(BufferedBinaryReader reader, Discipline discipline, int centerCode)
+			: base(reader, discipline, centerCode)
 		{
 			GeneratingProcessIdentifier = reader.ReadUInt8();
 			HoursAfter = reader.ReadUInt16();

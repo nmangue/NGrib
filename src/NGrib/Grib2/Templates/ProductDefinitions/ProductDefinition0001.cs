@@ -18,7 +18,6 @@
  */
 
 using NGrib.Grib2.CodeTables;
-using NGrib.Grib2.Sections;
 
 namespace NGrib.Grib2.Templates.ProductDefinitions
 {
@@ -43,7 +42,7 @@ namespace NGrib.Grib2.Templates.ProductDefinitions
 		public int EnsembleForecastsNumber { get; }
 
 		internal ProductDefinition0001(BufferedBinaryReader reader, Discipline discipline,
-		                               IdentificationSection identificationSection) : base(reader, discipline, identificationSection)
+		                               int centerCode) : base(reader, discipline, centerCode)
 		{
 			EnsembleForecastType = (EnsembleForecastType) reader.ReadByte();
 			PerturbationNumber = reader.ReadByte();

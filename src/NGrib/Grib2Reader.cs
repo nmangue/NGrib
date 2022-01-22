@@ -92,7 +92,7 @@ namespace NGrib
 
 						while (reader.PeekSection().Is(SectionCode.ProductDefinitionSection))
 						{
-							var productDefinitionSection = ProductDefinitionSection.BuildFrom(reader, indicatorSection.Discipline, identificationSection);
+							var productDefinitionSection = ProductDefinitionSection.BuildFrom(reader, indicatorSection.Discipline, identificationSection.CenterCode);
 							var dataRepresentationSection = DataRepresentationSection.BuildFrom(reader);
 
 							var bitmapSection = BitmapSection.BuildFrom(reader, dataRepresentationSection.DataPointsNumber);

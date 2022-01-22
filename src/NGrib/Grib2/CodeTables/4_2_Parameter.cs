@@ -23,8 +23,6 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
 
-using NGrib.Grib2.Sections;
-
 namespace NGrib.Grib2.CodeTables
 {
 	/// <summary>
@@ -70,13 +68,12 @@ namespace NGrib.Grib2.CodeTables
 			LocalUse = localUse;
 		}
 
-		public static Parameter? Get(Discipline d, IdentificationSection identificationSection, int parameterCategory,
-		                             int parameterNumber)
+		public static Parameter? Get(Discipline d, int centerCode, int parameterCategory, int parameterNumber)
 		{
 			if (ParameterCategory.CategoriesByDiscipline.TryGetValue(d, out var categories))
 			{
 				var category = categories.Where(c => c.Code == parameterCategory).ToArray();
-				if (category.Any() && ParametersByCategoryWithLocalTables(identificationSection)
+				if (category.Any() && ParametersByCategoryWithLocalTables(centerCode)
 					    .TryGetValue(category[0], out var parameters))
 				{
 					var parameter = parameters.Where(p => p.Code == parameterNumber).ToArray();
@@ -1591,24 +1588,25 @@ namespace NGrib.Grib2.CodeTables
 		private static IReadOnlyDictionary<ParameterCategory, IReadOnlyCollection<Parameter>> ParametersByCategoryCache = null;
 
 		public static IReadOnlyDictionary<ParameterCategory, IReadOnlyCollection<Parameter>>
-			ParametersByCategoryWithLocalTables(IdentificationSection identificationSection) {
+			ParametersByCategoryWithLocalTables(int centerCode) {
 
-			if (identificationSection == null) return ParametersByCategory;
+			if (centerCode < 0 || centerCode > 254) return ParametersByCategory;
 
-			if (ParametersByCategoryWithLocalTablesCache == null || identificationSection != previousIdentificationSectionCache) {
+			if (ParametersByCategoryWithLocalTablesCache == null || centerCode != previousCenterCodeCache) {
 				List<Parameter> parameters = GetListOfParameterProperties(typeof(Parameter));
-				if (identificationSection.CenterCode == Center.UsNcep.Id) {
+				if (centerCode == Center.UsNcep.Id) {
 					parameters.AddRange(GetListOfParameterProperties(typeof(LocalTables.US_NOAA_NCEP_Parameter)));
-				} else if (identificationSection.CenterCode == Center.Offenbach.Id) {
+				} else if (centerCode == Center.Offenbach.Id) {
 					parameters.AddRange(GetListOfParameterProperties(typeof(LocalTables.DE_DWD_Parameter)));
 				}
 
 				ParametersByCategoryWithLocalTablesCache = BuildParameterDictionary(parameters);
+				previousCenterCodeCache = centerCode;
 			}
 
 			return ParametersByCategoryWithLocalTablesCache;
 		}
 		private static IReadOnlyDictionary<ParameterCategory, IReadOnlyCollection<Parameter>> ParametersByCategoryWithLocalTablesCache = null;
-		private static IdentificationSection previousIdentificationSectionCache = null;
+		private static int previousCenterCodeCache = -1;
 	}
 }

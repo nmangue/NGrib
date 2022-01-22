@@ -19,7 +19,6 @@
 
 using System;
 using NGrib.Grib2.CodeTables;
-using NGrib.Grib2.Sections;
 
 namespace NGrib.Grib2.Templates.ProductDefinitions
 {
@@ -75,8 +74,8 @@ namespace NGrib.Grib2.Templates.ProductDefinitions
 		/// </summary>
 		public long SuccessiveFieldsTimeIncrement { get; }
 
-		internal ProductDefinition0008(BufferedBinaryReader reader, Discipline discipline,
-		                               IdentificationSection identificationSection) : base(reader, discipline, identificationSection)
+		internal ProductDefinition0008(BufferedBinaryReader reader, Discipline discipline, int centerCode)
+			: base(reader, discipline, centerCode)
 		{
 			OverallTimeIntervalEnd = reader.ReadDateTime();
 			RegisterContent(ProductDefinitionContent.OverallTimeIntervalEnd, () => OverallTimeIntervalEnd);
