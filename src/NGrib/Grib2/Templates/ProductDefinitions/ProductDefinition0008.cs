@@ -74,9 +74,8 @@ namespace NGrib.Grib2.Templates.ProductDefinitions
 		/// </summary>
 		public long SuccessiveFieldsTimeIncrement { get; }
 
-		internal ProductDefinition0008(
-			BufferedBinaryReader reader,
-			Discipline discipline) : base(reader, discipline)
+		internal ProductDefinition0008(BufferedBinaryReader reader, Discipline discipline, int centerCode)
+			: base(reader, discipline, centerCode)
 		{
 			OverallTimeIntervalEnd = reader.ReadDateTime();
 			RegisterContent(ProductDefinitionContent.OverallTimeIntervalEnd, () => OverallTimeIntervalEnd);
@@ -114,7 +113,7 @@ namespace NGrib.Grib2.Templates.ProductDefinitions
 			var successiveFieldsTimeIncrement = CalculateTimeRangeFrom(SuccessiveFieldsIncrementUnit, SuccessiveFieldsTimeIncrement);
 			if (successiveFieldsTimeIncrement.HasValue)
 			{
-				RegisterContent(ProductDefinitionContent.StatisticalProcessingTimeRange, () => successiveFieldsTimeIncrement.Value);
+				RegisterContent(ProductDefinitionContent.SuccessiveFieldsTimeIncrement, () => successiveFieldsTimeIncrement.Value);
 			}
 		}
 	}

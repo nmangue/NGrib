@@ -28,8 +28,8 @@ namespace NGrib.Grib2.Templates.ProductDefinitions
 		/// </summary>
 		public int BackgroundGeneratingProcessIdentifier { get; }
 
-		internal WithBackgroundProductDefinition(BufferedBinaryReader reader, Discipline discipline) : base(reader,
-			discipline)
+		internal WithBackgroundProductDefinition(BufferedBinaryReader reader, Discipline discipline, int centerCode)
+			: base(reader, discipline, centerCode)
 		{
 			BackgroundGeneratingProcessIdentifier = reader.ReadUInt8();
 		}

@@ -1,7 +1,7 @@
 /*
  * This file is part of NGrib.
  *
- * Copyright © 2020 Nicolas Mangué
+ * Copyright Â© 2020 Nicolas ManguÃ©
  * 
  * Copyright 2006-2010 Seaware AB, PO Box 1244, SE-131 28 
  * Nacka Strand, Sweden, info@seaware.se.

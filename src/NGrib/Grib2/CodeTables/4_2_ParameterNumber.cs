@@ -434,6 +434,81 @@ namespace NGrib.Grib2.CodeTables
 		///<summary>Ceiling (m)</summary>
 		[Description("Ceiling")] Ceiling = 13,
 
+		///<summary>Non-Convective Cloud Cover (%)</summary>
+		[Description("Non-Convective Cloud Cover")] NonConvectiveCloudCover = 14,
+
+		///<summary>Cloud Work Function (J kg-1)</summary>
+		[Description("Cloud Work Function")] CloudWorkFunction = 15,
+
+		///<summary>Convective Cloud Efficiency (Proportion)</summary>
+		[Description("Convective Cloud Efficiency")] ConvectiveCloudEfficiency = 16,
+
+		///<summary>Ice fraction of total condensate (Proportion)</summary>
+		[Description("Ice fraction of total condensate")] IceFractionOfTotalCondensate = 21,
+
+		///<summary>Cloud Cover (%)</summary>
+		[Description("Cloud Cover")] CloudCover = 22,
+
+		///<summary>Sunshine (Numeric)</summary>
+		[Description("Sunshine")] Sunshine = 24,
+
+		///<summary>Horizontal Extent of Cumulonimbus (CB) (%)</summary>
+		[Description("Horizontal Extent of Cumulonimbus (CB)")] HorizontalExtentOfCumulonimbus = 25,
+
+		///<summary>Height of Convective Cloud Base (m)</summary>
+		[Description("Height of Convective Cloud Base")] HeightOfConvectiveCloudBase = 26,
+
+		///<summary>Height of Convective Cloud Top (m)</summary>
+		[Description("Height of Convective Cloud Top")] HeightOfConvectiveCloudTop = 27,
+
+		///<summary>Number Concentration of Cloud Droplets (kg-1)</summary>
+		[Description("Number Concentration of Cloud Droplets")] NumberConcentrationOfCloudDroplets = 28,
+
+		///<summary>Number Concentration of Cloud Ice (kg-1)</summary>
+		[Description("Number Concentration of Cloud Ice")] NumberConcentrationOfCloudIce = 29,
+
+		///<summary>Number Density of Cloud Droplets (m-3)</summary>
+		[Description("Number Density of Cloud Droplets")] NumberDensityOfCloudDroplets = 30,
+
+		///<summary>Number Density of Cloud Ice (m-3)</summary>
+		[Description("Number Density of Cloud Ice")] NumberDensityOfCloudIce = 31,
+
+		///<summary>Fraction of Cloud Cover (Numeric)</summary>
+		[Description("Fraction of Cloud Cover")] FractionOfCloudCover = 32,
+
+		///<summary>Sunshine Duration (s)</summary>
+		[Description("Sunshine Duration")] SunshineDuration = 33,
+
+		///<summary>Surface Long Wave Effective Total Cloudiness (Numeric)</summary>
+		[Description("Surface Long Wave Effective Total Cloudiness")] SurfaceLongWaveEffectiveTotalCloudiness = 34,
+
+		///<summary>Surface Short Wave Effective Total Cloudiness (Numeric)</summary>
+		[Description("Surface Short Wave Effective Total Cloudiness")] SurfaceShortWaveEffectiveTotalCloudiness = 35,
+
+		///<summary>Fraction of Stratiform Precipitation Cover (Proportion)</summary>
+		[Description("Fraction of Stratiform Precipitation Cover")] FractionOfStratiformPrecipitationCover = 36,
+
+		///<summary>Fraction of Convective Precipitation Cover (Proportion)</summary>
+		[Description("Fraction of Convective Precipitation Cover")] FractionOfConvectivePrecipitationCover = 37,
+
+		///<summary>Mass Density of Cloud Droplets (kg m-3)</summary>
+		[Description("Mass Density of Cloud Droplets")] MassDensityOfCloudDroplets = 38,
+
+		///<summary>Mass Density of Cloud Ice (kg m-3)</summary>
+		[Description("Mass Density of Cloud Ice")] MassDensityOfCloudIce = 39,
+
+		///<summary>Mass Density of Convective Cloud Water Droplets (kg m-3)</summary>
+		[Description("Mass Density of Convective Cloud Water Droplets (kg m-3)")] MassDensityOfConvectiveCloudWaterDroplets = 40,
+
+		///<summary>Volume Fraction of Cloud Water Droplets (Numeric)</summary>
+		[Description("Volume Fraction of Cloud Water Droplets")] VolumeFractionOfCloudWaterDroplets = 47,
+
+		///<summary>Volume Fraction of Cloud Ice Particles (Numeric)</summary>
+		[Description("Volume Fraction of Cloud Ice Particles")] VolumeFractionOfCloudIceParticles = 48,
+
+		///<summary>Volume Fraction of Cloud (Ice and/or Water) (Numeric)</summary>
+		[Description("Volume Fraction of Cloud (Ice and/or Water)")] VolumeFractionOfCloud_IceAndOrWater = 49,
+
 		#endregion
 
 		#region Product Discipline 0: Meteorological products, Parameter Category 7: Thermodynamic Stability Indices
@@ -518,6 +593,28 @@ namespace NGrib.Grib2.CodeTables
 
 		///<summary>Radar spectra (3) (-)</summary>
 		[Description("Radar spectra (3)")] RadarSpectra3 = 8,
+
+		#endregion
+
+		#region Product Discipline 0 - Meteorological products, Parameter Category 16: Forecast Radar Imagery
+
+		///<summary>Equivalent radar reflectivity factor for rain (m m6 m-3)</summary>
+		[Description("Equivalent radar reflectivity factor for rain (m m6 m-3)")] EquivalentRadarReflectivityFactorForRain = 0,
+
+		///<summary>Equivalent radar reflectivity factor for snow (m m6 m-3)</summary>
+		[Description("Equivalent radar reflectivity factor for snow (m m6 m-3)")] EquivalentRadarReflectivityFactorForSnow = 1,
+
+		///<summary>Equivalent radar reflectivity factor for parameterized convection (m m6 m-3)</summary>
+		[Description("Equivalent radar reflectivity factor for parameterized convection (m m6 m-3)")] EquivalentRadarReflectivityFactorForParameterizedConvection = 2,
+
+		///<summary>Echo Top (m)</summary>
+		[Description("Echo Top (m)")] EchoTop = 3,
+
+		///<summary>Reflectivity (dB)</summary>
+		[Description("Reflectivity (dB)")] Reflectivity = 4,
+
+		///<summary>Composite reflectivity (dB)</summary>
+		[Description("Composite reflectivity (dB)")] CompositeReflectivity = 5,
 
 		#endregion
 
@@ -724,6 +821,13 @@ namespace NGrib.Grib2.CodeTables
 
 		#endregion
 
+		#region Product Discipline 2: Land surface products, Parameter Category 4: Fire Weather
+
+		///<summary>Haines Index (Numeric)</summary>
+		[Description("Haines Index (Numeric)")] HainesIndex = 2,
+
+		#endregion
+
 		#region Product Discipline 3: Space products, Parameter Category 0: Image format products
 
 		///<summary>Scaled radiance (numeric)</summary>
@@ -867,6 +971,9 @@ namespace NGrib.Grib2.CodeTables
 
 		///<summary>Ice divergence (s-1)</summary>
 		[Description("Ice divergence")] IceDivergence = 7,
+
+		///<summary>Ice Temperature (K)</summary>
+		[Description("Ice Temperature (K)")] IceTemperature = 8,
 
 		#endregion
 

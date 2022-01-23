@@ -41,7 +41,8 @@ namespace NGrib.Grib2.Templates.ProductDefinitions
 		/// </summary>
 		public int EnsembleForecastsNumber { get; }
 
-		internal ProductDefinition0001(BufferedBinaryReader reader, Discipline discipline) : base(reader, discipline)
+		internal ProductDefinition0001(BufferedBinaryReader reader, Discipline discipline,
+		                               int centerCode) : base(reader, discipline, centerCode)
 		{
 			EnsembleForecastType = (EnsembleForecastType) reader.ReadByte();
 			PerturbationNumber = reader.ReadByte();

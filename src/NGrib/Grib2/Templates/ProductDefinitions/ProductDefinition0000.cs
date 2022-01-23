@@ -78,8 +78,8 @@ namespace NGrib.Grib2.Templates.ProductDefinitions
 		/// </summary>
 		public double? SecondFixedSurfaceValue { get; }
 
-		internal ProductDefinition0000(BufferedBinaryReader reader, Discipline discipline) : base(
-			reader, discipline)
+		internal ProductDefinition0000(BufferedBinaryReader reader, Discipline discipline, int centerCode)
+			: base(reader, discipline, centerCode)
 		{
 			GeneratingProcessIdentifier = reader.ReadUInt8();
 			HoursAfter = reader.ReadUInt16();

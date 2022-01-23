@@ -17,9 +17,11 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Reflection;
 
 namespace NGrib.Grib2.CodeTables
 {
@@ -48,20 +50,31 @@ namespace NGrib.Grib2.CodeTables
 		/// </summary>
 		public string Unit { get; }
 
+		/// <summary>
+		/// Local use parameter flag.
+		/// True if parameter is not part of the GRIB2 master code table, but specific to the issuing center (e.g. NCEP/NOAA or DWD).
+		/// </summary>
+		public bool LocalUse { get; }
+
 		private Parameter(ParameterCategory category, int code, string name, string unit)
+			: this(category, code, name, unit, false) { }
+
+		internal Parameter(ParameterCategory category, int code, string name, string unit, bool localUse = true)
 		{
 			Category = category;
 			Code = code;
 			Name = name;
 			Unit = unit;
+			LocalUse = localUse;
 		}
 
-		public static Parameter? Get(Discipline d, int parameterCategory, int parameterNumber)
+		public static Parameter? Get(Discipline d, int centerCode, int parameterCategory, int parameterNumber)
 		{
 			if (ParameterCategory.CategoriesByDiscipline.TryGetValue(d, out var categories))
 			{
 				var category = categories.Where(c => c.Code == parameterCategory).ToArray();
-				if (category.Any() && ParametersByCategory.TryGetValue(category[0], out var parameters))
+				if (category.Any() && ParametersByCategoryWithLocalTables(centerCode)
+					    .TryGetValue(category[0], out var parameters))
 				{
 					var parameter = parameters.Where(p => p.Code == parameterNumber).ToArray();
 					if (parameter.Any())
@@ -924,6 +937,81 @@ namespace NGrib.Grib2.CodeTables
 		///<summary>Ceiling (m)</summary>
 		public static Parameter Ceiling { get; } = new Parameter(ParameterCategory.Cloud, 13, "Ceiling", "m");
 
+		///<summary>Non-Convective Cloud Cover (%)</summary>
+		public static Parameter NonConvectiveCloudCover { get; } = new Parameter(ParameterCategory.Cloud, 14, "Non-Convective Cloud Cover", "%");
+
+		///<summary>Cloud Work Function (J kg-1)</summary>
+		public static Parameter CloudWorkFunction { get; } = new Parameter(ParameterCategory.Cloud, 15, "Cloud Work Function", "J kg-1");
+
+		///<summary>Convective Cloud Efficiency (Proportion)</summary>
+		public static Parameter ConvectiveCloudEfficiency { get; } = new Parameter(ParameterCategory.Cloud, 16, "Convective Cloud Efficiency", "Proportion");
+
+		///<summary>Ice fraction of total condensate (Proportion)</summary>
+		public static Parameter IceFractionOfTotalCondensate { get; } = new Parameter(ParameterCategory.Cloud, 21, "Ice fraction of total condensate", "Proportion");
+
+		///<summary>Cloud Cover (%)</summary>
+		public static Parameter CloudCover { get; } = new Parameter(ParameterCategory.Cloud, 22, "Cloud Cover", "%");
+
+		///<summary>Sunshine (Numeric)</summary>
+		public static Parameter Sunshine { get; } = new Parameter(ParameterCategory.Cloud, 24, "Sunshine", "Numeric");
+
+		///<summary>Horizontal Extent of Cumulonimbus (CB) (%)</summary>
+		public static Parameter HorizontalExtentOfCumulonimbus { get; } = new Parameter(ParameterCategory.Cloud, 25, "Horizontal Extent of Cumulonimbus (CB)", "%");
+
+		///<summary>Height of Convective Cloud Base (m)</summary>
+		public static Parameter HeightOfConvectiveCloudBase { get; } = new Parameter(ParameterCategory.Cloud, 26, "Height of Convective Cloud Base", "m");
+
+		///<summary>Height of Convective Cloud Top (m)</summary>
+		public static Parameter HeightOfConvectiveCloudTop { get; } = new Parameter(ParameterCategory.Cloud, 27, "Height of Convective Cloud Top", "m");
+
+		///<summary>Number Concentration of Cloud Droplets (kg-1)</summary>
+		public static Parameter NumberConcentrationOfCloudDroplets { get; } = new Parameter(ParameterCategory.Cloud, 28, "Number Concentration of Cloud Droplets", "kg-1");
+
+		///<summary>Number Concentration of Cloud Ice (kg-1)</summary>
+		public static Parameter NumberConcentrationOfCloudIce { get; } = new Parameter(ParameterCategory.Cloud, 29, "Number Concentration of Cloud Ice", "kg-1");
+
+		///<summary>Number Density of Cloud Droplets (m-3)</summary>
+		public static Parameter NumberDensityOfCloudDroplets { get; } = new Parameter(ParameterCategory.Cloud, 30, "Number Density of Cloud Droplets", "m-3");
+
+		///<summary>Number Density of Cloud Ice (m-3)</summary>
+		public static Parameter NumberDensityOfCloudIce { get; } = new Parameter(ParameterCategory.Cloud, 31, "Number Density of Cloud Ice", "m-3");
+
+		///<summary>Fraction of Cloud Cover (Numeric)</summary>
+		public static Parameter FractionOfCloudCover { get; } = new Parameter(ParameterCategory.Cloud, 32, "Fraction of Cloud Cover", "Numeric");
+
+		///<summary>Sunshine Duration (s)</summary>
+		public static Parameter SunshineDuration { get; } = new Parameter(ParameterCategory.Cloud, 33, "Sunshine Duration", "s");
+
+		///<summary>Surface Long Wave Effective Total Cloudiness (Numeric)</summary>
+		public static Parameter SurfaceLongWaveEffectiveTotalCloudiness { get; } = new Parameter(ParameterCategory.Cloud, 34, "Surface Long Wave Effective Total Cloudiness", "Numeric");
+
+		///<summary>Surface Short Wave Effective Total Cloudiness (Numeric)</summary>
+		public static Parameter SurfaceShortWaveEffectiveTotalCloudiness { get; } = new Parameter(ParameterCategory.Cloud, 35, "Surface Short Wave Effective Total Cloudiness", "Numeric");
+
+		///<summary>Fraction of Stratiform Precipitation Cover (Proportion)</summary>
+		public static Parameter FractionOfStratiformPrecipitationCover { get; } = new Parameter(ParameterCategory.Cloud, 36, "Fraction of Stratiform Precipitation Cover", "Proportion");
+
+		///<summary>Fraction of Convective Precipitation Cover (Proportion)</summary>
+		public static Parameter FractionOfConvectivePrecipitationCover { get; } = new Parameter(ParameterCategory.Cloud, 37, "Fraction of Convective Precipitation Cover", "Proportion");
+
+		///<summary>Mass Density of Cloud Droplets (kg m-3)</summary>
+		public static Parameter MassDensityOfCloudDroplets { get; } = new Parameter(ParameterCategory.Cloud, 38, "Mass Density of Cloud Droplets", "kg m-3");
+
+		///<summary>Mass Density of Cloud Ice (kg m-3)</summary>
+		public static Parameter MassDensityOfCloudIce { get; } = new Parameter(ParameterCategory.Cloud, 39, "Mass Density of Cloud Ice", "kg m-3");
+
+		///<summary>Mass Density of Convective Cloud Water Droplets (kg m-3)</summary>
+		public static Parameter MassDensityOfConvectiveCloudWaterDroplets { get; } = new Parameter(ParameterCategory.Cloud, 40, "Mass Density of Convective Cloud Water Droplets", "kg m-3");
+
+		///<summary>Volume Fraction of Cloud Water Droplets (Numeric)</summary>
+		public static Parameter VolumeFractionOfCloudWaterDroplets { get; } = new Parameter(ParameterCategory.Cloud, 47, "Volume Fraction of Cloud Water Droplets", "Numeric");
+
+		///<summary>Volume Fraction of Cloud Ice Particles (Numeric)</summary>
+		public static Parameter VolumeFractionOfCloudIceParticles { get; } = new Parameter(ParameterCategory.Cloud, 48, "Volume Fraction of Cloud Ice Particles", "Numeric");
+
+		///<summary>Volume Fraction of Cloud (Ice and/or Water) (Numeric)</summary>
+		public static Parameter VolumeFractionOfCloud_IceAndOrWater { get; } = new Parameter(ParameterCategory.Cloud, 49, "Volume Fraction of Cloud (Ice and/or Water)", "Numeric");
+
 		#endregion
 
 		#region Product Discipline 0: Meteorological products, Parameter Category 7: Thermodynamic Stability Indices
@@ -1017,6 +1105,28 @@ namespace NGrib.Grib2.CodeTables
 
 		///<summary>Radar spectra (3) (-)</summary>
 		public static Parameter RadarSpectra3 { get; } = new Parameter(ParameterCategory.Radar, 8, "Radar spectra (3)", "-");
+
+		#endregion
+
+		#region Product Discipline 0 - Meteorological products, Parameter Category 16: Forecast Radar Imagery
+
+		///<summary>Equivalent radar reflectivity factor for rain (m m6 m-3)</summary>
+		public static Parameter EquivalentRadarReflectivityFactorForRain { get; } = new Parameter(ParameterCategory.ForecastRadarImagery, 0, "Equivalent radar reflectivity factor for rain", "m m6 m-3");
+
+		///<summary>Equivalent radar reflectivity factor for snow (m m6 m-3)</summary>
+		public static Parameter EquivalentRadarReflectivityFactorForSnow { get; } = new Parameter(ParameterCategory.ForecastRadarImagery, 1, "Equivalent radar reflectivity factor for snow", "m m6 m-3");
+
+		///<summary>Equivalent radar reflectivity factor for parameterized convection (m m6 m-3)</summary>
+		public static Parameter EquivalentRadarReflectivityFactorForParameterizedConvection { get; } = new Parameter(ParameterCategory.ForecastRadarImagery, 2, "Equivalent radar reflectivity factor for parameterized convection", "m m6 m-3");
+
+		///<summary>Echo Top (m)</summary>
+		public static Parameter EchoTop { get; } = new Parameter(ParameterCategory.ForecastRadarImagery, 3, "Echo Top", "m");
+
+		///<summary>Reflectivity (dB)</summary>
+		public static Parameter Reflectivity { get; } = new Parameter(ParameterCategory.ForecastRadarImagery, 4, "Reflectivity", "dB");
+
+		///<summary>Composite reflectivity (dB)</summary>
+		public static Parameter CompositeReflectivity { get; } = new Parameter(ParameterCategory.ForecastRadarImagery, 5, "Composite reflectivity", "dB");
 
 		#endregion
 
@@ -1128,6 +1238,10 @@ namespace NGrib.Grib2.CodeTables
 		///<summary>Contrail (base)</summary>
 		public static Parameter Contrail { get; } =
 			new Parameter(ParameterCategory.PhysicalAtmosphericProperties, 16, "Contrail", "base");
+
+		///<summary>Weather (Code Table 4.225)</summary>
+		public static Parameter Weather { get; } =
+			new Parameter(ParameterCategory.PhysicalAtmosphericProperties, 25, "Weather", "Code Table 4.225");
 
 		#endregion
 
@@ -1243,6 +1357,13 @@ namespace NGrib.Grib2.CodeTables
 		///<summary>Bottom layer soil temperature (K)</summary>
 		public static Parameter BottomLayerSoilTemperature { get; } =
 			new Parameter(ParameterCategory.SoilProducts, 4, "Bottom layer soil temperature", "K");
+
+		#endregion
+
+		#region Product Discipline 2: Land surface products, Parameter Category 4: Fire Weather
+
+		///<summary>Haines Index (Numeric)</summary>
+		public static Parameter HainesIndex { get; } = new Parameter(ParameterCategory.FireWeather, 2, "Haines Index", "Numeric");
 
 		#endregion
 
@@ -1395,6 +1516,9 @@ namespace NGrib.Grib2.CodeTables
 		///<summary>Ice divergence (s-1)</summary>
 		public static Parameter IceDivergence { get; } = new Parameter(ParameterCategory.Ice, 7, "Ice divergence", "s-1");
 
+		///<summary>Ice Temperature (K)</summary>
+		public static Parameter IceTemperature { get; } = new Parameter(ParameterCategory.Ice, 8, "Ice Temperature", "K");
+
 		#endregion
 
 		#region Product Discipline 10: Oceanographic products, Parameter Category 3: Surface Properties
@@ -1429,334 +1553,60 @@ namespace NGrib.Grib2.CodeTables
 
 		#endregion
 
-		public static IReadOnlyDictionary<ParameterCategory, IReadOnlyCollection<Parameter>> ParametersByCategory { get; } =
-			ImmutableList<Parameter>.Empty
-				.Add(Temperature)
-				.Add(VirtualTemperature)
-				.Add(PotentialTemperature)
-				.Add(PseudoAdiabaticPotentialTemperatureOrEquivalentPotentialTemperature)
-				.Add(MaximumTemperature)
-				.Add(MinimumTemperature)
-				.Add(DewPointTemperature)
-				.Add(DewPointDepression)
-				.Add(LapseRate)
-				.Add(TemperatureAnomaly)
-				.Add(LatentHeatNetFlux)
-				.Add(SensibleHeatNetFlux)
-				.Add(HeatIndex)
-				.Add(WindChillFactor)
-				.Add(MinimumDewPointDepression)
-				.Add(VirtualPotentialTemperature)
-				.Add(SnowPhaseChangeHeatFlux)
-				.Add(SkinTemperature)
-				.Add(SnowTemperature)
-				.Add(TurbulentTransferCoefficientForHeat)
-				.Add(TurbulentDiffusionCoefficientForHeat)
-				.Add(ApparentTemperature)
-				.Add(TemperatureTendencyDueToShortWaveRadiation)
-				.Add(TemperatureTendencyDueToLongWaveRadiation)
-				.Add(TemperatureTendencyDueToShortWaveRadiationClearSky)
-				.Add(TemperatureTendencyDueToLongWaveRadiationClearSky)
-				.Add(TemperatureTendencyDueToParameterizations)
-				.Add(WetBulbTemperature)
-				.Add(UnbalancedComponentOfTemperature)
-				.Add(TemperatureAdvection)
-				.Add(SpecificHumidity)
-				.Add(RelativeHumidity)
-				.Add(HumidityMixingRatio)
-				.Add(PrecipitableWater)
-				.Add(VaporPressure)
-				.Add(SaturationDeficit)
-				.Add(Evaporation)
-				.Add(PrecipitationRate)
-				.Add(TotalPrecipitation)
-				.Add(LargeScalePrecipitationNonConvective)
-				.Add(ConvectivePrecipitation)
-				.Add(SnowDepth)
-				.Add(SnowfallRateWaterEquivalent)
-				.Add(WaterEquivalentOfAccumulatedSnowDepth)
-				.Add(ConvectiveSnow)
-				.Add(LargeScaleSnow)
-				.Add(SnowMelt)
-				.Add(SnowAge)
-				.Add(AbsoluteHumidity)
-				.Add(PrecipitationType)
-				.Add(IntegratedLiquidWater)
-				.Add(Condensate)
-				.Add(CloudMixingRatio)
-				.Add(IceWaterMixingRatio)
-				.Add(RainMixingRatio)
-				.Add(SnowMixingRatio)
-				.Add(HorizontalMoistureConvergence)
-				.Add(MaximumRelativeHumidity)
-				.Add(MaximumAbsoluteHumidity)
-				.Add(TotalSnowfall)
-				.Add(PrecipitableWaterCategory)
-				.Add(Hail)
-				.Add(Graupel)
-				.Add(CategoricalRain)
-				.Add(CategoricalFreezingRain)
-				.Add(CategoricalIcePellets)
-				.Add(CategoricalSnow)
-				.Add(ConvectivePrecipitationRate)
-				.Add(HorizontalMoistureDivergence)
-				.Add(PercentFrozenPrecipitation)
-				.Add(PotentialEvaporation)
-				.Add(PotentialEvaporationRate)
-				.Add(SnowCover)
-				.Add(RainFractionOfTotalCloudWater)
-				.Add(RimeFactor)
-				.Add(TotalColumnIntegratedRain)
-				.Add(TotalColumnIntegratedSnow)
-				.Add(LargeScaleWaterPrecipitation)
-				.Add(ConvectiveWaterPrecipitation)
-				.Add(TotalWaterPrecipitation)
-				.Add(TotalSnowPrecipitation)
-				.Add(TotalColumnWater)
-				.Add(TotalPrecipitationRate)
-				.Add(TotalSnowfallRateWaterEquivalent)
-				.Add(LargeScalePrecipitationRate)
-				.Add(ConvectiveSnowfallRateWaterEquivalent)
-				.Add(LargeScaleSnowfallRateWaterEquivalent)
-				.Add(TotalSnowfallRate)
-				.Add(ConvectiveSnowfallRate)
-				.Add(LargeScaleSnowfallRate)
-				.Add(SnowDepthWaterEquivalent)
-				.Add(SnowDensity)
-				.Add(SnowEvaporation)
-				.Add(TotalColumnIntegratedWaterVapour)
-				.Add(RainPrecipitationRate)
-				.Add(SnowPrecipitationRate)
-				.Add(FreezingRainPrecipitationRate)
-				.Add(IcePelletsPrecipitationRate)
-				.Add(TotalColumnIntegrateCloudWater)
-				.Add(TotalColumnIntegrateCloudIce)
-				.Add(HailMixingRatio)
-				.Add(TotalColumnIntegrateHail)
-				.Add(HailPrepitationRate)
-				.Add(TotalColumnIntegrateGraupel)
-				.Add(GraupelPrecipitationRate)
-				.Add(ConvectiveRainRate)
-				.Add(LargeScaleRainRate)
-				.Add(TotalColumnIntegrateWater)
-				.Add(EvaporationRate)
-				.Add(TotalCondensate)
-				.Add(TotalColumnIntegrateCondensate)
-				.Add(CloudIceMixingRatio)
-				.Add(SpecificCloudLiquidWaterContent)
-				.Add(SpecificCloudIceWaterContent)
-				.Add(SpecificRainWaterContent)
-				.Add(SpecificSnowWaterContent)
-				.Add(StratiformPrecipitationRate)
-				.Add(CategoricalConvectivePrecipitation)
-				.Add(TotalKinematicMoistureFlux)
-				.Add(Ucomponent)
-				.Add(Vcomponent)
-				.Add(RelativeHumidityWithRespectToWater)
-				.Add(RelativeHumidityWithRespectToIce)
-				.Add(FreezingOrFrozenPrecipitationRate)
-				.Add(MassDensityOfRain)
-				.Add(MassDensityOfSnow)
-				.Add(MassDensityOfGraupel)
-				.Add(MassDensityOfHail)
-				.Add(SpecificNumberConcentrationOfRain)
-				.Add(SpecificNumberConcentrationOfSnow)
-				.Add(SpecificNumberConcentrationOfGraupel)
-				.Add(SpecificNumberConcentrationOfHail)
-				.Add(NumberDensityOfRain)
-				.Add(NumberDensityOfSnow)
-				.Add(NumberDensityOfGraupel)
-				.Add(NumberDensityOfHail)
-				.Add(SpecificHumidityTendencyDueToParameterizations)
-				.Add(MassDensityOfLiquidWaterCoatingOnHail)
-				.Add(SpecificMassOfLiquidWaterCoatingOnHail)
-				.Add(MassMixingRatioOfLiquidWaterCoatingOnHail)
-				.Add(MassDensityOfLiquidWaterCoatingOnGraupel)
-				.Add(SpecificMassOfLiquidWaterCoatingOnGraupel)
-				.Add(MassMixingRatioOfLiquidWaterCoatingOnGraupel)
-				.Add(MassDensityOfLiquidWaterCoatingOnSnow)
-				.Add(SpecificMassOfLiquidWaterCoatingOnSnow)
-				.Add(MassMixingRatioOfLiquidWaterCoatingOnSnow)
-				.Add(UnbalancedComponentOfSpecificHumidity)
-				.Add(UnbalancedComponentOfSpecificCloudLiquidWaterContent)
-				.Add(UnbalancedComponentOfSpecificCloudIceWaterContent)
-				.Add(FractionOfSnowCover)
-				.Add(WindDirection)
-				.Add(WindSpeed)
-				.Add(UComponentOfWind)
-				.Add(VComponentOfWind)
-				.Add(StreamFunction)
-				.Add(VelocityPotential)
-				.Add(MontgomeryStreamFunction)
-				.Add(SigmaCoordinateVerticalVelocity)
-				.Add(VerticalVelocityPressure)
-				.Add(VerticalVelocityGeometric)
-				.Add(AbsoluteVorticity)
-				.Add(AbsoluteDivergence)
-				.Add(RelativeVorticity)
-				.Add(RelativeDivergence)
-				.Add(PotentialVorticity)
-				.Add(VerticalUComponentShear)
-				.Add(VerticalVComponentShear)
-				.Add(MomentumFluxUComponent)
-				.Add(MomentumFluxVComponent)
-				.Add(WindMixingEnergy)
-				.Add(BoundaryLayerDissipation)
-				.Add(MaximumWindSpeed)
-				.Add(WindSpeedGust)
-				.Add(UComponentOfWindGust)
-				.Add(VComponentOfWindGust)
-				.Add(Pressure)
-				.Add(PressureReducedToMsl)
-				.Add(PressureTendency)
-				.Add(IcaoStandardAtmosphereReferenceHeight)
-				.Add(Geopotential)
-				.Add(GeopotentialHeight)
-				.Add(GeometricHeight)
-				.Add(StandardDeviationOfHeight)
-				.Add(PressureAnomaly)
-				.Add(GeopotentialHeightAnomaly)
-				.Add(Density)
-				.Add(AltimeterSetting)
-				.Add(Thickness)
-				.Add(PressureAltitude)
-				.Add(DensityAltitude)
-				.Add(NetShortWaveRadiationFluxSurface)
-				.Add(NetShortWaveRadiationFlux)
-				.Add(ShortWaveRadiationFlux)
-				.Add(GlobalRadiationFlux)
-				.Add(BrightnessTemperature)
-				.Add(RadianceWaveNumber)
-				.Add(RadianceWaveLength)
-				.Add(NetLongWaveRadiationFluxSurface)
-				.Add(NetLongWaveRadiationFlux)
-				.Add(LongWaveRadiationFlux)
-				.Add(CloudIce)
-				.Add(TotalCloudCover)
-				.Add(ConvectiveCloudCover)
-				.Add(LowCloudCover)
-				.Add(MediumCloudCover)
-				.Add(HighCloudCover)
-				.Add(CloudWater)
-				.Add(CloudAmount)
-				.Add(CloudType)
-				.Add(ThunderstormMaximumTops)
-				.Add(ThunderstormCoverage)
-				.Add(CloudBase)
-				.Add(CloudTop)
-				.Add(Ceiling)
-				.Add(ParcelLiftedIndex)
-				.Add(BestLiftedIndex)
-				.Add(KIndex)
-				.Add(KoIndex)
-				.Add(TotalTotalsIndex)
-				.Add(SweatIndex)
-				.Add(ConvectiveAvailablePotentialEnergy)
-				.Add(ConvectiveInhibition)
-				.Add(StormRelativeHelicity)
-				.Add(EnergyHelicityIndex)
-				.Add(AerosolType)
-				.Add(TotalOzone)
-				.Add(BaseSpectrumWidth)
-				.Add(BaseReflectivity)
-				.Add(BaseRadialVelocity)
-				.Add(VerticallyIntegratedLiquid)
-				.Add(LayerMaximumBaseReflectivity)
-				.Add(Precipitation)
-				.Add(RadarSpectra1)
-				.Add(RadarSpectra2)
-				.Add(RadarSpectra3)
-				.Add(AirConcentrationOfCaesium137)
-				.Add(AirConcentrationOfIodine131)
-				.Add(AirConcentrationOfRadioactivePollutant)
-				.Add(GroundDepositionOfCaesium137)
-				.Add(GroundDepositionOfIodine131)
-				.Add(GroundDepositionOfRadioactivePollutant)
-				.Add(TimeIntegratedAirConcentrationOfCaesiumPollutant)
-				.Add(TimeIntegratedAirConcentrationOfIodinePollutant)
-				.Add(TimeIntegratedAirConcentrationOfRadioactivePollutant)
-				.Add(Visibility)
-				.Add(Albedo)
-				.Add(ThunderstormProbability)
-				.Add(MixedLayerDepth)
-				.Add(VolcanicAsh)
-				.Add(IcingTop)
-				.Add(IcingBase)
-				.Add(Icing)
-				.Add(TurbulenceTop)
-				.Add(TurbulenceBase)
-				.Add(Turbulence)
-				.Add(TurbulentKineticEnergy)
-				.Add(PlanetaryBoundaryLayerRegime)
-				.Add(ContrailIntensity)
-				.Add(ContrailEngineType)
-				.Add(ContrailTop)
-				.Add(Contrail)
-				.Add(ArbitraryTextStringCcittia5)
-				.Add(FlashFloodGuidance)
-				.Add(FlashFloodRunoff)
-				.Add(RemotelySensedSnowCover)
-				.Add(ElevationOfSnowCoveredTerrain)
-				.Add(SnowWaterEquivalentPercentOfNormal)
-				.Add(ConditionalPercentPrecipitationAmountFractileForAnOverallPeriod)
-				.Add(PercentPrecipitationInASubPeriodOfAnOverallPeriod)
-				.Add(ProbabilityOf001InchOfPrecipitationPop)
-				.Add(LandCover)
-				.Add(SurfaceRoughness)
-				.Add(SoilTemperature)
-				.Add(SoilMoistureContent)
-				.Add(Vegetation)
-				.Add(WaterRunoff)
-				.Add(Evapotranspiration)
-				.Add(ModelTerrainHeight)
-				.Add(LandUse)
-				.Add(SoilType)
-				.Add(UpperLayerSoilTemperature)
-				.Add(UpperLayerSoilMoisture)
-				.Add(LowerLayerSoilMoisture)
-				.Add(BottomLayerSoilTemperature)
-				.Add(ScaledRadiance)
-				.Add(ScaledAlbedo)
-				.Add(ScaledBrightnessTemperature)
-				.Add(ScaledPrecipitableWater)
-				.Add(ScaledLiftedIndex)
-				.Add(ScaledCloudTopPressure)
-				.Add(ScaledSkinTemperature)
-				.Add(CloudMask)
-				.Add(EstimatedPrecipitation)
-				.Add(WaveSpectra1)
-				.Add(WaveSpectra2)
-				.Add(WaveSpectra3)
-				.Add(SignificantHeightOfCombinedWindWavesAndSwell)
-				.Add(DirectionOfWindWaves)
-				.Add(SignificantHeightOfWindWaves)
-				.Add(MeanPeriodOfWindWaves)
-				.Add(DirectionOfSwellWaves)
-				.Add(SignificantHeightOfSwellWaves)
-				.Add(MeanPeriodOfSwellWaves)
-				.Add(PrimaryWaveDirection)
-				.Add(PrimaryWaveMeanPeriod)
-				.Add(SecondaryWaveDirection)
-				.Add(SecondaryWaveMeanPeriod)
-				.Add(CurrentDirection)
-				.Add(CurrentSpeed)
-				.Add(UComponentOfCurrent)
-				.Add(VComponentOfCurrent)
-				.Add(IceCover)
-				.Add(IceThickness)
-				.Add(DirectionOfIceDrift)
-				.Add(SpeedOfIceDrift)
-				.Add(UComponentOfIceDrift)
-				.Add(VComponentOfIceDrift)
-				.Add(IceGrowthRate)
-				.Add(IceDivergence)
-				.Add(WaterTemperature)
-				.Add(DeviationOfSeaLevelFromMean)
-				.Add(MainThermoclineDepth)
-				.Add(MainThermoclineAnomaly)
-				.Add(TransientThermoclineDepth)
-				.Add(Salinity)
-				.GroupBy(c => c.Category)
-				.ToDictionary(g => g.Key, g => (IReadOnlyCollection<Parameter>) g.ToImmutableList());
+		private static List<Parameter> GetListOfParameterProperties(Type parentClassType) {
+			PropertyInfo[] propertyInfos = parentClassType.GetProperties()
+			                                              .Where(pi => pi.PropertyType == typeof(Parameter))
+			                                              .ToArray();
+			var parameters = new List<Parameter>(propertyInfos.Length);
+			foreach (PropertyInfo propertyInfo in propertyInfos) {
+				parameters.Add((Parameter)propertyInfo.GetValue(null));
+			}
+
+			return parameters;
+		}
+
+		private static IReadOnlyDictionary<ParameterCategory, IReadOnlyCollection<Parameter>>
+			BuildParameterDictionary(IList<Parameter> parameters) {
+
+			return parameters.GroupBy(c => c.Category)
+			                 .ToDictionary(
+				                 g => g.Key,
+				                 g => (IReadOnlyCollection<Parameter>)g.ToImmutableList());
+		}
+
+		public static IReadOnlyDictionary<ParameterCategory, IReadOnlyCollection<Parameter>> ParametersByCategory {
+			get {
+				if (ParametersByCategoryCache == null) {
+					List<Parameter> parameters = GetListOfParameterProperties(typeof(Parameter));
+					ParametersByCategoryCache = BuildParameterDictionary(parameters);
+				}
+
+				return ParametersByCategoryCache;
+			}
+		}
+
+		private static IReadOnlyDictionary<ParameterCategory, IReadOnlyCollection<Parameter>> ParametersByCategoryCache = null;
+
+		public static IReadOnlyDictionary<ParameterCategory, IReadOnlyCollection<Parameter>>
+			ParametersByCategoryWithLocalTables(int centerCode) {
+
+			if (centerCode < 0 || centerCode > 254) return ParametersByCategory;
+
+			if (ParametersByCategoryWithLocalTablesCache == null || centerCode != previousCenterCodeCache) {
+				List<Parameter> parameters = GetListOfParameterProperties(typeof(Parameter));
+				if (centerCode == Center.UsNcep.Id) {
+					parameters.AddRange(GetListOfParameterProperties(typeof(LocalTables.US_NOAA_NCEP_Parameter)));
+				} else if (centerCode == Center.Offenbach.Id) {
+					parameters.AddRange(GetListOfParameterProperties(typeof(LocalTables.DE_DWD_Parameter)));
+				}
+
+				ParametersByCategoryWithLocalTablesCache = BuildParameterDictionary(parameters);
+				previousCenterCodeCache = centerCode;
+			}
+
+			return ParametersByCategoryWithLocalTablesCache;
+		}
+		private static IReadOnlyDictionary<ParameterCategory, IReadOnlyCollection<Parameter>> ParametersByCategoryWithLocalTablesCache = null;
+		private static int previousCenterCodeCache = -1;
 	}
 }

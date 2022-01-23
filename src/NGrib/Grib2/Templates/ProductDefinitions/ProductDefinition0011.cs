@@ -73,7 +73,8 @@ namespace NGrib.Grib2.Templates.ProductDefinitions
 		/// </summary>
 		public long SuccessiveFieldsTimeIncrement { get; }
 
-		internal ProductDefinition0011(BufferedBinaryReader reader, Discipline discipline) : base(reader, discipline)
+		internal ProductDefinition0011(BufferedBinaryReader reader, Discipline discipline,
+		                               int centerCode) : base(reader, discipline, centerCode)
 		{
 			OverallTimeIntervalEnd = reader.ReadDateTime();
 			RegisterContent(ProductDefinitionContent.OverallTimeIntervalEnd, () => OverallTimeIntervalEnd);
