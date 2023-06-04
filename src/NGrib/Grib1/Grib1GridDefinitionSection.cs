@@ -632,6 +632,45 @@ namespace NGrib.Grib1
 
 					break; // end Polar Stereographic grids
 
+				case 10: // Rotated Lat-Lon
+
+					// octets 18-20 (La2 latitude of last grid point)
+					lat2 = GribNumbers.int3(raf);
+					
+					// octets 21-23 (Lo2 longitude of last grid point)
+					lon2 = GribNumbers.int3(raf);
+					
+					// octets 24-25 (Di i direction increment)
+					dx = GribNumbers.int2(raf);
+					
+					// octets 26-27 (Dj j direction increment)
+					dy = GribNumbers.int2(raf);
+					
+					// octet 28 (Scanning mode)
+					scan = raf.ReadByte();
+					
+					// octet 29-32 reserved
+					reserved = GribNumbers.int4(raf);
+					
+					// octets 33-35 (lat of southern pole)
+					latsp = GribNumbers.int3(raf) / 1000.0;
+
+					// octets 36-38 (lon of southern pole)
+					lonsp = GribNumbers.int3(raf) / 1000.0;
+					
+					
+					// octets 39-42 (Angle of rotation (represented in the same way as the reference value)
+					lov = GribNumbers.float4(raf);
+
+					
+					if (length > 32)
+					{
+						// getP_VorL(raf);
+						// Vertical coordinates (NV) and thinned grids (PL) not supported - skip this
+						SupportClass.Skip(raf, length - 32);
+					}
+					
+					break;
 
 				default:
 					Console.Out.WriteLine("Unknown Grid Type : " + type);
