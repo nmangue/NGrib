@@ -635,16 +635,16 @@ namespace NGrib.Grib1
 				case 10: // Rotated Lat-Lon
 
 					// octets 18-20 (La2 latitude of last grid point)
-					lat2 = GribNumbers.int3(raf);
+					lat2 = GribNumbers.int3(raf) / 1000.0;
 					
 					// octets 21-23 (Lo2 longitude of last grid point)
-					lon2 = GribNumbers.int3(raf);
+					lon2 = GribNumbers.int3(raf) / 1000.0;
 					
 					// octets 24-25 (Di i direction increment)
-					dx = GribNumbers.int2(raf);
+					dx = GribNumbers.int2(raf) / 1000.0;
 					
 					// octets 26-27 (Dj j direction increment)
-					dy = GribNumbers.int2(raf);
+					dy = GribNumbers.int2(raf) / 1000.0;
 					
 					// octet 28 (Scanning mode)
 					scan = raf.ReadByte();

@@ -124,5 +124,11 @@ namespace NGrib.Tests
 		/// Uses a bitmap section.
 		/// </summary>
 		public static string DwdCosmoTotalPrecipitationFile { get; } = "samples/cosmo-d2_germany_regular-lat-lon_single-level_2020103112_012_TOT_PREC.grib2";
+
+		/// <summary>
+		/// Harmonie Netherlands
+		/// Contains a subset of data for one hour 
+		/// </summary>
+		public static string HarmonieOneHourFile { get; } = "samples/HA40_N55_202306100000_00100_GB";
 	}
 }
