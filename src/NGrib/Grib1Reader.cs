@@ -50,7 +50,7 @@ namespace NGrib
 		/// <param name="record">The record to read.</param>
 		/// <param name="hasBitmapSection">Indicates whether the Bit-map section was used by the GRIB file producer.</param>
 		/// <returns>The data set point values.</returns>
-		public float[] ReadRecordRawData(Grib1Record record, bool hasBitmapSection = false) => data.getData(record.DataOffset, record.ProductDefinitionSection.DecimalScale, false);
+		public float[] ReadRecordRawData(Grib1Record record, bool hasBitmapSection = false) => data.getData(record.DataOffset, record.ProductDefinitionSection.DecimalScale, false, record);
 
 		/// <summary>
 		/// Read the records grid value.

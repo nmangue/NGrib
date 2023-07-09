@@ -40,7 +40,21 @@ namespace NGrib.Grib1
 	{
 		/// <summary> if missing value is not defined use this value.</summary>
 		public const int UNDEFINED = -9999;
+		
+		private static int[] bitmask = {128, 64, 32, 16, 8, 4, 2, 1};
 
+		
+		/**
+		* Test if the given gribBitNumber is set in the test value.
+		* 
+		* @param value test the 8 bits in this value .
+		* @param gribBitNumber one based, starting from highest bit. Must be between 1-8.
+		* @return true if the given gribBitNumber is set.
+		*/
+		public static bool TestGribBitIsSet(int value, int gribBitNumber) {
+			return (value & bitmask[gribBitNumber - 1]) != 0;
+		}
+		
 		/// <summary> Convert 2 bytes into a signed integer.
 		/// 
 		/// </summary>

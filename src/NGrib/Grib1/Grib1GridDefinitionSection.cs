@@ -90,6 +90,11 @@ namespace NGrib.Grib1
 			get { return ny; }
 		}
 
+		/// <summary>
+		/// Grid size number of points in total
+		/// </summary>
+		public int Npts => nx * ny;
+		
 		/// <summary> Get y-coordinate/latitude of grid start point.
 		/// 
 		/// </summary>
@@ -663,11 +668,11 @@ namespace NGrib.Grib1
 					lov = GribNumbers.float4(raf);
 
 					
-					if (length > 32)
+					if (length > 42)
 					{
 						// getP_VorL(raf);
 						// Vertical coordinates (NV) and thinned grids (PL) not supported - skip this
-						SupportClass.Skip(raf, length - 32);
+						SupportClass.Skip(raf, length - 42);
 					}
 					
 					break;
@@ -822,7 +827,7 @@ namespace NGrib.Grib1
 		public IEnumerable<Coordinate> EnumerateGridPoints()
 		{
 			if ((Resolution & 128) == 0 || // The direction increments have to be given
-			    ScanMode != 0) // Expect to scan the grid from North to South and West to East, and consecutive in i direction
+			    ScanMode != 0 && (ScanMode & 64) == 0) // Expect to scan the grid from North to South and West to East, and consecutive in i direction
 			{
 				throw new NotSupportedException();
 			}
@@ -831,7 +836,7 @@ namespace NGrib.Grib1
 			var lastGridPoint = new Coordinate(La2, Lo2);
 
 			var xStep = Dx;
-			var yStep = -Dy;
+			var yStep = ((ScanMode & 64) == 0 ? -1 : 1) * Dy;
 			var currentGridPoint = firstGridPoint;
 
 			// Adjacent points in x direction are consecutive 
