@@ -27,6 +27,10 @@
     <Content Include="samples\marine-lion_corse.grb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Remove="samples\HA40_N55_202306100000_00100_GB" />
+    <Content Include="samples\HA40_N55_202306100000_00100_GB">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

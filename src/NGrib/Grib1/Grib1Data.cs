@@ -73,7 +73,8 @@ namespace NGrib.Grib1
 		/// <throws>  NotSupportedException </throws>
 		/// <returns> float[]
 		/// </returns>
-		public float[] getData(long offset, int DecimalScale, bool bmsExists)
+		public float[] getData(long offset, int DecimalScale, bool bmsExists, Grib1Record record)
+
 		{
 			long start = (System.DateTime.Now.Ticks - 621355968000000000) / 10000;
 
@@ -89,7 +90,7 @@ namespace NGrib.Grib1
 				bms = new Grib1BitMapSection(raf);
 
 			// read Binary Data Section 4
-			Grib1BinaryDataSection bds = new Grib1BinaryDataSection(raf, DecimalScale, bms);
+			Grib1BinaryDataSection bds = new Grib1BinaryDataSection(raf, DecimalScale, bms, record);
 
 			return bds.Values;
 		} // end getData
