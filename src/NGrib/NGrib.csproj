@@ -4,18 +4,18 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.8.0</Version>
+    <Version>0.9.0</Version>
     <Authors>Nicolas Mangué</Authors>
     <Company />
     <Description>NGrib is a .NET Standard library to read GRIB (GRid in Binary) files. GRIB is a gridded data standard from WMO (World Meteorological Organisation) and is used by many meteorological organisation.</Description>
-    <Copyright>Copyright ©2021</Copyright>
+    <Copyright>Copyright ©2023</Copyright>
     <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/nmangue/NGrib</PackageProjectUrl>
     <RepositoryUrl>https://github.com/nmangue/NGrib.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>Add support for Data Representation Template 5.50002</PackageReleaseNotes>
-    <AssemblyVersion>0.8.0.0</AssemblyVersion>
-    <FileVersion>0.8.0.0</FileVersion>
+    <PackageReleaseNotes>Add support for rotated lat/lon (Code figure 10). Thanks @bartdevriendt!</PackageReleaseNotes>
+    <AssemblyVersion>0.9.0.0</AssemblyVersion>
+    <FileVersion>0.9.0.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup>
