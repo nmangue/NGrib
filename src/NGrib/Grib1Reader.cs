@@ -18,7 +18,8 @@ namespace NGrib
 		/// </summary>
 		/// <param name="filePath">The GRIB 2 file path.</param>
 		public Grib1Reader(string filePath) : this(File.OpenRead(filePath))
-		{ }
+		{
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <c>Grib2Reader</c> class
@@ -50,7 +51,7 @@ namespace NGrib
 		/// <param name="record">The record to read.</param>
 		/// <param name="hasBitmapSection">Indicates whether the Bit-map section was used by the GRIB file producer.</param>
 		/// <returns>The data set point values.</returns>
-		public float[] ReadRecordRawData(Grib1Record record, bool hasBitmapSection = false) => data.getData(record.DataOffset, record.ProductDefinitionSection.DecimalScale, false, record);
+		public float[] ReadRecordRawData(Grib1Record record) => data.getData(record.DataOffset, record.ProductDefinitionSection.DecimalScale, record.ProductDefinitionSection.bmsExists(), record);
 
 		/// <summary>
 		/// Read the records grid value.
@@ -58,9 +59,9 @@ namespace NGrib
 		/// <param name="record">The record to read.</param>
 		/// <param name="hasBitmapSection">Indicates whether the Bit-map section was used by the GRIB file producer.</param>
 		/// <returns>The record grid points and the corresponding values.</returns>
-		public IEnumerable<KeyValuePair<Coordinate, float>> ReadRecordValues(Grib1Record record, bool hasBitmapSection = false)
+		public IEnumerable<KeyValuePair<Coordinate, float>> ReadRecordValues(Grib1Record record)
 		{
-			var rawData = ReadRecordRawData(record, hasBitmapSection);
+			var rawData = ReadRecordRawData(record);
 
 			return record.GridDefinitionSection.EnumerateGridPoints()
 				.Zip(rawData, (c, v) => new KeyValuePair<Coordinate, float>(c, v));

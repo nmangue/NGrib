@@ -65,6 +65,22 @@ public class Grib1Reader_Harmonie_Test
         Check.That(value.Key.Latitude).Equals(8.45);
         Check.That(value.Key.Longitude).Equals(11.45);
         Check.That(value.Value).Equals(279.986206f);
+    }
 
+    [Fact]
+    public void Test_ReadWithBms()
+    {
+        using var stream = File.OpenRead(GribFileSamples.HarmonieOneHourFile);
+        var reader = new Grib1Reader(stream);
+
+        var records = reader.ReadRecords().ToArray();
+
+        var record = records.First(r => r.ProductDefinitionSection.bmsExists());
+        var data = reader.ReadRecordRawData(record);
+
+        Check.That(data.Length).Equals(115600);
+        Check.That(data[0]).Equals(0);
+        Check.That(data[6336]).IsCloseTo(0.1196, 1e-4); // First non-zero/non -9999 value
+        Check.That(data[115599]).Equals(-9999);
     }
 }
