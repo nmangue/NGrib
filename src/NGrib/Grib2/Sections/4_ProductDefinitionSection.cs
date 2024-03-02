@@ -111,7 +111,8 @@ namespace NGrib.Grib2.Sections
 				{ 2, (r, args) => new ProductDefinition0002(r, (Discipline) args[0], (int) args[1]) },
 				{ 8, (r, args) => new ProductDefinition0008(r, (Discipline) args[0], (int) args[1]) },
 				{ 11, (r, args) => new ProductDefinition0011(r, (Discipline) args[0], (int) args[1]) },
-				{ 12, (r, args) => new ProductDefinition0012(r, (Discipline) args[0], (int) args[1]) }
+				{ 12, (r, args) => new ProductDefinition0012(r, (Discipline) args[0], (int) args[1]) },
+				{ 32, (r, args) => new ProductDefinition0032(r, (Discipline) args[0], (int) args[1]) }
 			};
 	}
 }
