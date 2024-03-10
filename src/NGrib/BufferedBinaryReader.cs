@@ -18,6 +18,7 @@
  */
 
 using System;
+using System.Buffers;
 using System.IO;
 using System.Numerics;
 using NGrib.Grib2.Sections;
@@ -44,8 +45,8 @@ namespace NGrib
 		{
 			this.stream = stream;
 			this.leaveOpen = leaveOpen;
-			this.bufferSize = bufferSize;
-			buffer = new byte[bufferSize];
+			buffer = ArrayPool<byte>.Shared.Rent(bufferSize);
+			this.bufferSize = buffer.Length;
 			MarkBufferAsUsed();
 			SaveCurrentPosition();
 		}
@@ -77,7 +78,7 @@ namespace NGrib
 		private void EnsureAvailable(int numBytes)
 		{
 			if (NumBytesAvailable >= numBytes) return;
-			
+
 			// Try to read from the stream
 			// and check that we were able to read the bytes we wanted
 			if (!FillBuffer() && NumBytesAvailable < numBytes)
@@ -86,12 +87,12 @@ namespace NGrib
 			}
 		}
 
-    public byte ReadByte()
-    {
-      EnsureAvailable(sizeof(byte));
-      var val = buffer[bufferOffset];
-      bufferOffset += sizeof(byte);
-      return val;
+		public byte ReadByte()
+		{
+			EnsureAvailable(sizeof(byte));
+			var val = buffer[bufferOffset];
+			bufferOffset += sizeof(byte);
+			return val;
 		}
 
 		public int ReadUInt8() => ReadByte();
@@ -106,13 +107,13 @@ namespace NGrib
 			return val;
 		}
 
-    public int ReadInt16()
-    {
-	    EnsureAvailable(sizeof(short));
-	    var val = BigEndianBitConverter.ToInt16(buffer, bufferOffset);
-	    bufferOffset += sizeof(short);
-	    return val;
-    }
+		public int ReadInt16()
+		{
+			EnsureAvailable(sizeof(short));
+			var val = BigEndianBitConverter.ToInt16(buffer, bufferOffset);
+			bufferOffset += sizeof(short);
+			return val;
+		}
 
 		public long ReadUInt32()
 		{
@@ -200,7 +201,7 @@ namespace NGrib
 			var result = ReadUIntN(nbBit);
 			return result.AsSignedInt(nbBit);
 		}
-	
+
 		public BigInteger ReadUInt64()
 		{
 			EnsureAvailable(sizeof(ulong));
@@ -266,7 +267,7 @@ namespace NGrib
 			{
 				return new SectionInfo(Constants.IndicatorSectionLength, SectionCode.IndicatorSection);
 			}
-			
+
 			if (sectionLength == Constants.GribFileEndCode)
 			{
 				return new SectionInfo(Constants.EndSectionLength, SectionCode.EndSection);
@@ -309,6 +310,7 @@ namespace NGrib
 			{
 				stream.Close();
 			}
+			ArrayPool<byte>.Shared.Return(buffer);
 		}
 
 		public void SaveCurrentPosition()
@@ -316,7 +318,7 @@ namespace NGrib
 			savedPosition = Position;
 		}
 
-    public long Position => stream.Position - NumBytesAvailable;
+		public long Position => stream.Position - NumBytesAvailable;
 
 		public void SeekToSavedPosition()
 		{
