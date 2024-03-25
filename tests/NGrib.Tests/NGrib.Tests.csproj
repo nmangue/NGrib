@@ -75,7 +75,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="samples\gfs.20200314.t00z.pgrb2.0p25.anl">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="samples\gfs.20240323.t18z.pgrb2.0p25.anl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="samples\W_fr-meteofrance,MODEL,AROME+0025+SP1+00H06H_C_LFPW_202010310600--Temperature.grib2">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
