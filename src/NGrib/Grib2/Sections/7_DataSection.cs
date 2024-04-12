@@ -51,7 +51,7 @@ namespace NGrib.Grib2.Sections
 		/// </summary>
 		public long DataLength { get; }
 
-		private DataSection(long length, int section, long dataOffset, long dataLength)
+		internal DataSection(long length, int section, long dataOffset, long dataLength)
 		{
 			DataOffset = dataOffset;
 			Length = length;
