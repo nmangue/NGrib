@@ -1569,11 +1569,15 @@ namespace NGrib.Grib2.CodeTables
 
 		#endregion
 
-		private static List<Parameter> GetListOfParameterProperties(Type parentClassType)
-		{
-			PropertyInfo[] propertyInfos = parentClassType.GetProperties()
-																										.Where(pi => pi.PropertyType == typeof(Parameter))
-																										.ToArray();
+		private static List<Parameter> GetListOfParameterProperties(
+#if NET5_0_OR_GREATER
+        [System.Diagnostics.CodeAnalysis.DynamicallyAccessedMembers(System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicProperties)]
+#endif
+            Type parentClassType) {
+            
+            PropertyInfo[] propertyInfos = parentClassType.GetProperties()
+			                                              .Where(pi => pi.PropertyType == typeof(Parameter))
+			                                              .ToArray();
 			var parameters = new List<Parameter>(propertyInfos.Length);
 			foreach (PropertyInfo propertyInfo in propertyInfos)
 			{
