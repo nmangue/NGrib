@@ -133,5 +133,14 @@ namespace NGrib.Tests
 		
 		public static string IconD2SatelliteFile { get; } = "samples/icon-d2_germany_regular-lat-lon_single-level_2024030203_000_2d_synmsg_bt_cl_wv6.2.grib2";
 		
+		/// <summary>
+		/// NCEP GFS 20240323/18+12 Max Wind Forecasts (0.25 degree grid):
+		/// Parameters:
+		/// 	- UGRD (U-Component of Wind)
+		/// 	- VGRD (V-Component of Wind)
+		/// Levels:
+		/// 	- max wind
+		/// </summary>
+		public static string NcepGfsMaxWindFile { get; } = "samples/gfs.20240323.t18z.pgrb2.0p25.anl";
 	}
 }
