@@ -922,6 +922,19 @@ namespace NGrib.Grib2.CodeTables
 		///<summary>Secondary wave mean period (s)</summary>
 		[Description("Secondary wave mean period")]
 		SecondaryWaveMeanPeriod = 13,
+		
+        ///<summary>Direction of combined wind waves and swell (deg)</summary>
+        [Description("Direction of combined wind waves and swell")]
+        DirectionOfCombinedWindWavesAndSwell = 14,
+
+        ///<summary>Period of combined wind waves and swell (s)</summary>
+        [Description("Period of combined wind waves and swell")]
+        PeriodOfCombinedWindWavesAndSwell = 15,
+
+        ///<summary>Inverse mean wave frequency</summary>
+        [Description("Inverse mean wave frequency")]
+        InverseMeanWaveFrequency = 25,
+
 
 		#endregion
 

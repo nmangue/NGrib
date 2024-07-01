@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-
-namespace NGrib.Tests
+﻿namespace NGrib.Tests
 {
 	internal static class GribFileSamples
 	{
@@ -107,11 +104,15 @@ namespace NGrib.Tests
 		public static string NcepGefsAvgFile { get; } = "samples/geavg.t06z.pgrb2a.0p50.f006";
 
 		/// <summary>
+		/// NCEP GEFS 
+		/// </summary>
+		public static string NcepGefsWaveFile { get; } = "samples/gefs.wave.t00z.c00.global.0p25.f000.grib2";
+
+		/// <summary>
 		/// NCEP GEFS P8 20200825/06+02 Forecasts (0.5 degree grid)
 		/// Contains all variable on subregion
 		/// </summary>
 		public static string NcepGefsPerturbationFile { get; } = "samples/gep08.t00z.pgrb2a.0p50.f012";
-
 
 		/// <summary>
 		/// Météo France AROME
