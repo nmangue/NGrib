@@ -74,7 +74,7 @@ namespace NGrib.Grib2.CodeTables
 			{
 				var category = categories.Where(c => c.Code == parameterCategory).ToArray();
 				if (category.Any() && ParametersByCategoryWithLocalTables(centerCode)
-					    .TryGetValue(category[0], out var parameters))
+							.TryGetValue(category[0], out var parameters))
 				{
 					var parameter = parameters.Where(p => p.Code == parameterNumber).ToArray();
 					if (parameter.Any())
@@ -872,9 +872,9 @@ namespace NGrib.Grib2.CodeTables
 		public static Parameter RadianceWaveLength { get; } = new Parameter(ParameterCategory.ShortWaveRadiation, 6,
 			"Radiance (with respect to wave length)", "W m-3 sr-1");
 
-        ///<summary>Surface short-wave (solar) radiation downwards (J m-2)</summary>
+		///<summary>Surface short-wave (solar) radiation downwards (J m-2)</summary>
 		public static Parameter SurfaceShortWaveRadiationDownwards { get; } = new Parameter(ParameterCategory.ShortWaveRadiation, 7,
-            "Surface short-wave (solar) radiation downwards", "J m-2");
+						"Surface short-wave (solar) radiation downwards", "J m-2");
 
 		#endregion
 
@@ -1469,16 +1469,16 @@ namespace NGrib.Grib2.CodeTables
 		///<summary>Secondary wave mean period (s)</summary>
 		public static Parameter SecondaryWaveMeanPeriod { get; } =
 			new Parameter(ParameterCategory.Waves, 13, "Secondary wave mean period", "s");
-		
-        ///<summary>Direction of combined wind waves and swell (deg)</summary>
+
+		///<summary>Direction of combined wind waves and swell (deg)</summary>
 		public static Parameter DirectionOfCombinedWindWavesAndSwell { get; } = new Parameter(ParameterCategory.Waves, 14,
 			"Direction of combined wind waves and swell", "m");
 
-        ///<summary>Period of combined wind waves and swell (s)</summary>
+		///<summary>Period of combined wind waves and swell (s)</summary>
 		public static Parameter PeriodOfCombinedWindWavesAndSwell { get; } = new Parameter(ParameterCategory.Waves, 15,
 			"Period of combined wind waves and swell", "m");
 
-        ///<summary>Inverse mean wave frequency</summary>
+		///<summary>Inverse mean wave frequency</summary>
 		public static Parameter InverseMeanWaveFrequency { get; } = new Parameter(ParameterCategory.Waves, 25,
 			"Inverse mean wave frequency", "m");
 
@@ -1569,12 +1569,14 @@ namespace NGrib.Grib2.CodeTables
 
 		#endregion
 
-		private static List<Parameter> GetListOfParameterProperties(Type parentClassType) {
+		private static List<Parameter> GetListOfParameterProperties(Type parentClassType)
+		{
 			PropertyInfo[] propertyInfos = parentClassType.GetProperties()
-			                                              .Where(pi => pi.PropertyType == typeof(Parameter))
-			                                              .ToArray();
+																										.Where(pi => pi.PropertyType == typeof(Parameter))
+																										.ToArray();
 			var parameters = new List<Parameter>(propertyInfos.Length);
-			foreach (PropertyInfo propertyInfo in propertyInfos) {
+			foreach (PropertyInfo propertyInfo in propertyInfos)
+			{
 				parameters.Add((Parameter)propertyInfo.GetValue(null));
 			}
 
@@ -1582,17 +1584,21 @@ namespace NGrib.Grib2.CodeTables
 		}
 
 		private static IReadOnlyDictionary<ParameterCategory, IReadOnlyCollection<Parameter>>
-			BuildParameterDictionary(IList<Parameter> parameters) {
+			BuildParameterDictionary(IList<Parameter> parameters)
+		{
 
 			return parameters.GroupBy(c => c.Category)
-			                 .ToDictionary(
-				                 g => g.Key,
-				                 g => (IReadOnlyCollection<Parameter>)g.ToImmutableList());
+											 .ToDictionary(
+												 g => g.Key,
+												 g => (IReadOnlyCollection<Parameter>)g.ToImmutableList());
 		}
 
-		public static IReadOnlyDictionary<ParameterCategory, IReadOnlyCollection<Parameter>> ParametersByCategory {
-			get {
-				if (ParametersByCategoryCache == null) {
+		public static IReadOnlyDictionary<ParameterCategory, IReadOnlyCollection<Parameter>> ParametersByCategory
+		{
+			get
+			{
+				if (ParametersByCategoryCache == null)
+				{
 					List<Parameter> parameters = GetListOfParameterProperties(typeof(Parameter));
 					ParametersByCategoryCache = BuildParameterDictionary(parameters);
 				}
@@ -1604,15 +1610,20 @@ namespace NGrib.Grib2.CodeTables
 		private static IReadOnlyDictionary<ParameterCategory, IReadOnlyCollection<Parameter>> ParametersByCategoryCache = null;
 
 		public static IReadOnlyDictionary<ParameterCategory, IReadOnlyCollection<Parameter>>
-			ParametersByCategoryWithLocalTables(int centerCode) {
+			ParametersByCategoryWithLocalTables(int centerCode)
+		{
 
 			if (centerCode < 0 || centerCode > 254) return ParametersByCategory;
 
-			if (ParametersByCategoryWithLocalTablesCache == null || centerCode != previousCenterCodeCache) {
+			if (ParametersByCategoryWithLocalTablesCache == null || centerCode != previousCenterCodeCache)
+			{
 				List<Parameter> parameters = GetListOfParameterProperties(typeof(Parameter));
-				if (centerCode == Center.UsNcep.Id) {
+				if (centerCode == Center.UsNcep.Id)
+				{
 					parameters.AddRange(GetListOfParameterProperties(typeof(LocalTables.US_NOAA_NCEP_Parameter)));
-				} else if (centerCode == Center.Offenbach.Id) {
+				}
+				else if (centerCode == Center.Offenbach.Id)
+				{
 					parameters.AddRange(GetListOfParameterProperties(typeof(LocalTables.DE_DWD_Parameter)));
 				}
 
