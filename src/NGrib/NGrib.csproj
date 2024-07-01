@@ -15,7 +15,7 @@
     <PackageReleaseNotes>Change the BufferedBinaryReader to using pooled arrays. Thanks @ArnimSchinz!
 Add support for product definition template 32. Thanks @bartdevriendt!
 Apply special case when simple packing number of bits is 0</PackageReleaseNotes>
-    <Version>0.11.0</Version>
+    <Version>0.12.0</Version>
     <AssemblyVersion>$(Version).0</AssemblyVersion>
     <FileVersion>$(Version).0</FileVersion>
   </PropertyGroup>

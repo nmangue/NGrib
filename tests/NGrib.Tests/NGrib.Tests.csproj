@@ -24,6 +24,9 @@
     <Content Include="samples\gfs.20200330.t18z.pgrb2.0p25.f012">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+      <Content Include="samples\gefs.wave.t00z.c00.global.0p25.f000.grib2">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     <Content Include="samples\marine-lion_corse.grb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
