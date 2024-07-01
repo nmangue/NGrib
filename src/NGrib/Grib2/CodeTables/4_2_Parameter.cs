@@ -872,6 +872,10 @@ namespace NGrib.Grib2.CodeTables
 		public static Parameter RadianceWaveLength { get; } = new Parameter(ParameterCategory.ShortWaveRadiation, 6,
 			"Radiance (with respect to wave length)", "W m-3 sr-1");
 
+        ///<summary>Surface short-wave (solar) radiation downwards (J m-2)</summary>
+		public static Parameter SurfaceShortWaveRadiationDownwards { get; } = new Parameter(ParameterCategory.ShortWaveRadiation, 7,
+            "Surface short-wave (solar) radiation downwards", "J m-2");
+
 		#endregion
 
 		#region Product Discipline 0: Meteorological products, Parameter Category 5: Long-wave Radiation

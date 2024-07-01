@@ -71,7 +71,16 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 			OriginalFieldValuesType = (OriginalFieldValuesType) reader.ReadUInt8();
 		}
 
-		private protected override IEnumerable<float> DoEnumerateDataValues(BufferedBinaryReader reader, DataSection dataSection, long dataPointsNumber)
+        internal GridPointDataSimplePacking(float referenceValue, int binaryScaleFactor, int decimalScaleFactor, int numberOfBits, OriginalFieldValuesType originalFieldValuesType)
+        {
+            ReferenceValue = referenceValue;
+            BinaryScaleFactor = binaryScaleFactor;
+            DecimalScaleFactor = decimalScaleFactor;
+            NumberOfBits = numberOfBits;
+            OriginalFieldValuesType = originalFieldValuesType;
+        }
+
+        private protected override IEnumerable<float> DoEnumerateDataValues(BufferedBinaryReader reader, DataSection dataSection, long dataPointsNumber)
 		{
 			IEnumerable<int> ReadPackedValues()
 			{
@@ -88,7 +97,17 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 
 		protected IEnumerable<float> Unpack(IEnumerable<int> packedValues)
 		{
-			var d = DecimalScaleFactor;
+            // Special case
+            if (NumberOfBits == 0)
+            {
+                foreach (var _ in packedValues)
+                {
+                    yield return ReferenceValue;
+                }
+				yield break;
+            }
+
+            var d = DecimalScaleFactor;
 
 			var dd = Math.Pow(10, d);
 
@@ -105,10 +124,10 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 			//   X1 = 0
 			//   X2 = scaled encoded value 
 			foreach(var item in packedValues)
-			{
-				// (R + ( X1 + X2) * EE)/DD ;
-				yield return (float) ((r + item * ee) / dd);
-			}
+            {
+                // (R + ( X1 + X2) * EE)/DD ;
+                yield return (float) ((r + item * ee) / dd);
+            }
 		}
 	}
 }
