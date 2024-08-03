@@ -31,6 +31,7 @@ Apply special case when simple packing number of bits is 0</PackageReleaseNotes>
 
   <ItemGroup>
     <PackageReference Include="CSJ2K.NetCore" Version="3.0.0" />
+    <PackageReference Include="Libaec" Version="0.1.0" />
     <PackageReference Include="System.Collections.Immutable" Version="6.0.0" />
   </ItemGroup>
 
