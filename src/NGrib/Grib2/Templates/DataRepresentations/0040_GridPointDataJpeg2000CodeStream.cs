@@ -26,6 +26,7 @@
 
 using CSJ2K;
 using NGrib.Grib2.Sections;
+using System;
 using System.Collections.Generic;
 
 namespace NGrib.Grib2.Templates.DataRepresentations
@@ -56,7 +57,7 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 
 			if (img.NumberOfComponents <= 0)
 			{
-				return new float[0];
+				return Array.Empty<float>();
 			}
 
 			var values = img.GetComponent(0);
