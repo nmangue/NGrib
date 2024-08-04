@@ -46,9 +46,29 @@ namespace NGrib.Tests
 			var apcpDataset = datasets.Single(d => d.Parameter.Equals(Parameter.TotalPrecipitation));
 			Check.That(apcpDataset.ProductDefinitionSection.ProductDefinition.TryGet(ProductDefinitionContent.EnsembleForecastsNumber, out ensembleForecastsNumber)).IsTrue();
 			Check.That(ensembleForecastsNumber).IsEqualTo(expectedEnsembleForecastsNumber);
-		
+
 			Check.That(apcpDataset.ProductDefinitionSection.TryGet(ProductDefinitionContent.PerturbationNumber, out perturbationNumber)).IsTrue();
 			Check.That(perturbationNumber).IsEqualTo(expectedPerturbationNumber);
+		}
+
+		[Fact]
+		public void Read_CombinedDataSets_Test()
+		{
+			using var stream = File.OpenRead(GribFileSamples.NcepGefsWaveFile);
+			var reader = new Grib2Reader(stream);
+			var dataSets = reader.ReadAllDataSets().ToArray();
+
+			var parameters = dataSets.Select(ds => ds.Parameter).ToArray();
+			Check.That(parameters).ContainsNoNull();
+
+			var combinedDirection = parameters.First(p => p.Value.Code == 14);
+			Check.That(combinedDirection.Value.Name).Equals("Direction of combined wind waves and swell");
+
+			var combinedPeriod = parameters.First(p => p.Value.Code == 15);
+			Check.That(combinedPeriod.Value.Name).Equals("Period of combined wind waves and swell");
+
+			var inverseFrequency = parameters.First(p => p.Value.Code == 25);
+			Check.That(inverseFrequency.Value.Name).Equals("Inverse mean wave frequency");
 		}
 	}
 }
