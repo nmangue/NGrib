@@ -20,7 +20,7 @@ namespace NGrib.Tests
 			
 			var data = reader.ReadDataSetValues(temperatureDs).ToDictionary(kv => kv.Key, kv => kv.Value);
 
-            // Excepted values read using eccodes
+            // Expected values read using eccodes
             var coordinates = new Dictionary<Coordinate, float>
             {
 				{(-21.25, 55.50), 2.8653944397e+02f },   // La Réunion Island
