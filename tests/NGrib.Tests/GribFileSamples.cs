@@ -4,6 +4,8 @@
 	{
 		public static string ValidFile { get; } = "samples/gfs.20200314.t00z.pgrb2.0p25.anl";
 
+		public static string MarineLionCorse { get; } = @"samples/marine-lion_corse.grb";
+
 		/// <summary>
 		/// Octet No.    Octet No.      Value        Meaning
 		/// 1-4          1-4            GRIB         “GRIB” (coded according to the International Alphabet No. 5)
