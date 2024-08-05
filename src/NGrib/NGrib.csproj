@@ -12,17 +12,22 @@
     <PackageProjectUrl>https://github.com/nmangue/NGrib</PackageProjectUrl>
     <RepositoryUrl>https://github.com/nmangue/NGrib.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>Change the BufferedBinaryReader to using pooled arrays. Thanks @ArnimSchinz!
-Add support for product definition template 32. Thanks @bartdevriendt!
-Apply special case when simple packing number of bits is 0</PackageReleaseNotes>
+    <PackageReleaseNotes>
+		Add .NET 8 target
+		Add support for template 5.42 CCSDS recommended lossless compression
+		Add support for reading more wave parameters. Thankes @da-br
+		Update System.Drawing.Common transitive dependency. Thanks @ArnimSchinz!
+	</PackageReleaseNotes>
     <Version>0.12.0</Version>
     <AssemblyVersion>$(Version).0</AssemblyVersion>
     <FileVersion>$(Version).0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup>
+    <PackageVersion>$(Version)-pre</PackageVersion>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -37,6 +42,7 @@ Apply special case when simple packing number of bits is 0</PackageReleaseNotes>
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
     <Folder Include="Grib1\" />
   </ItemGroup>
 
