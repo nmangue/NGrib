@@ -110,6 +110,7 @@ namespace NGrib.Grib2.Sections
 				{ 2, r => new GridPointDataComplexPacking(r) },
 				{ 3, r => new GridPointDataComplexPackingAndSpatialDifferencing(r) },
 				{ 40, r => new GridPointDataJpeg2000CodeStream(r) },
+				{ 42, r => new GridPointDataCcsdsLosslessCompression(r) },
 				{ 40000, r => new GridPointDataJpeg2000CodeStream(r) },
 				{ 50002, r => new GridPointDataEcmwfSecondOrderPacking(r) },
 			};
