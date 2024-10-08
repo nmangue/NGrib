@@ -133,6 +133,7 @@
 		public static string HarmonieOneHourFile { get; } = "samples/HA40_N55_202306100000_00100_GB";
 		
 		public static string IconD2SatelliteFile { get; } = "samples/icon-d2_germany_regular-lat-lon_single-level_2024030203_000_2d_synmsg_bt_cl_wv6.2.grib2";
-		
+
+		public static string EastChina_Japan { get; } = "samples/eastchina_japan.grb2";
 	}
 }

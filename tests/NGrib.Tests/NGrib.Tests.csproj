@@ -12,6 +12,9 @@
     <None Remove="samples\gfs.20200330.t18z.pgrb2.0p25.f012" />
     <None Remove="samples\marine-lion_corse.grb" />
     <None Remove="samples\wmo-one_dataset-message.grb2" />
+    <None Update="samples\eastchina_japan.grb2">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
