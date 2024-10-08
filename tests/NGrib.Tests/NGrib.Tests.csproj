@@ -1,48 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6</TargetFramework>
-
+    <TargetFramework>net8</TargetFramework>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="samples\gfs.20200325.t18z.pgrb2.0p25.f006" />
-    <None Remove="samples\gfs.20200325.t18z.pgrb2.0p25.f018" />
-    <None Remove="samples\gfs.20200330.t18z.pgrb2.0p25.f012" />
-    <None Remove="samples\marine-lion_corse.grb" />
-    <None Remove="samples\wmo-one_dataset-message.grb2" />
-    <None Update="samples\eastchina_japan.grb2">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="samples\gfs.20200325.t18z.pgrb2.0p25.f006">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="samples\gfs.20200325.t18z.pgrb2.0p25.f018">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="samples\gfs.20200330.t18z.pgrb2.0p25.f012">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-      <Content Include="samples\gefs.wave.t00z.c00.global.0p25.f000.grib2">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-    <Content Include="samples\marine-lion_corse.grb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <None Remove="samples\HA40_N55_202306100000_00100_GB" />
-    <Content Include="samples\HA40_N55_202306100000_00100_GB">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <None Remove="samples\icon-d2_germany_regular-lat-lon_single-level_2024030203_000_2d_synmsg_bt_cl_wv6.2.grib2" />
-    <Content Include="samples\icon-d2_germany_regular-lat-lon_single-level_2024030203_000_2d_synmsg_bt_cl_wv6.2.grib2">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
+    
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.3" />
     <PackageReference Include="NFluent" Version="3.0.1.352" />
@@ -62,28 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="samples\wmo-one_dataset-message.grb2">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="references\DWD-COSMO-Total_precipitation_rate_surface_12_Hour_Accumulation.csv">
+    <None Include="references\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="samples\cosmo-d2_germany_regular-lat-lon_single-level_2020103112_012_TOT_PREC.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="samples\geavg.t06z.pgrb2a.0p50.f006">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="samples\gep08.t00z.pgrb2a.0p50.f012">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="samples\gfs.20200314.t00z.pgrb2.0p25.anl">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="samples\W_fr-meteofrance,MODEL,AROME+0025+SP1+00H06H_C_LFPW_202010310600--Temperature.grib2">
+    <None Include="samples\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

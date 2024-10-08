@@ -11,7 +11,7 @@ namespace NGrib.Tests
 		[Fact]
 		public void Read_Test()
 		{
-			using var stream = File.OpenRead(@"samples\marine-lion_corse.grb");
+			using var stream = File.OpenRead(GribFileSamples.MarineLionCorse);
 
 			var reader = new Grib1Reader(stream);
 			var data = new Dictionary<Grib1Record, Dictionary<Coordinate, float>>();

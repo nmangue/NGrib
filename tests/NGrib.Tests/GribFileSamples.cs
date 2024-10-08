@@ -4,6 +4,8 @@
 	{
 		public static string ValidFile { get; } = "samples/gfs.20200314.t00z.pgrb2.0p25.anl";
 
+		public static string MarineLionCorse { get; } = @"samples/marine-lion_corse.grb";
+
 		/// <summary>
 		/// Octet No.    Octet No.      Value        Meaning
 		/// 1-4          1-4            GRIB         “GRIB” (coded according to the International Alphabet No. 5)
@@ -133,6 +135,8 @@
 		public static string HarmonieOneHourFile { get; } = "samples/HA40_N55_202306100000_00100_GB";
 		
 		public static string IconD2SatelliteFile { get; } = "samples/icon-d2_germany_regular-lat-lon_single-level_2024030203_000_2d_synmsg_bt_cl_wv6.2.grib2";
+
+		public static string EcmwfTmp2mDataTemplate42 { get; } = "samples/ecmwf-aifs-0p25-20240802060000-18h-oper-fc-tmp_2m.grib2";
 
 		public static string EastChina_Japan { get; } = "samples/eastchina_japan.grb2";
 	}

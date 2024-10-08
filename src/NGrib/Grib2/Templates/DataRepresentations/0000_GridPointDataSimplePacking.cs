@@ -82,20 +82,19 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 
         private protected override IEnumerable<float> DoEnumerateDataValues(BufferedBinaryReader reader, DataSection dataSection, long dataPointsNumber)
 		{
-			IEnumerable<int> ReadPackedValues()
-			{
-				reader.NextUIntN();
-				for (var i = 0; i < dataPointsNumber; i++)
-				{
-					yield return reader.ReadUIntN(NumberOfBits);
-				}
-			}
-
-			return Unpack(ReadPackedValues());
-
+			return Unpack(ReadPackedValues(reader, dataSection, dataPointsNumber));
 		}
 
-		protected IEnumerable<float> Unpack(IEnumerable<int> packedValues)
+        private protected virtual IEnumerable<int> ReadPackedValues(BufferedBinaryReader reader, DataSection dataSection, long dataPointsNumber)
+        {
+            reader.NextUIntN();
+            for (var i = 0; i < dataPointsNumber; i++)
+            {
+                yield return reader.ReadUIntN(NumberOfBits);
+            }
+        }
+
+        protected IEnumerable<float> Unpack(IEnumerable<int> packedValues)
 		{
             // Special case
             if (NumberOfBits == 0)
