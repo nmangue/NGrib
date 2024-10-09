@@ -46,7 +46,7 @@ namespace NGrib.Tests
                             longitude: double.Parse(parts[1], CultureInfo.InvariantCulture)
                             );
 
-                        var value = float.Parse(parts[2], CultureInfo.InvariantCulture);
+                        var value = (float) Math.Round(float.Parse(parts[2], CultureInfo.InvariantCulture), 5);
                         if (value == 9999)
                         {
                             //TODO Find out why the reference missing value

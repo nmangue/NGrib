@@ -25,6 +25,11 @@ namespace NGrib.Grib2.CodeTables
 	public enum SpatialDifferencingOrder
 	{
 		/// <summary>
+		/// No spatial differencing.
+		/// </summary>
+		None = 0,
+
+		/// <summary>
 		/// First-order spatial differencing.
 		/// </summary>
 		FirstOrder = 1,
