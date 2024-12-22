@@ -38,7 +38,7 @@
     <PackageReference Include="CSJ2K.NetCore" Version="3.0.0" />
     <PackageReference Include="Libaec" Version="0.2.0" />
     <PackageReference Include="System.Collections.Immutable" Version="8.0.0" />
-    <PackageReference Include="System.Drawing.Common" Version="8.0.7" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.11" />
   </ItemGroup>
 
   <ItemGroup>
