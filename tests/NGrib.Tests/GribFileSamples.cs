@@ -137,6 +137,8 @@
 		public static string IconD2SatelliteFile { get; } = "samples/icon-d2_germany_regular-lat-lon_single-level_2024030203_000_2d_synmsg_bt_cl_wv6.2.grib2";
 
 		public static string EcmwfTmp2mDataTemplate42 { get; } = "samples/ecmwf-aifs-0p25-20240802060000-18h-oper-fc-tmp_2m.grib2";
+
+		public static string WaveComplexPacking { get; } = "samples/wave-complex-packing.grib2";
 		
 	}
 }

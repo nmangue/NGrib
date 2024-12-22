@@ -196,6 +196,21 @@ namespace NGrib
 			}
 		}
 
+		public void ReadUIntN(int nbBit, int[] buffer, int nbValues, int skip = 0)
+		{
+			NextUIntN();
+
+			if (skip > 0)
+            {
+                ReadUIntN(skip);
+            }
+
+            for (int i = 0;	i < nbValues; i++)
+			{
+				buffer[i] = ReadUIntN(nbBit);
+			}
+		}
+
 		public int ReadIntN(int nbBit)
 		{
 			var result = ReadUIntN(nbBit);

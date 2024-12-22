@@ -25,7 +25,9 @@
  */
 
 using System;
+using System.Buffers;
 using System.Collections.Generic;
+using System.Diagnostics;
 using NGrib.Grib2.CodeTables;
 using NGrib.Grib2.Sections;
 
@@ -55,369 +57,287 @@ namespace NGrib.Grib2.Templates.DataRepresentations
 
 		private protected override IEnumerable<float> DoEnumerateDataValues(BufferedBinaryReader reader, DataSection dataSection, long dataPointsNumber)
 		{
-			var mvm = MissingValueManagement;
+			var ng = (int)NumberOfGroups;
 
-			float pmv = PrimaryMissingValue;
+			var groupRefValArray = ArrayPool<int>.Shared.Rent(ng);
+			var nvalsPerGroupArray = ArrayPool<int>.Shared.Rent(ng);
+			var nbitsPerGroupValArray = ArrayPool<int>.Shared.Rent(ng);
+			var secVal = ArrayPool<long>.Shared.Rent((int)dataPointsNumber);
 
-			int ng = (int) NumberOfGroups;
+            try
+            {
+                var bufRef = dataSection.DataOffset;
 
-			int g1 = 0, gMin = 0, h1 = 0, h2 = 0, hMin = 0;
-			// [6-ww]   1st values of undifferenced scaled values and minimums
-			var os = OrderSpatial;
-			int ds = ExtraDescriptorsLength;
+                var refP = NumberOfGroups * NumberOfBits;
 
-			reader.NextUIntN();
-			int sign;
-			// ds is number of bytes, convert to bits -1 for sign bit
-			ds = ds * 8 - 1;
-			if (os == SpatialDifferencingOrder.FirstOrder)
-			{
-				// first order spatial differencing g1 and gMin
-				sign = reader.ReadUIntN(1);
-				g1 = reader.ReadUIntN(ds);
-				if (sign == 1)
-				{
-					g1 *= (-1);
-				}
+                if (OrderSpatial != 0)
+                {
+                    refP += (1 + (int)OrderSpatial) * (ExtraDescriptorsLength * 8);
+                }
 
-				sign = reader.ReadUIntN(1);
-				gMin = reader.ReadUIntN(ds);
-				if (sign == 1)
-				{
-					gMin *= (-1);
-				}
-			}
-			else if (os == SpatialDifferencingOrder.SecondOrder)
-			{
-				//second order spatial differencing h1, h2, hMin
-				sign = reader.ReadUIntN(1);
-				h1 = reader.ReadUIntN(ds);
-				if (sign == 1)
-				{
-					h1 *= (-1);
-				}
+                long bufWidth = bufRef + refP / 8 + (refP % 8 != 0 ? 1 : 0);
 
-				sign = reader.ReadUIntN(1);
-				h2 = reader.ReadUIntN(ds);
-				if (sign == 1)
-				{
-					h2 *= (-1);
-				}
+                var widthP = NumberOfGroups * BitsGroupWidths;
+                long bufLength = bufWidth + widthP / 8 + (widthP % 8 != 0 ? 1 : 0);
 
-				sign = reader.ReadUIntN(1);
-				hMin = reader.ReadUIntN(ds);
-				if (sign == 1)
-				{
-					hMin *= (-1);
-				}
-			}
-			else
-			{
-				throw new BadGribFormatException("DS Error");
-			}
+                var lengthP = NumberOfGroups * this.BitsScaledGroupLength;
+                long bufVals = bufLength + lengthP / 8 + (lengthP % 8 != 0 ? 1 : 0);
 
-			// [ww +1]-xx  Get reference values for groups (X1's)
-			int[] x1 = new int[ng];
-			int nbBits = NumberOfBits;
+                lengthP = 0;
+                refP = OrderSpatial != 0 ? ((int)OrderSpatial + 1) * (ExtraDescriptorsLength * 8) : 0;
+                long vcount = 0;
 
-			reader.NextUIntN();
-			for (int i = 0; i < ng; i++)
-			{
-				x1[i] = reader.ReadUIntN(nbBits);
-			}
+                reader.Seek(bufRef, System.IO.SeekOrigin.Begin);
+                reader.ReadUIntN(NumberOfBits, groupRefValArray, ng, (int)refP);
 
-			// [xx +1 ]-yy Get number of bits used to encode each group
-			int[] nb = new int[ng];
-			nbBits = BitsGroupWidths;
+                reader.Seek(bufLength, System.IO.SeekOrigin.Begin);
+                reader.ReadUIntN(BitsScaledGroupLength, nvalsPerGroupArray, ng);
 
-			reader.NextUIntN();
-			for (int i = 0; i < ng; i++)
-			{
-				nb[i] = reader.ReadUIntN(nbBits);
-			}
+                reader.Seek(bufWidth, System.IO.SeekOrigin.Begin);
+                reader.ReadUIntN(BitsGroupWidths, nbitsPerGroupValArray, ng);
 
-			// [yy +1 ]-zz Get the scaled group lengths using formula
-			//     Ln = ref + Kn * len_inc, where n = 1-NG,
-			//          ref = referenceGroupLength, and  len_inc = lengthIncrement
+                reader.Seek(bufVals, System.IO.SeekOrigin.Begin);
+                reader.NextUIntN();
 
-			int[] l = new int[ng];
-			int countL = 0;
-			int rgLength = (int) ReferenceGroupLength;
+                for (var i = 0; i < NumberOfGroups; i++)
+                {
+                    var groupRefVal = groupRefValArray[i];
+                    long nvalsPerGroup = nvalsPerGroupArray[i];
+                    var nbitsPerGroupVal = nbitsPerGroupValArray[i];
 
-			int lenInc = LengthIncrement;
+                    nvalsPerGroup *= LengthIncrement;
+                    nvalsPerGroup += ReferenceGroupLength;
+                    nbitsPerGroupVal += ReferenceGroupWidths;
 
-			nbBits = BitsScaledGroupLength;
+                    if (i == NumberOfGroups - 1)
+                    {
+                        nvalsPerGroup = LastGroupLength;
+                    }
+                    if (dataPointsNumber < vcount + nvalsPerGroup)
+                    {
+                        throw new BadGribFormatException("Decoding error");
+                    }
 
-			reader.NextUIntN();
-			for (int i = 0; i < ng; i++)
-			{
-				// NG
-				l[i] = rgLength + reader.ReadUIntN(nbBits) * lenInc;
+                    if (MissingValueManagement == ComplexPackingMissingValueManagement.None)
+                    {
+                        // No explicit missing values included within data values
+                        for (var j = 0; j < nvalsPerGroup; j++)
+                        {
+                            Debug.Assert(vcount + j < dataPointsNumber);
+                            secVal[vcount + j] = groupRefVal + reader.ReadUIntN(nbitsPerGroupVal);
+                        }
+                    }
+                    else if (MissingValueManagement == ComplexPackingMissingValueManagement.Primary)
+                    {
+                        // Primary missing values included within data values
+                        long maxn = 0;
+                        for (var j = 0; j < nvalsPerGroup; j++)
+                        {
+                            if (nbitsPerGroupVal == 0)
+                            {
+                                maxn = (1L << NumberOfBits) - 1;
+                                if (groupRefVal == maxn)
+                                {
+                                    secVal[vcount + j] = long.MaxValue;  // missing value
+                                }
+                                else
+                                {
+                                    long temp = reader.ReadUIntN(nbitsPerGroupVal);
+                                    secVal[vcount + j] = groupRefVal + temp;
+                                }
+                            }
+                            else
+                            {
+                                long temp = reader.ReadUIntN(nbitsPerGroupVal);
+                                maxn = (1L << nbitsPerGroupVal) - 1;
+                                if (temp == maxn)
+                                {
+                                    secVal[vcount + j] = long.MaxValue;  // missing value
+                                }
+                                else
+                                {
+                                    secVal[vcount + j] = groupRefVal + temp;
+                                }
+                            }
+                        }
+                    }
+                    else if (MissingValueManagement == ComplexPackingMissingValueManagement.PrimaryAndSecondary)
+                    {
+                        // Primary and secondary missing values included within data values
+                        long maxn = (1L << NumberOfBits) - 1;
+                        long maxn2 = 0;  // maxn - 1
+                        for (var j = 0; j < nvalsPerGroup; j++)
+                        {
+                            if (nbitsPerGroupVal == 0)
+                            {
+                                maxn2 = maxn - 1;
+                                if (groupRefVal == maxn || groupRefVal == maxn2)
+                                {
+                                    secVal[vcount + j] = long.MaxValue;  // missing value
+                                }
+                                else
+                                {
+                                    long temp = reader.ReadUIntN(nbitsPerGroupVal);
+                                    secVal[vcount + j] = groupRefVal + temp;
+                                }
+                            }
+                            else
+                            {
+                                long temp = reader.ReadUIntN(nbitsPerGroupVal);
+                                maxn = (1L << nbitsPerGroupVal) - 1;
+                                maxn2 = maxn - 1;
+                                if (temp == maxn || temp == maxn2)
+                                {
+                                    secVal[vcount + j] = long.MaxValue;  // missing value
+                                }
+                                else
+                                {
+                                    secVal[vcount + j] = groupRefVal + temp;
+                                }
+                            }
+                        }
+                    }
 
-				countL += l[i];
-			}
+                    vcount += nvalsPerGroup;
+                }
 
-			// [zz +1 ]-nn get X2 values and add X1[ i ] + X2
+                if (OrderSpatial != SpatialDifferencingOrder.None)
+                {
+                    reader.Seek(bufRef, System.IO.SeekOrigin.Begin);
+                    reader.NextUIntN();
 
-			var data = new float[countL];
+                    long bias = 0;
+                    var extras = new ulong[2];
+                    refP = 0;
 
-			//gds.getNumberPoints() );
-			// used to check missing values when X2 is packed with all 1's
-			int[] bitsmv1 = new int[31];
-			//int bitsmv2[] = new int[ 31 ]; didn't code cuz number larger the # of bits
-			for (int i = 0; i < 31; i++)
-			{
-				bitsmv1[i] = (int) Math.Pow(2, i) - 1;
-			}
+                    // For Complex packing, order == 0
+                    // For Complex packing and spatial differencing, order == 1 or 2 (code table 5.6)
+                    if (OrderSpatial != SpatialDifferencingOrder.FirstOrder && OrderSpatial != SpatialDifferencingOrder.SecondOrder)
+                    {
+                        throw new BadGribFormatException($"Unsupported order of spatial differencing {OrderSpatial}");
+                    }
 
-			var count = 0;
-			int x2;
-			reader.NextUIntN();
-			for (int i = 0; i < ng - 1; i++)
-			{
-				for (int j = 0; j < l[i]; j++)
-				{
-					if (nb[i] == 0)
-					{
-						if (mvm == 0)
-						{
-							// X2 = 0
-							data[count++] = x1[i];
-						}
-						else if (mvm == ComplexPackingMissingValueManagement.Primary)
-						{
-							data[count++] = pmv;
-						}
-					}
-					else
-					{
-						x2 = reader.ReadUIntN(nb[i]);
+                    for (var i = 0; i < (int)OrderSpatial; i++)
+                    {
+                        extras[i] = (ulong)reader.ReadUIntN(ExtraDescriptorsLength * 8);
+                    }
 
-						if (mvm == 0)
-						{
-							data[count++] = x1[i] + x2;
-						}
-						else if (mvm == ComplexPackingMissingValueManagement.Primary)
-						{
-							// X2 is also set to missing value is all bits set to 1's
-							if (x2 == bitsmv1[nb[i]])
-							{
-								data[count++] = pmv;
-							}
-							else
-							{
-								data[count++] = x1[i] + x2;
-							}
-						}
-					}
-				} // end for j
-			} // end for i
+                    bias = reader.ReadIntN(ExtraDescriptorsLength * 8);
 
-			// process last group
-			int last = (int) LastGroupLength;
+                    PostProcess(secVal, dataPointsNumber, (int)OrderSpatial, bias, extras);
+                }
 
-			for (int j = 0; j < last; j++)
-			{
-				// last group
-				if (nb[ng - 1] == 0)
-				{
-					if (mvm == 0)
-					{
-						// X2 = 0
-						data[count++] = x1[ng - 1];
-					}
-					else if (mvm == ComplexPackingMissingValueManagement.Primary)
-					{
-						data[count++] = pmv;
-					}
-				}
-				else
-				{
-					x2 = reader.ReadUIntN(nb[ng - 1]);
-					if (mvm == 0)
-					{
-						data[count++] = x1[ng - 1] + x2;
-					}
-					else if (mvm == ComplexPackingMissingValueManagement.Primary)
-					{
-						// X2 is also set to missing value is all bits set to 1's
-						if (x2 == bitsmv1[nb[ng - 1]])
-						{
-							data[count++] = pmv;
-						}
-						else
-						{
-							data[count++] = x1[ng - 1] + x2;
-						}
-					}
-				}
-			} // end for j
+                var binaryS = Math.Pow(2, BinaryScaleFactor);
+                var decimalS = Math.Pow(10, -DecimalScaleFactor);
 
-			if (os == SpatialDifferencingOrder.FirstOrder)
-			{
-				// g1 and gMin this coding is a sort of guess, no doc
-				float sum = 0;
-				if (mvm == 0)
-				{
-					// no missing values
-					for (int i = 1; i < data.Length; i++)
-					{
-						data[i] += gMin; // add minimum back
-					}
+                var missingValue = MissingValueManagement switch
+                {
+                    ComplexPackingMissingValueManagement.Primary => PrimaryMissingValue,
+                    ComplexPackingMissingValueManagement.PrimaryAndSecondary => SecondaryMissingValue,
+                    _ => 9999f
+                };
 
-					data[0] = g1;
-					for (int i = 1; i < data.Length; i++)
-					{
-						sum += data[i];
-						data[i] = data[i - 1] + sum;
-					}
-				}
-				else
-				{
-					// contains missing values
-					float lastOne = pmv;
-					// add the minimum back and set g1
-					int idx = 0;
-					for (int i = 0; i < data.Length; i++)
-					{
-						if (data[i] != pmv)
-						{
-							if (idx == 0)
-							{
-								// set g1
-								data[i] = g1;
-								lastOne = data[i];
-								idx = i + 1;
-							}
-							else
-							{
-								data[i] += gMin;
-							}
-						}
-					}
+                var val = new float[dataPointsNumber];
+                for (var i = 0; i < dataPointsNumber; i++)
+                {
+                    if (secVal[i] == long.MaxValue)
+                    {
+                        val[i] = missingValue;
+                    }
+                    else
+                    {
+                        val[i] = (float)((secVal[i] * binaryS + ReferenceValue) * decimalS);
+                    }
+                }
 
-					if (lastOne == pmv)
-					{
-						throw new BadGribFormatException("DS bad spatial differencing data");
-					}
 
-					for (int i = idx; i < data.Length; i++)
-					{
-						if (data[i] != pmv)
-						{
-							sum += data[i];
-							data[i] = lastOne + sum;
-							lastOne = data[i];
-						}
-					}
-				}
-			}
-			else if (os == SpatialDifferencingOrder.SecondOrder)
-			{
-				//h1, h2, hMin
-				float hDiff = h2 - h1;
-				float sum = 0;
-				if (mvm == 0)
-				{
-					// no missing values
-					for (int i = 2; i < data.Length; i++)
-					{
-						data[i] += hMin; // add minimum back
-					}
+                return val;
+            }
+            finally
+            {
+                ArrayPool<int>.Shared.Return(groupRefValArray);
+                ArrayPool<int>.Shared.Return(nvalsPerGroupArray);
+                ArrayPool<int>.Shared.Return(nbitsPerGroupValArray);
+                ArrayPool<long>.Shared.Return(secVal);
+            }
+        }
 
-					data[0] = h1;
-					data[1] = h2;
-					sum = hDiff;
-					for (int i = 2; i < data.Length; i++)
-					{
-						sum += data[i];
-						data[i] = data[i - 1] + sum;
-					}
-				}
-				else
-				{
-					// contains missing values
-					int idx = 0;
-					float lastOne = pmv;
-					// add the minimum back and set h1 and h2
-					for (int i = 0; i < data.Length; i++)
-					{
-						if (data[i] != pmv)
-						{
-							if (idx == 0)
-							{
-								// set h1
-								data[i] = h1;
-								sum = 0;
-								lastOne = data[i];
-								idx++;
-							}
-							else if (idx == 1)
-							{
-								// set h2
-								data[i] = h1 + hDiff;
-								sum = hDiff;
-								lastOne = data[i];
-								idx = i + 1;
-							}
-							else
-							{
-								data[i] += hMin;
-							}
-						}
-					}
+        private static void PostProcess(long[] values, long length, long order, long bias, ulong[] extras)
+        {
+            ulong last = 0, penultimate = 0;
+            long j = 0;
 
-					if (lastOne == pmv)
-					{
-						throw new BadGribFormatException("DS bad spatial differencing data");
-					}
+            if (order <= 0 || order > 3)
+            {
+                throw new ArgumentOutOfRangeException(nameof(order), "Order must be between 1 and 3.");
+            }
 
-					for (int i = idx; i < data.Length; i++)
-					{
-						if (data[i] != pmv)
-						{
-							sum += data[i];
+            if (values == null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
 
-							data[i] = lastOne + sum;
-							lastOne = data[i];
-						}
-					}
-				}
-			} // end h1, h2, hMin
+            if (order == 1)
+            {
+                last = extras[0];
+                while (j < length && values[j] == long.MaxValue)
+                {
+                    j++;
+                }
 
-			// formula used to create values,  Y * 10**D = R + (X1 + X2) * 2**E
+                if (j < length)
+                {
+                    values[j++] = (long)extras[0];
+                }
 
-			var d = DecimalScaleFactor;
+                while (j < length)
+                {
+                    if (values[j] == long.MaxValue)
+                    {
+                        j++;
+                    }
+                    else
+                    {
+                        values[j] += (long)last + bias;
+                        last = (ulong)values[j++];
+                    }
+                }
+            }
+            else if (order == 2)
+            {
+                penultimate = extras[0];
+                last = extras[1];
 
-			var dd = Math.Pow(10, d);
+                while (j < length && values[j] == long.MaxValue)
+                {
+                    j++;
+                }
 
-			var r = ReferenceValue;
+                if (j < length)
+                {
+                    values[j++] = (long)extras[0];
+                }
 
-			var e = BinaryScaleFactor;
+                while (j < length && values[j] == long.MaxValue)
+                {
+                    j++;
+                }
 
-			var ee = Math.Pow(2.0, e);
+                if (j < length)
+                {
+                    values[j++] = (long)extras[1];
+                }
 
-			if (mvm == 0)
-			{
-				// no missing values
-				for (int i = 0; i < data.Length; i++)
-				{
-					data[i] = (float) ((r + data[i] * ee) / dd);
-				}
-			}
-			else
-			{
-				// missing value == 1
-				for (int i = 0; i < data.Length; i++)
-				{
-					if (data[i] != pmv)
-					{
-						data[i] = (float) ((r + data[i] * ee) / dd);
-					}
-				}
-			}
-
-			return data;
-		}
+                for (; j < length; j++)
+                {
+                    if (values[j] != long.MaxValue)
+                    {
+                        values[j] = values[j] + bias + (long)last + (long)last - (long)penultimate;
+                        penultimate = last;
+                        last = (ulong)values[j];
+                    }
+                }
+            }
+        }
 	}
 }
