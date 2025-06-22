@@ -105,6 +105,11 @@ namespace NGrib.Grib2.Templates.GridDefinitions
 			Dx = reader.ReadInt32() * ratio;
 			Dy = reader.ReadInt32() * ratio;
 			ScanMode = reader.ReadUInt8();
+			
+			if (Lo1 > Lo2)
+			{
+				Lo1 -= 360;
+			}
 		}
 
 		public override IEnumerable<Coordinate> EnumerateGridPoints()

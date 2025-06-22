@@ -92,6 +92,11 @@
 		public static string WmoOneDataSetMessage { get; } = "samples/wmo-one_dataset-message.grb2";
 
 		/// <summary>
+		/// NCEP GEFS Full Domain (0.25 degree grid)
+		/// </summary>
+		public static string NcepGfsFullDomainFile { get; } = "samples/gfs.20250622.t00z.pgrb2.0p25.f000";
+		
+		/// <summary>
 		/// NCEP GFS 20200330/18+12 Forecasts (0.25 degree grid):
 		///   - lon 55 - 55.5
 		///   - lat -21 - -21.25
