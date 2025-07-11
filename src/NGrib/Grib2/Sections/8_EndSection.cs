@@ -24,41 +24,40 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace NGrib.Grib2.Sections
+namespace NGrib.Grib2.Sections;
+
+/// <summary>
+/// Section 8 - End Section
+/// </summary>
+public sealed class EndSection
 {
-	/// <summary>
-	/// Section 8 - End Section
-	/// </summary>
-	public sealed class EndSection
-	{
-		/// <summary>
-		/// Length of section in octets.
-		/// </summary>
-		public long Length { get; }
+    /// <summary>
+    /// Length of section in octets.
+    /// </summary>
+    public long Length { get; }
 
-		/// <summary>
-		/// Number of section.
-		/// </summary>
-		public int Section { get; }
+    /// <summary>
+    /// Number of section.
+    /// </summary>
+    public int Section { get; }
 
-		private EndSection(long length, int section)
-		{
-			Length = length;
-			Section = section;
-		}
+    private EndSection(long length, int section)
+    {
+        Length = length;
+        Section = section;
+    }
 
-		internal static EndSection BuildFrom(BufferedBinaryReader reader)
-		{
-			var sectionInfos = reader.ReadSectionInfo();
-			if (!sectionInfos.Is(SectionCode.EndSection))
-			{
-				throw new UnexpectedGribSectionException(
-					SectionCode.DataSection,
-					sectionInfos.SectionCode
-				);
-			}
+    internal static EndSection BuildFrom(BufferedBinaryReader reader)
+    {
+        var sectionInfos = reader.ReadSectionInfo();
+        if (!sectionInfos.Is(SectionCode.EndSection))
+        {
+            throw new UnexpectedGribSectionException(
+                SectionCode.DataSection,
+                sectionInfos.SectionCode
+            );
+        }
 
-			return new EndSection(sectionInfos.Length, sectionInfos.SectionCode);
-		}
-	}
+        return new EndSection(sectionInfos.Length, sectionInfos.SectionCode);
+    }
 }

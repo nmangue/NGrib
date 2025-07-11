@@ -24,33 +24,32 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace NGrib.Grib2.Templates.GridDefinitions
+namespace NGrib.Grib2.Templates.GridDefinitions;
+
+public class RotatedGaussianLatLonGridDefinition : GaussianLatLonGridDefinition
 {
-	public class RotatedGaussianLatLonGridDefinition : GaussianLatLonGridDefinition
-	{
-		/// <summary> .</summary>
-		/// <returns> SpLat as a float
-		/// 
-		/// </returns>
-		public double SpLat { get; }
+    /// <summary> .</summary>
+    /// <returns> SpLat as a float
+    /// 
+    /// </returns>
+    public double SpLat { get; }
 
-		/// <summary> .</summary>
-		/// <returns> SpLon as a float
-		/// 
-		/// </returns>
-		public double SpLon { get; }
+    /// <summary> .</summary>
+    /// <returns> SpLon as a float
+    /// 
+    /// </returns>
+    public double SpLon { get; }
 
-		/// <summary> .</summary>
-		/// <returns> Rotationangle as a float
-		/// 
-		/// </returns>
-		public long Rotationangle { get; }
+    /// <summary> .</summary>
+    /// <returns> Rotationangle as a float
+    /// 
+    /// </returns>
+    public long Rotationangle { get; }
 
-		internal RotatedGaussianLatLonGridDefinition(BufferedBinaryReader reader) : base(reader)
-		{
-			SpLat = reader.ReadInt32() * Ratio;
-			SpLon = reader.ReadUInt32() * Ratio;
-			Rotationangle = reader.ReadUInt32();
-		}
-	}
+    internal RotatedGaussianLatLonGridDefinition(BufferedBinaryReader reader) : base(reader)
+    {
+        SpLat = reader.ReadInt32() * Ratio;
+        SpLon = reader.ReadUInt32() * Ratio;
+        Rotationangle = reader.ReadUInt32();
+    }
 }

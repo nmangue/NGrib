@@ -24,62 +24,61 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace NGrib.Grib2.Sections
+namespace NGrib.Grib2.Sections;
+
+/// <summary>
+/// Section 6 - Data Section
+/// </summary>
+public sealed class DataSection
 {
-	/// <summary>
-	/// Section 6 - Data Section
-	/// </summary>
-	public sealed class DataSection
-	{
-		/// <summary>
-		/// Length of section in octets.
-		/// </summary>
-		public long Length { get; }
+    /// <summary>
+    /// Length of section in octets.
+    /// </summary>
+    public long Length { get; }
 
-		/// <summary>
-		/// Number of section.
-		/// </summary>
-		public int Section { get; }
+    /// <summary>
+    /// Number of section.
+    /// </summary>
+    public int Section { get; }
 
-		/// <summary>
-		/// Position of the data start.
-		/// </summary>
-		public long DataOffset { get; }
+    /// <summary>
+    /// Position of the data start.
+    /// </summary>
+    public long DataOffset { get; }
 
-		/// <summary>
-		/// Data part length.
-		/// </summary>
-		public long DataLength { get; }
+    /// <summary>
+    /// Data part length.
+    /// </summary>
+    public long DataLength { get; }
 
-		private DataSection(long length, int section, long dataOffset, long dataLength)
-		{
-			DataOffset = dataOffset;
-			Length = length;
-			Section = section;
-			DataLength = dataLength;
-		}
+    private DataSection(long length, int section, long dataOffset, long dataLength)
+    {
+        DataOffset = dataOffset;
+        Length = length;
+        Section = section;
+        DataLength = dataLength;
+    }
 
-		internal static DataSection BuildFrom(BufferedBinaryReader reader)
-		{
-			// octets 1-4 (Length of DS)
-			var length = reader.ReadUInt32();
+    internal static DataSection BuildFrom(BufferedBinaryReader reader)
+    {
+        // octets 1-4 (Length of DS)
+        var length = reader.ReadUInt32();
 
-			// octet 5  section 7
-			var section = reader.ReadUInt8();
-			if (section != (int) SectionCode.DataSection)
-			{
-				throw new UnexpectedGribSectionException(
-					SectionCode.DataSection,
-					section
-				);
-			}
+        // octet 5  section 7
+        var section = reader.ReadUInt8();
+        if (section != (int) SectionCode.DataSection)
+        {
+            throw new UnexpectedGribSectionException(
+                SectionCode.DataSection,
+                section
+            );
+        }
 
-			var dataOffset = reader.Position;
+        var dataOffset = reader.Position;
 
-			var dataLength = length - 5;
-			reader.Skip((int) dataLength);
+        var dataLength = length - 5;
+        reader.Skip((int) dataLength);
 
-			return new DataSection(length, section, dataOffset, dataLength);
-		}
-	}
+        return new DataSection(length, section, dataOffset, dataLength);
+    }
 }

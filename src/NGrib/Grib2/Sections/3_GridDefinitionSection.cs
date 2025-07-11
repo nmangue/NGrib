@@ -24,130 +24,128 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System.IO;
 using NGrib.Grib2.Templates;
 using NGrib.Grib2.Templates.GridDefinitions;
 
-namespace NGrib.Grib2.Sections
+namespace NGrib.Grib2.Sections;
+
+/// <summary>
+/// Section 3 - Grid Definition Section
+/// </summary>
+public sealed class GridDefinitionSection
 {
-	/// <summary>
-	/// Section 3 - Grid Definition Section
-	/// </summary>
-	public sealed class GridDefinitionSection
-	{
-		/// <summary>
-		/// Length of section in octets.
-		/// </summary>
-		public long Length { get; }
+    /// <summary>
+    /// Length of section in octets.
+    /// </summary>
+    public long Length { get; }
 
-		/// <summary>
-		/// Number of section.
-		/// </summary>
-		public int Section { get; }
+    /// <summary>
+    /// Number of section.
+    /// </summary>
+    public int Section { get; }
 
-		/// <summary>
-		/// Source of grid definition.
-		/// </summary>
-		public int Source { get; }
+    /// <summary>
+    /// Source of grid definition.
+    /// </summary>
+    public int Source { get; }
 
-		/// <summary>
-		/// Number of data points.
-		/// </summary>
-		public long DataPointsNumber { get; }
+    /// <summary>
+    /// Number of data points.
+    /// </summary>
+    public long DataPointsNumber { get; }
 
-		/// <summary>
-		/// Number of octets for optional list of numbers defining number of points.
-		/// </summary>
-		public int OptionalListNumberLength { get; }
+    /// <summary>
+    /// Number of octets for optional list of numbers defining number of points.
+    /// </summary>
+    public int OptionalListNumberLength { get; }
 
-		/// <summary>
-		/// Interpretation of list of numbers defining number of points.
-		/// </summary>
-		public int OptionalListInterpretationCode { get; }
+    /// <summary>
+    /// Interpretation of list of numbers defining number of points.
+    /// </summary>
+    public int OptionalListInterpretationCode { get; }
 
-		/// <summary>
-		/// Grid Definition Template Number
-		/// </summary>
-		public int TemplateNumber { get; }
+    /// <summary>
+    /// Grid Definition Template Number
+    /// </summary>
+    public int TemplateNumber { get; }
 
-		/// <summary>
-		/// Grid Definition Template
-		/// </summary>
-		public GridDefinition GridDefinition { get; }
+    /// <summary>
+    /// Grid Definition Template
+    /// </summary>
+    public GridDefinition GridDefinition { get; }
 
-		private GridDefinitionSection(
-			long length,
-			int section,
-			int source,
-			long dataPointsNumber,
-			int oLon,
-			int ioLon,
-			int templateNumber,
-			GridDefinition gridDefinition)
-		{
-			TemplateNumber = templateNumber;
-			Length = length;
-			Section = section;
-			Source = source;
-			DataPointsNumber = dataPointsNumber;
-			OptionalListNumberLength = oLon;
-			OptionalListInterpretationCode = ioLon;
-			GridDefinition = gridDefinition;
-		}
+    private GridDefinitionSection(
+        long length,
+        int section,
+        int source,
+        long dataPointsNumber,
+        int oLon,
+        int ioLon,
+        int templateNumber,
+        GridDefinition gridDefinition)
+    {
+        TemplateNumber = templateNumber;
+        Length = length;
+        Section = section;
+        Source = source;
+        DataPointsNumber = dataPointsNumber;
+        OptionalListNumberLength = oLon;
+        OptionalListInterpretationCode = ioLon;
+        GridDefinition = gridDefinition;
+    }
 
-		internal static GridDefinitionSection BuildFrom(BufferedBinaryReader reader)
-		{
-			var currentPosition = reader.Position;
-			var length = reader.ReadUInt32();
+    internal static GridDefinitionSection BuildFrom(BufferedBinaryReader reader)
+    {
+        var currentPosition = reader.Position;
+        var length = reader.ReadUInt32();
 
-			var section = reader.ReadUInt8(); // This is section 3
+        var section = reader.ReadUInt8(); // This is section 3
 
-			if (section != (int) SectionCode.GridDefinitionSection)
-			{
-				throw new UnexpectedGribSectionException(SectionCode.GridDefinitionSection, section);
-			}
+        if (section != (int) SectionCode.GridDefinitionSection)
+        {
+            throw new UnexpectedGribSectionException(SectionCode.GridDefinitionSection, section);
+        }
 
-			var source = reader.ReadUInt8();
+        var source = reader.ReadUInt8();
 
-			var numberPoints = reader.ReadUInt32();
+        var numberPoints = reader.ReadUInt32();
 
-			var olLength = reader.ReadUInt8();
+        var olLength = reader.ReadUInt8();
 
-			var olInterpretation = reader.ReadUInt8();
+        var olInterpretation = reader.ReadUInt8();
 
-			var templateNumber = reader.ReadUInt16();
+        var templateNumber = reader.ReadUInt16();
 
-			var gridDefinition = GridDefinitionFactories.Build(reader, templateNumber);
+        var gridDefinition = GridDefinitionFactories.Build(reader, templateNumber);
 
-			// Prevent from over-reading the stream
-			reader.Seek(currentPosition + length, SeekOrigin.Begin);
+        // Prevent from over-reading the stream
+        reader.Seek(currentPosition + length, SeekOrigin.Begin);
 
-			return new GridDefinitionSection(length, section, source, numberPoints, olLength, olInterpretation,
-				templateNumber, gridDefinition);
-		}
+        return new GridDefinitionSection(length, section, source, numberPoints, olLength, olInterpretation,
+            templateNumber, gridDefinition);
+    }
 
-		private static readonly TemplateFactory<GridDefinition> GridDefinitionFactories =
-			new TemplateFactory<GridDefinition>
-			{
-				{0, r => new LatLonGridDefinition(r)},
-				{1, r => new RotatedLatLonGridDefinition(r)},
-				{2, r => new StretchedLatLonGridDefinition(r)},
-				{3, r => new StretchedRotatedLatLonGridDefinition(r)},
-				{10, r => new MercatorGridDefinition(r)},
-				{20, r => new PolarStereographicProjectionGridDefinition(r)},
-				{30, r => new LambertConformalGridDefinition(r)},
-				{31, r => new AlbersEqualAreaGridDefinition(r)},
-				{40, r => new GaussianLatLonGridDefinition(r)},
-				{41, r => new RotatedGaussianLatLonGridDefinition(r)},
-				{42, r => new StretchedGaussianLatLonGridDefinition(r)},
-				{43, r => new StretchedRotatedGaussianLatLonGridDefinition(r)},
-				{50, r => new SphericalHarmonicCoefficientsGridDefinition(r)},
-				{51, r => new RotatedSphericalHarmonicCoefficientsGridDefinition(r)},
-				{52, r => new StretchedSphericalHarmonicCoefficientsGridDefinition(r)},
-				{53, r => new StretchedRotatedSphericalHarmonicCoefficientsGridDefinition(r)},
-				{90, r => new SpaceViewPerspectiveOrOrthographicGridDefinition(r)},
-				{100, r => new TriangularGridBasedOnAnIcosahedronGridDefinition(r)},
-				{110, r => new EquatorialAzimuthalEquidistantProjectionGridDefinition(r)}
-			};
-	}
+    private static readonly TemplateFactory<GridDefinition> GridDefinitionFactories =
+        new TemplateFactory<GridDefinition>
+        {
+            {0, r => new LatLonGridDefinition(r)},
+            {1, r => new RotatedLatLonGridDefinition(r)},
+            {2, r => new StretchedLatLonGridDefinition(r)},
+            {3, r => new StretchedRotatedLatLonGridDefinition(r)},
+            {10, r => new MercatorGridDefinition(r)},
+            {20, r => new PolarStereographicProjectionGridDefinition(r)},
+            {30, r => new LambertConformalGridDefinition(r)},
+            {31, r => new AlbersEqualAreaGridDefinition(r)},
+            {40, r => new GaussianLatLonGridDefinition(r)},
+            {41, r => new RotatedGaussianLatLonGridDefinition(r)},
+            {42, r => new StretchedGaussianLatLonGridDefinition(r)},
+            {43, r => new StretchedRotatedGaussianLatLonGridDefinition(r)},
+            {50, r => new SphericalHarmonicCoefficientsGridDefinition(r)},
+            {51, r => new RotatedSphericalHarmonicCoefficientsGridDefinition(r)},
+            {52, r => new StretchedSphericalHarmonicCoefficientsGridDefinition(r)},
+            {53, r => new StretchedRotatedSphericalHarmonicCoefficientsGridDefinition(r)},
+            {90, r => new SpaceViewPerspectiveOrOrthographicGridDefinition(r)},
+            {100, r => new TriangularGridBasedOnAnIcosahedronGridDefinition(r)},
+            {110, r => new EquatorialAzimuthalEquidistantProjectionGridDefinition(r)}
+        };
 }

@@ -17,24 +17,23 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace NGrib.Grib2.Templates.GridDefinitions
+namespace NGrib.Grib2.Templates.GridDefinitions;
+
+public abstract class XyEarthGridDefinition : EarthGridDefinition
 {
-	public abstract class XyEarthGridDefinition : EarthGridDefinition
-	{
-		/// <summary>
-		/// Number of points along x-axis or a parallel.
-		/// </summary>
-		public long Nx { get; }
+    /// <summary>
+    /// Number of points along x-axis or a parallel.
+    /// </summary>
+    public long Nx { get; }
 
-		/// <summary>
-		/// Number of points along y-axis or a meridian.
-		/// </summary>
-		public long Ny { get; }
+    /// <summary>
+    /// Number of points along y-axis or a meridian.
+    /// </summary>
+    public long Ny { get; }
 
-		private protected XyEarthGridDefinition(BufferedBinaryReader reader) : base(reader)
-		{
-			Nx = reader.ReadUInt32();
-			Ny = reader.ReadUInt32();
-		}
-	}
+    private protected XyEarthGridDefinition(BufferedBinaryReader reader) : base(reader)
+    {
+        Nx = reader.ReadUInt32();
+        Ny = reader.ReadUInt32();
+    }
 }

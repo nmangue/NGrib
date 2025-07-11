@@ -24,49 +24,48 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace NGrib.Grib2.Sections
+namespace NGrib.Grib2.Sections;
+
+/// <summary>
+/// Section 2 - Local Use Section
+/// </summary>
+public sealed class LocalUseSection
 {
-	/// <summary>
-	/// Section 2 - Local Use Section
-	/// </summary>
-	public sealed class LocalUseSection
-	{
-		/// <summary>
-		/// Length of section in octets.
-		/// </summary>
-		public long Length { get; }
+    /// <summary>
+    /// Length of section in octets.
+    /// </summary>
+    public long Length { get; }
 
-		/// <summary>
-		/// Number of section.
-		/// </summary>
-		public int Section { get; }
+    /// <summary>
+    /// Number of section.
+    /// </summary>
+    public int Section { get; }
 
-		/// <summary>
-		/// Position at which the local use data begins.
-		/// </summary>
-		internal long ContentOffset { get; }
+    /// <summary>
+    /// Position at which the local use data begins.
+    /// </summary>
+    internal long ContentOffset { get; }
 		
-		private LocalUseSection(long length, int section, long contentOffset)
-		{
-			Length = length;
-			Section = section;
-			ContentOffset = contentOffset;
-		}
+    private LocalUseSection(long length, int section, long contentOffset)
+    {
+        Length = length;
+        Section = section;
+        ContentOffset = contentOffset;
+    }
 
-		internal static LocalUseSection BuildFrom(BufferedBinaryReader reader)
-		{
-			// octets 1-4 (Length of GDS)
-			var length = reader.ReadUInt32();
+    internal static LocalUseSection BuildFrom(BufferedBinaryReader reader)
+    {
+        // octets 1-4 (Length of GDS)
+        var length = reader.ReadUInt32();
 
-			var section = reader.ReadUInt8();
-			if (section != (int) SectionCode.LocalUseSection)
-			{
-				return null;
-			}
+        var section = reader.ReadUInt8();
+        if (section != (int) SectionCode.LocalUseSection)
+        {
+            return null;
+        }
 
-			var contentOffset = reader.Position;
-			reader.Skip((int) length - 5);
-			return new LocalUseSection(length, section, contentOffset);
-		}
-	}
+        var contentOffset = reader.Position;
+        reader.Skip((int) length - 5);
+        return new LocalUseSection(length, section, contentOffset);
+    }
 }

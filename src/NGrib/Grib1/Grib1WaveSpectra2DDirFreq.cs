@@ -24,125 +24,124 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace NGrib.Grib1
+namespace NGrib.Grib1;
+
+public sealed class Grib1WaveSpectra2DDirFreq
 {
-	public sealed class Grib1WaveSpectra2DDirFreq
-	{
-		private string version;
+    private string version;
 
-		public string Version
-		{
-			get { return version; }
-		}
+    public string Version
+    {
+        get { return version; }
+    }
 
-		// one-offset
-		private int directionNumber;
+    // one-offset
+    private int directionNumber;
 
-		public int DirectionNumber
-		{
-			get { return directionNumber; }
-		}
+    public int DirectionNumber
+    {
+        get { return directionNumber; }
+    }
 
-		// one-offset
-		private int frequencyNumber;
+    // one-offset
+    private int frequencyNumber;
 
-		public int FrequencyNumber
-		{
-			get { return frequencyNumber; }
-		}
+    public int FrequencyNumber
+    {
+        get { return frequencyNumber; }
+    }
 
-		private int numberOfDirections;
+    private int numberOfDirections;
 
-		public int NumberOfDirections
-		{
-			get { return numberOfDirections; }
-		}
+    public int NumberOfDirections
+    {
+        get { return numberOfDirections; }
+    }
 
-		private int numberOfFrequencies;
+    private int numberOfFrequencies;
 
-		public int NumberOfFrequencies
-		{
-			get { return numberOfFrequencies; }
-		}
+    public int NumberOfFrequencies
+    {
+        get { return numberOfFrequencies; }
+    }
 
-		private int dirScaleFactor;
+    private int dirScaleFactor;
 
-		public int DirScaleFactor
-		{
-			get { return dirScaleFactor; }
-		}
+    public int DirScaleFactor
+    {
+        get { return dirScaleFactor; }
+    }
 
-		private int freqScaleFactor;
+    private int freqScaleFactor;
 
-		public int FreqScaleFactor
-		{
-			get { return freqScaleFactor; }
-		}
+    public int FreqScaleFactor
+    {
+        get { return freqScaleFactor; }
+    }
 
-		private double[] directions;
+    private double[] directions;
 
-		public double[] Directions
-		{
-			get { return directions; }
-		}
+    public double[] Directions
+    {
+        get { return directions; }
+    }
 
-		private double[] frequencies;
+    private double[] frequencies;
 
-		public double[] Frequencies
-		{
-			get { return frequencies; }
-		}
+    public double[] Frequencies
+    {
+        get { return frequencies; }
+    }
 
-		/// <summary>
-		/// The direction [deg].
-		/// </summary>
-		public double Direction
-		{
-			get { return directions[directionNumber - 1]; }
-		}
+    /// <summary>
+    /// The direction [deg].
+    /// </summary>
+    public double Direction
+    {
+        get { return directions[directionNumber - 1]; }
+    }
 
-		/// <summary>
-		/// The frequency [Hz];
-		/// </summary>
-		public double Frequency
-		{
-			get { return frequencies[frequencyNumber - 1]; }
-		}
+    /// <summary>
+    /// The frequency [Hz];
+    /// </summary>
+    public double Frequency
+    {
+        get { return frequencies[frequencyNumber - 1]; }
+    }
 
 
-		internal Grib1WaveSpectra2DDirFreq(System.IO.Stream raf)
-		{
-			SupportClass.Skip(raf, 4);
+    internal Grib1WaveSpectra2DDirFreq(System.IO.Stream raf)
+    {
+        SupportClass.Skip(raf, 4);
 
-			byte[] ver = GribNumbers.ReadBytes(raf, 4);
-			System.Text.Encoding enc = System.Text.Encoding.ASCII;
-			version = enc.GetString(ver);
+        byte[] ver = GribNumbers.ReadBytes(raf, 4);
+        System.Text.Encoding enc = System.Text.Encoding.ASCII;
+        version = enc.GetString(ver);
 
-			SupportClass.Skip(raf, 2);
+        SupportClass.Skip(raf, 2);
 
-			directionNumber = raf.ReadByte();
-			frequencyNumber = raf.ReadByte();
-			numberOfDirections = raf.ReadByte();
-			numberOfFrequencies = raf.ReadByte();
-			dirScaleFactor = GribNumbers.int4(raf);
-			freqScaleFactor = GribNumbers.int4(raf);
+        directionNumber = raf.ReadByte();
+        frequencyNumber = raf.ReadByte();
+        numberOfDirections = raf.ReadByte();
+        numberOfFrequencies = raf.ReadByte();
+        dirScaleFactor = GribNumbers.int4(raf);
+        freqScaleFactor = GribNumbers.int4(raf);
 
-			SupportClass.Skip(raf, 37);
+        SupportClass.Skip(raf, 37);
 
-			directions = new double[numberOfDirections];
-			frequencies = new double[numberOfFrequencies];
+        directions = new double[numberOfDirections];
+        frequencies = new double[numberOfFrequencies];
 
-			for (int i = 0; i < numberOfDirections; i++)
-			{
-				int val = GribNumbers.int4(raf);
-				directions[i] = (double) val / (double) dirScaleFactor;
-			}
+        for (int i = 0; i < numberOfDirections; i++)
+        {
+            int val = GribNumbers.int4(raf);
+            directions[i] = (double) val / (double) dirScaleFactor;
+        }
 
-			for (int i = 0; i < numberOfFrequencies; i++)
-			{
-				int val = GribNumbers.int4(raf);
-				frequencies[i] = (double) val / (double) freqScaleFactor;
-			}
-		}
-	}
+        for (int i = 0; i < numberOfFrequencies; i++)
+        {
+            int val = GribNumbers.int4(raf);
+            frequencies[i] = (double) val / (double) freqScaleFactor;
+        }
+    }
 }

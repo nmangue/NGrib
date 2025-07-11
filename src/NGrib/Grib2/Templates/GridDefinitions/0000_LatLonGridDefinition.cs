@@ -24,123 +24,120 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using NGrib.Grib2.CodeTables;
 
-namespace NGrib.Grib2.Templates.GridDefinitions
+namespace NGrib.Grib2.Templates.GridDefinitions;
+
+public class LatLonGridDefinition : XyEarthGridDefinition
 {
-	public class LatLonGridDefinition : XyEarthGridDefinition
-	{
-		/// <summary>
-		/// Basic angle of the initial production domain.
-		/// </summary>
-		public long Angle { get; }
+    /// <summary>
+    /// Basic angle of the initial production domain.
+    /// </summary>
+    public long Angle { get; }
 
-		/// <summary>
-		/// Subdivisions of basic angle used to define extreme longitudes and latitudes, and direction increments.
-		/// </summary>
-		public long SubdivisionsAngle { get; }
+    /// <summary>
+    /// Subdivisions of basic angle used to define extreme longitudes and latitudes, and direction increments.
+    /// </summary>
+    public long SubdivisionsAngle { get; }
 
-		/// <summary>
-		/// Latitude of first grid point.
-		/// </summary>
-		public double La1 { get; }
+    /// <summary>
+    /// Latitude of first grid point.
+    /// </summary>
+    public double La1 { get; }
 
-		/// <summary>
-		/// Longitude of first grid point.
-		/// </summary>
-		public double Lo1 { get; }
+    /// <summary>
+    /// Longitude of first grid point.
+    /// </summary>
+    public double Lo1 { get; }
 
-		/// <summary>
-		/// Resolution and component flags value.
-		/// </summary>
-		public ResolutionAndComponent ResolutionAndComponent { get; }
+    /// <summary>
+    /// Resolution and component flags value.
+    /// </summary>
+    public ResolutionAndComponent ResolutionAndComponent { get; }
 
-		/// <summary>
-		/// Latitude of last grid point.
-		/// </summary>
-		public double La2 { get; }
+    /// <summary>
+    /// Latitude of last grid point.
+    /// </summary>
+    public double La2 { get; }
 
-		/// <summary>
-		/// Longitude of last grid point.
-		/// </summary>
-		public double Lo2 { get; }
+    /// <summary>
+    /// Longitude of last grid point.
+    /// </summary>
+    public double Lo2 { get; }
 
-		/// <summary>
-		/// X-direction increment.
-		/// </summary>
-		public double Dx { get; }
+    /// <summary>
+    /// X-direction increment.
+    /// </summary>
+    public double Dx { get; }
 
-		/// <summary>
-		/// Y-direction increment.
-		/// </summary>
-		public double Dy { get; }
+    /// <summary>
+    /// Y-direction increment.
+    /// </summary>
+    public double Dy { get; }
 
-		/// <summary>
-		/// Scanning mode.
-		/// </summary>
-		public int ScanMode { get; }
+    /// <summary>
+    /// Scanning mode.
+    /// </summary>
+    public int ScanMode { get; }
 
-		internal LatLonGridDefinition(BufferedBinaryReader reader) : base(reader)
-		{
-			Angle = reader.ReadUInt32();
-			SubdivisionsAngle = reader.ReadUInt32();
-			double ratio;
-			if (Angle == 0)
-			{
-				ratio = 1e-6;
-			}
-			else
-			{
-				ratio = Angle / (double) SubdivisionsAngle;
-			}
+    internal LatLonGridDefinition(BufferedBinaryReader reader) : base(reader)
+    {
+        Angle = reader.ReadUInt32();
+        SubdivisionsAngle = reader.ReadUInt32();
+        double ratio;
+        if (Angle == 0)
+        {
+            ratio = 1e-6;
+        }
+        else
+        {
+            ratio = Angle / (double) SubdivisionsAngle;
+        }
 
-			La1 = reader.ReadInt32() * ratio;
-			Lo1 = reader.ReadInt32() * ratio;
-			ResolutionAndComponent = (ResolutionAndComponent) reader.ReadUInt8();
-			La2 = reader.ReadInt32() * ratio;
-			Lo2 = reader.ReadInt32() * ratio;
-			Dx = reader.ReadInt32() * ratio;
-			Dy = reader.ReadInt32() * ratio;
-			ScanMode = reader.ReadUInt8();
-		}
+        La1 = reader.ReadInt32() * ratio;
+        Lo1 = reader.ReadInt32() * ratio;
+        ResolutionAndComponent = (ResolutionAndComponent) reader.ReadUInt8();
+        La2 = reader.ReadInt32() * ratio;
+        Lo2 = reader.ReadInt32() * ratio;
+        Dx = reader.ReadInt32() * ratio;
+        Dy = reader.ReadInt32() * ratio;
+        ScanMode = reader.ReadUInt8();
+    }
 
-		public override IEnumerable<Coordinate> EnumerateGridPoints()
-		{
-			var scanningMode = (ScanningMode) ScanMode;
-			var resolution = ResolutionAndComponent;
+    public override IEnumerable<Coordinate> EnumerateGridPoints()
+    {
+        var scanningMode = (ScanningMode) ScanMode;
+        var resolution = ResolutionAndComponent;
 
-			if (resolution != (ResolutionAndComponent.JDirectionIncrementGiven | ResolutionAndComponent.IDirectionIncrementGiven) ||
-			    (scanningMode & ~(ScanningMode.ScanJPositive | ScanningMode.ScanIReverse)) != ScanningMode.Default)
-			{
-				throw new NotImplementedException();
-			}
+        if (resolution != (ResolutionAndComponent.JDirectionIncrementGiven | ResolutionAndComponent.IDirectionIncrementGiven) ||
+            (scanningMode & ~(ScanningMode.ScanJPositive | ScanningMode.ScanIReverse)) != ScanningMode.Default)
+        {
+            throw new NotImplementedException();
+        }
 
-			var firstGridPoint = new Coordinate(La1, Lo1);
-			var lastGridPoint = new Coordinate(La2, Lo2);
+        var firstGridPoint = new Coordinate(La1, Lo1);
+        var lastGridPoint = new Coordinate(La2, Lo2);
 
-			var xStep = Dx * (scanningMode.HasFlag(ScanningMode.ScanIReverse) ? -1 : 1);
-			var yStep = Dy * (scanningMode.HasFlag(ScanningMode.ScanJPositive) ? 1 : -1);
-			var currentGridPoint = firstGridPoint;
+        var xStep = Dx * (scanningMode.HasFlag(ScanningMode.ScanIReverse) ? -1 : 1);
+        var yStep = Dy * (scanningMode.HasFlag(ScanningMode.ScanJPositive) ? 1 : -1);
+        var currentGridPoint = firstGridPoint;
 
-			// Adjacent points in x direction are consecutive 
-			var latitudeOffset = 0d;
-			for (var y = 0; y < Ny; y++)
-			{
-				var longitudeOffset = 0d;
-				for (var x = 0; x < Nx; x++)
-				{
-					currentGridPoint = firstGridPoint.Add(latitudeOffset, longitudeOffset);
-					yield return currentGridPoint;
+        // Adjacent points in x direction are consecutive 
+        var latitudeOffset = 0d;
+        for (var y = 0; y < Ny; y++)
+        {
+            var longitudeOffset = 0d;
+            for (var x = 0; x < Nx; x++)
+            {
+                currentGridPoint = firstGridPoint.Add(latitudeOffset, longitudeOffset);
+                yield return currentGridPoint;
 
-					longitudeOffset += xStep;
-				}
-				latitudeOffset += yStep;
-			}
+                longitudeOffset += xStep;
+            }
+            latitudeOffset += yStep;
+        }
 
-			Debug.Assert(lastGridPoint.Equals(currentGridPoint));
-		}
-	}
+        Debug.Assert(lastGridPoint.Equals(currentGridPoint));
+    }
 }

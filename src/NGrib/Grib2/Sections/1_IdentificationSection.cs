@@ -24,129 +24,127 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System;
 using NGrib.Grib2.CodeTables;
 
-namespace NGrib.Grib2.Sections
+namespace NGrib.Grib2.Sections;
+
+/// <summary>
+/// Section 1 - Identification Section
+/// </summary>
+public sealed record IdentificationSection
 {
-	/// <summary>
-	/// Section 1 - Identification Section
-	/// </summary>
-	public sealed class IdentificationSection
-	{
-		/// <summary>
-		/// Length of section in octets.
-		/// </summary>
-		public long Length { get; }
+    /// <summary>
+    /// Length of section in octets.
+    /// </summary>
+    public long Length { get; }
 
-		/// <summary>
-		/// Number of section.
-		/// </summary>
-		public int Section { get; }
+    /// <summary>
+    /// Number of section.
+    /// </summary>
+    public int Section { get; }
 
-		/// <summary>
-		/// Identification of originating/generating center.
-		/// </summary>
-		public int CenterCode { get; }
+    /// <summary>
+    /// Identification of originating/generating center.
+    /// </summary>
+    public int CenterCode { get; }
 
-		/// <summary>
-		/// Originating/generating center.
-		/// </summary>
-		public Center Center { get; }
+    /// <summary>
+    /// Originating/generating center.
+    /// </summary>
+    public Center Center { get; }
 
-		/// <summary>
-		/// Identification of originating/generating sub-centre (allocated by originating/generating Centre)
-		/// </summary>
-		public int SubCenterCode { get; }
+    /// <summary>
+    /// Identification of originating/generating sub-centre (allocated by originating/generating Centre)
+    /// </summary>
+    public int SubCenterCode { get; }
 
-		/// <summary>
-		/// GRIB Master Tables Version Number.
-		/// </summary>
-		public int MasterTableVersion { get; }
+    /// <summary>
+    /// GRIB Master Tables Version Number.
+    /// </summary>
+    public int MasterTableVersion { get; }
 
-		/// <summary>
-		/// Version number of GRIB Local Tables used to augment Master Tables.
-		/// </summary>
-		public int LocalTableVersion { get; }
+    /// <summary>
+    /// Version number of GRIB Local Tables used to augment Master Tables.
+    /// </summary>
+    public int LocalTableVersion { get; }
 
-		/// <summary>
-		/// Significance of Reference Time.
-		/// </summary>
-		public ReferenceTimeSignificance ReferenceTimeSignificance { get; }
+    /// <summary>
+    /// Significance of Reference Time.
+    /// </summary>
+    public ReferenceTimeSignificance ReferenceTimeSignificance { get; }
 
-		/// <summary>
-		/// Reference time of data.
-		/// </summary>
-		public DateTime ReferenceTime { get; }
+    /// <summary>
+    /// Reference time of data.
+    /// </summary>
+    public DateTime ReferenceTime { get; }
 
-		/// <summary>
-		/// Production status of processed data in this GRIB message.
-		/// </summary>
-		public ProductStatus ProductStatus { get; }
+    /// <summary>
+    /// Production status of processed data in this GRIB message.
+    /// </summary>
+    public ProductStatus ProductStatus { get; }
 
-		/// <summary>
-		/// Type of processed data in this GRIB message.
-		/// </summary>
-		public ProductType ProductType { get; }
+    /// <summary>
+    /// Type of processed data in this GRIB message.
+    /// </summary>
+    public ProductType ProductType { get; }
 
-		private IdentificationSection(long length, int section, int centerCode, int subCenterCode, int masterTableVersion, int localTableVersion, int referenceTimeSignificanceCode, DateTime referenceTime, int productStatusCode, int productTypeCode)
-		{
-			Length = length;
-			Section = section;
-			CenterCode = centerCode;
-			Center = Center.GetCenterById(CenterCode);
-			SubCenterCode = subCenterCode;
-			MasterTableVersion = masterTableVersion;
-			LocalTableVersion = localTableVersion;
-			ReferenceTimeSignificance = (ReferenceTimeSignificance)referenceTimeSignificanceCode;
-			ReferenceTime = referenceTime;
-			ProductStatus = (ProductStatus)productStatusCode;
-			ProductType = (ProductType)productTypeCode;
-		}
+    private IdentificationSection(long length, int section, int centerCode, int subCenterCode, int masterTableVersion, int localTableVersion, int referenceTimeSignificanceCode, DateTime referenceTime, int productStatusCode, int productTypeCode)
+    {
+        Length = length;
+        Section = section;
+        CenterCode = centerCode;
+        Center = Center.GetCenterById(CenterCode);
+        SubCenterCode = subCenterCode;
+        MasterTableVersion = masterTableVersion;
+        LocalTableVersion = localTableVersion;
+        ReferenceTimeSignificance = (ReferenceTimeSignificance)referenceTimeSignificanceCode;
+        ReferenceTime = referenceTime;
+        ProductStatus = (ProductStatus)productStatusCode;
+        ProductType = (ProductType)productTypeCode;
+    }
 
-		internal static IdentificationSection BuildFrom(BufferedBinaryReader reader)
-		{
-			// section 1 octet 1-4 (length of section)
-			var length = reader.ReadUInt32();
+    internal static IdentificationSection BuildFrom(BufferedBinaryReader reader)
+    {
+        // section 1 octet 1-4 (length of section)
+        var length = reader.ReadUInt32();
 
-			var section = reader.ReadUInt8();
-			if (section != (int) SectionCode.IdentificationSection)
-			{
-				return null;
-			}
+        var section = reader.ReadUInt8();
+        if (section != (int) SectionCode.IdentificationSection)
+        {
+            return null;
+        }
 
-			// Center  octet 6-7
-			var centerCode = reader.ReadUInt16();
+        // Center  octet 6-7
+        var centerCode = reader.ReadUInt16();
 
-			// Center  octet 8-9
-			var subCenterCode = reader.ReadUInt16();
+        // Center  octet 8-9
+        var subCenterCode = reader.ReadUInt16();
 
-			// Parameter master table octet 10
-			var masterTableVersion = reader.ReadUInt8();
+        // Parameter master table octet 10
+        var masterTableVersion = reader.ReadUInt8();
 
-			// Parameter local table octet 11
-			var localTableVersion = reader.ReadUInt8();
+        // Parameter local table octet 11
+        var localTableVersion = reader.ReadUInt8();
 
-			// significanceOfRT octet 12
-			var significanceOfRt = reader.ReadUInt8();
+        // significanceOfRT octet 12
+        var significanceOfRt = reader.ReadUInt8();
 
-			// octets 13-19 (base time of forecast)
-			var refTime = reader.ReadDateTime();
+        // octets 13-19 (base time of forecast)
+        var refTime = reader.ReadDateTime();
 
-			var productStatusCode = reader.ReadUInt8();
+        var productStatusCode = reader.ReadUInt8();
 
-			var productTypeCode = reader.ReadUInt8();
-			return new IdentificationSection(
-				length,
-				section,
-				centerCode,
-				subCenterCode,
-				masterTableVersion,
-				localTableVersion,
-				significanceOfRt,
-				refTime,
-				productStatusCode,
-				productTypeCode);
-		}
-	}
+        var productTypeCode = reader.ReadUInt8();
+        return new IdentificationSection(
+            length,
+            section,
+            centerCode,
+            subCenterCode,
+            masterTableVersion,
+            localTableVersion,
+            significanceOfRt,
+            refTime,
+            productStatusCode,
+            productTypeCode);
+    }
 }

@@ -18,99 +18,96 @@
  */
 
 using NGrib.Grib2.CodeTables;
-using System;
 
-namespace NGrib.Grib2.Templates.ProductDefinitions
+namespace NGrib.Grib2.Templates.ProductDefinitions;
+
+/// <summary>
+/// Product Definition Template 4.0: Analysis or forecast at a horizontal level or in a horizontal layer at a point in time
+/// </summary>
+public class ProductDefinition0000 : WithBackgroundProductDefinition
 {
+    /// <summary>
+    /// Analysis or forecast generating processes identifier.
+    /// </summary>
+    public int GeneratingProcessIdentifier { get; }
 
-	/// <summary>
-	/// Product Definition Template 4.0: Analysis or forecast at a horizontal level or in a horizontal layer at a point in time
-	/// </summary>
-	public class ProductDefinition0000 : WithBackgroundProductDefinition
-	{
-		/// <summary>
-		/// Analysis or forecast generating processes identifier.
-		/// </summary>
-		public int GeneratingProcessIdentifier { get; }
+    /// <summary>
+    /// Hours of observational data cutoff after reference time.
+    /// </summary>
+    public int HoursAfter { get; }
 
-		/// <summary>
-		/// Hours of observational data cutoff after reference time.
-		/// </summary>
-		public int HoursAfter { get; }
+    /// <summary>
+    /// Minutes of observational data cutoff after reference time.
+    /// </summary>
+    public int MinutesAfter { get; }
 
-		/// <summary>
-		/// Minutes of observational data cutoff after reference time.
-		/// </summary>
-		public int MinutesAfter { get; }
+    /// <summary>
+    /// Timespan of observational data cutoff after reference time.
+    /// </summary>
+    public TimeSpan ObservationalDataCutoff { get; }
 
-		/// <summary>
-		/// Timespan of observational data cutoff after reference time.
-		/// </summary>
-		public TimeSpan ObservationalDataCutoff { get; }
+    /// <summary>
+    /// Indicator of unit of time range.
+    /// </summary>
+    public TimeRangeUnitGrib2 TimeRangeUnitGrib2 { get; }
 
-		/// <summary>
-		/// Indicator of unit of time range.
-		/// </summary>
-		public TimeRangeUnit TimeRangeUnit { get; }
+    /// <summary>
+    /// Forecast time in units defined by indicator of unit of time range.
+    /// </summary>
+    public int ForecastTime { get; }
 
-		/// <summary>
-		/// Forecast time in units defined by indicator of unit of time range.
-		/// </summary>
-		public int ForecastTime { get; }
+    /// <summary>
+    /// Type of first fixed surface.
+    /// </summary>
+    public FixedSurfaceType FirstFixedSurfaceType { get; }
 
-		/// <summary>
-		/// Type of first fixed surface.
-		/// </summary>
-		public FixedSurfaceType FirstFixedSurfaceType { get; }
+    /// <summary>
+    /// Value of first fixed surface.
+    /// </summary>
+    public double? FirstFixedSurfaceValue { get; }
 
-		/// <summary>
-		/// Value of first fixed surface.
-		/// </summary>
-		public double? FirstFixedSurfaceValue { get; }
+    /// <summary>
+    /// Type of second fixed surface.
+    /// </summary>
+    public FixedSurfaceType SecondFixedSurfaceType { get; }
 
-		/// <summary>
-		/// Type of second fixed surface.
-		/// </summary>
-		public FixedSurfaceType SecondFixedSurfaceType { get; }
+    /// <summary>
+    /// Value of second fixed surface.
+    /// </summary>
+    public double? SecondFixedSurfaceValue { get; }
 
-		/// <summary>
-		/// Value of second fixed surface.
-		/// </summary>
-		public double? SecondFixedSurfaceValue { get; }
+    internal ProductDefinition0000(BufferedBinaryReader reader, Discipline discipline) : base(
+        reader, discipline)
+    {
+        GeneratingProcessIdentifier = reader.ReadUInt8();
+        HoursAfter = reader.ReadUInt16();
+        MinutesAfter = reader.ReadUInt8();
+        ObservationalDataCutoff = TimeSpan.FromHours(HoursAfter) + TimeSpan.FromMinutes(MinutesAfter);
+        TimeRangeUnitGrib2 = (TimeRangeUnitGrib2) reader.ReadUInt8();
+        ForecastTime = reader.ReadInt32();
 
-		internal ProductDefinition0000(BufferedBinaryReader reader, Discipline discipline) : base(
-			reader, discipline)
-		{
-			GeneratingProcessIdentifier = reader.ReadUInt8();
-			HoursAfter = reader.ReadUInt16();
-			MinutesAfter = reader.ReadUInt8();
-			ObservationalDataCutoff = TimeSpan.FromHours(HoursAfter) + TimeSpan.FromMinutes(MinutesAfter);
-			TimeRangeUnit = (TimeRangeUnit) reader.ReadUInt8();
-			ForecastTime = reader.ReadInt32();
+        FirstFixedSurfaceType = (FixedSurfaceType) reader.ReadUInt8();
+        FirstFixedSurfaceValue = reader.ReadScaledValue();
 
-			FirstFixedSurfaceType = (FixedSurfaceType) reader.ReadUInt8();
-			FirstFixedSurfaceValue = reader.ReadScaledValue();
+        SecondFixedSurfaceType = (FixedSurfaceType) reader.ReadUInt8();
+        SecondFixedSurfaceValue = reader.ReadScaledValue();
 
-			SecondFixedSurfaceType = (FixedSurfaceType) reader.ReadUInt8();
-			SecondFixedSurfaceValue = reader.ReadScaledValue();
+        RegisterContent(ProductDefinitionContent.GeneratingProcessId, () => GeneratingProcessIdentifier);
+        RegisterContent(ProductDefinitionContent.ObservationalDataCutoff, () => ObservationalDataCutoff);
+        var forecastTime = CalculateTimeRangeFrom(TimeRangeUnitGrib2, ForecastTime);
+        if (forecastTime.HasValue) {
+            RegisterContent(ProductDefinitionContent.ForecastTime, () => forecastTime.Value);
+        }
 
-			RegisterContent(ProductDefinitionContent.GeneratingProcessId, () => GeneratingProcessIdentifier);
-			RegisterContent(ProductDefinitionContent.ObservationalDataCutoff, () => ObservationalDataCutoff);
-			var forecastTime = CalculateTimeRangeFrom(TimeRangeUnit, ForecastTime);
-			if (forecastTime.HasValue) {
-				RegisterContent(ProductDefinitionContent.ForecastTime, () => forecastTime.Value);
-			}
-
-			RegisterContent(ProductDefinitionContent.FirstFixedSurfaceType, () => FirstFixedSurfaceType);
-			if (FirstFixedSurfaceValue.HasValue)
-			{
-				RegisterContent(ProductDefinitionContent.FirstFixedSurfaceValue, () => FirstFixedSurfaceValue.Value);
-			}
-			RegisterContent(ProductDefinitionContent.SecondFixedSurfaceType, () => SecondFixedSurfaceType);
-			if (SecondFixedSurfaceValue.HasValue)
-			{
-				RegisterContent(ProductDefinitionContent.SecondFixedSurfaceValue, () => SecondFixedSurfaceValue.Value);
-			}
-		}
-	}
+        RegisterContent(ProductDefinitionContent.FirstFixedSurfaceType, () => FirstFixedSurfaceType);
+        if (FirstFixedSurfaceValue.HasValue)
+        {
+            RegisterContent(ProductDefinitionContent.FirstFixedSurfaceValue, () => FirstFixedSurfaceValue.Value);
+        }
+        RegisterContent(ProductDefinitionContent.SecondFixedSurfaceType, () => SecondFixedSurfaceType);
+        if (SecondFixedSurfaceValue.HasValue)
+        {
+            RegisterContent(ProductDefinitionContent.SecondFixedSurfaceValue, () => SecondFixedSurfaceValue.Value);
+        }
+    }
 }

@@ -19,37 +19,36 @@
 
 using NGrib.Grib2.CodeTables;
 
-namespace NGrib.Grib2.Templates.ProductDefinitions
+namespace NGrib.Grib2.Templates.ProductDefinitions;
+
+/// <summary>
+/// Product Definition Template 4.1: Individual ensemble forecast, control and perturbed, at ahorizontal level or in a horizontal layer at a point in time.
+/// </summary>
+public class ProductDefinition0001 : ProductDefinition0000
 {
-	/// <summary>
-	/// Product Definition Template 4.1: Individual ensemble forecast, control and perturbed, at ahorizontal level or in a horizontal layer at a point in time.
-	/// </summary>
-	public class ProductDefinition0001 : ProductDefinition0000
-	{
-		/// <summary>
-		/// Type of ensemble forecast (see Code table 4.6).
-		/// </summary>
-		public EnsembleForecastType EnsembleForecastType { get; }
+    /// <summary>
+    /// Type of ensemble forecast (see Code table 4.6).
+    /// </summary>
+    public EnsembleForecastType EnsembleForecastType { get; }
 
-		/// <summary>
-		/// Perturbation number.
-		/// </summary>
-		public int PerturbationNumber { get; }
+    /// <summary>
+    /// Perturbation number.
+    /// </summary>
+    public int PerturbationNumber { get; }
 
-		/// <summary>
-		/// Number of forecasts in ensemble
-		/// </summary>
-		public int EnsembleForecastsNumber { get; }
+    /// <summary>
+    /// Number of forecasts in ensemble
+    /// </summary>
+    public int EnsembleForecastsNumber { get; }
 
-		internal ProductDefinition0001(BufferedBinaryReader reader, Discipline discipline) : base(reader, discipline)
-		{
-			EnsembleForecastType = (EnsembleForecastType) reader.ReadByte();
-			PerturbationNumber = reader.ReadByte();
-			EnsembleForecastsNumber = reader.ReadByte();
+    internal ProductDefinition0001(BufferedBinaryReader reader, Discipline discipline) : base(reader, discipline)
+    {
+        EnsembleForecastType = (EnsembleForecastType) reader.ReadByte();
+        PerturbationNumber = reader.ReadByte();
+        EnsembleForecastsNumber = reader.ReadByte();
 
-			RegisterContent(ProductDefinitionContent.EnsembleForecastType, () => EnsembleForecastType);
-			RegisterContent(ProductDefinitionContent.PerturbationNumber, () => PerturbationNumber);
-			RegisterContent(ProductDefinitionContent.EnsembleForecastsNumber, () => EnsembleForecastsNumber);
-		}
-	}
+        RegisterContent(ProductDefinitionContent.EnsembleForecastType, () => EnsembleForecastType);
+        RegisterContent(ProductDefinitionContent.PerturbationNumber, () => PerturbationNumber);
+        RegisterContent(ProductDefinitionContent.EnsembleForecastsNumber, () => EnsembleForecastsNumber);
+    }
 }

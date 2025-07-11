@@ -18,61 +18,58 @@
  */
 
 using NGrib.Grib2.CodeTables;
-using System;
-using System.Collections.Generic;
 
-namespace NGrib.Grib2.Templates
+namespace NGrib.Grib2.Templates;
+
+public abstract class Template
 {
-	public abstract class Template
-	{
-		private readonly Dictionary<TemplateContent, Func<object>> _accessors = new Dictionary<TemplateContent, Func<object>>();
+    private readonly Dictionary<TemplateContent, Func<object>> _accessors = new Dictionary<TemplateContent, Func<object>>();
 
-		protected Template()
-		{
-		}
+    protected Template()
+    {
+    }
 
-		protected void RegisterContent<T>(TemplateContent<T> content, Func<T> accesor)
-		{
-			_accessors[content] = () => accesor();
-		}
+    protected void RegisterContent<T>(TemplateContent<T> content, Func<T> accesor)
+    {
+        _accessors[content] = () => accesor();
+    }
 
-		public bool TryGet<T>(TemplateContent<T> content, out T result)
-		{
-			if (_accessors.TryGetValue(content, out var methodInfo))
-			{
-				result = (T) methodInfo.Invoke();
-				return true;
-			}
+    public bool TryGet<T>(TemplateContent<T> content, out T result)
+    {
+        if (_accessors.TryGetValue(content, out var methodInfo))
+        {
+            result = (T) methodInfo.Invoke();
+            return true;
+        }
 
-			result = default;
-			return false;
-		}
+        result = default;
+        return false;
+    }
 
-		protected TimeSpan? CalculateTimeRangeFrom(TimeRangeUnit rangeUnit, long value)
-		{
-			switch(rangeUnit)
-			{
-				case TimeRangeUnit.Minute:
-					return TimeSpan.FromMinutes(value);
-				case TimeRangeUnit.Hour:
-					return TimeSpan.FromHours(value);
-				case TimeRangeUnit.Day:
-					return TimeSpan.FromDays(value);
-				case TimeRangeUnit.Month:
-					return TimeSpan.FromDays(value);
-				case TimeRangeUnit.Hours3:
-					return TimeSpan.FromHours(value*3);
-				case TimeRangeUnit.Hours6:
-					return TimeSpan.FromDays(value*6);
-				case TimeRangeUnit.Hours12:
-					return TimeSpan.FromDays(value*12);
-				case TimeRangeUnit.Second:
-					return TimeSpan.FromSeconds(value);
-				default:
-					// The other TimeRangeUnit (i.e. Month) can't be
-					// converted to a TimeSpan without some convention.
-					return null;
-			}
-		}
-	}
+    protected TimeSpan? CalculateTimeRangeFrom(TimeRangeUnitGrib2 rangeUnitGrib2, long value)
+    {
+        switch(rangeUnitGrib2)
+        {
+            case TimeRangeUnitGrib2.Minute:
+                return TimeSpan.FromMinutes(value);
+            case TimeRangeUnitGrib2.Hour:
+                return TimeSpan.FromHours(value);
+            case TimeRangeUnitGrib2.Day:
+                return TimeSpan.FromDays(value);
+            case TimeRangeUnitGrib2.Month:
+                return TimeSpan.FromDays(value);
+            case TimeRangeUnitGrib2.Hours3:
+                return TimeSpan.FromHours(value*3);
+            case TimeRangeUnitGrib2.Hours6:
+                return TimeSpan.FromDays(value*6);
+            case TimeRangeUnitGrib2.Hours12:
+                return TimeSpan.FromDays(value*12);
+            case TimeRangeUnitGrib2.Second:
+                return TimeSpan.FromSeconds(value);
+            default:
+                // The other TimeRangeUnit (i.e. Month) can't be
+                // converted to a TimeSpan without some convention.
+                return null;
+        }
+    }
 }

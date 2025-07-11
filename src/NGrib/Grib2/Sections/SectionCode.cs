@@ -17,17 +17,17 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace NGrib.Grib2.Sections
+namespace NGrib.Grib2.Sections;
+
+/// <summary>
+/// Section Codes.
+/// </summary>
+public enum SectionCode
 {
-  /// <summary>
-  /// Section Codes.
-  /// </summary>
-	public enum SectionCode
-	{
     /// <summary>
     /// Indicator Section Code.
     /// </summary>
-		IndicatorSection,
+    IndicatorSection,
 
     /// <summary>
     /// Identification Section Code.
@@ -37,36 +37,35 @@ namespace NGrib.Grib2.Sections
     /// <summary>
     /// Local Use Section Code.
     /// </summary>
-		LocalUseSection,
+    LocalUseSection,
 
-		/// <summary>
-		/// Grid Definition Section Code.
-		/// </summary>
-		GridDefinitionSection,
+    /// <summary>
+    /// Grid Definition Section Code.
+    /// </summary>
+    GridDefinitionSection,
 
-		/// <summary>
-		/// Product Definition Section Code.
-		/// </summary>
-		ProductDefinitionSection,
+    /// <summary>
+    /// Product Definition Section Code.
+    /// </summary>
+    ProductDefinitionSection,
 
-		/// <summary>
-		/// Data Representation Section Code.
-		/// </summary>
-		DataRepresentationSection,
+    /// <summary>
+    /// Data Representation Section Code.
+    /// </summary>
+    DataRepresentationSection,
 
-		/// <summary>
-		/// Bitmap Section Code.
-		/// </summary>
-		BitmapSection,
+    /// <summary>
+    /// Bitmap Section Code.
+    /// </summary>
+    BitmapSection,
 
-		/// <summary>
-		/// Data Section Code.
-		/// </summary>
-		DataSection,
+    /// <summary>
+    /// Data Section Code.
+    /// </summary>
+    DataSection,
 
-		/// <summary>
-		/// End Section Code.
-		/// </summary>
-		EndSection
-  }
+    /// <summary>
+    /// End Section Code.
+    /// </summary>
+    EndSection
 }

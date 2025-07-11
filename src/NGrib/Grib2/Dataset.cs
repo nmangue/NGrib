@@ -24,102 +24,98 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using NGrib.Grib2.CodeTables;
 using NGrib.Grib2.Sections;
 
-namespace NGrib.Grib2
+namespace NGrib.Grib2;
+
+/// <summary>
+/// Represents a data set in a GRIB2 message.
+/// </summary>
+public sealed class DataSet
 {
-	/// <summary>
-	/// Represents a data set in a GRIB2 message.
-	/// </summary>
-	public sealed class DataSet
-	{
-		/// <summary>
-		/// Message in which the data set is provided.
-		/// </summary>
-		public Message Message { get; }
+    /// <summary>
+    /// Message in which the data set is provided.
+    /// </summary>
+    public Message Message { get; }
 
-		/// <summary>
-		/// Local Use Section.
-		/// </summary>
-		/// <remarks><c>null</c> if not used.</remarks>
-		public LocalUseSection LocalUseSection { get; }
+    /// <summary>
+    /// Local Use Section.
+    /// </summary>
+    /// <remarks><c>null</c> if not used.</remarks>
+    public LocalUseSection LocalUseSection { get; }
 
-		/// <summary>
-		/// Grid Definition Section.
-		/// </summary>
-		public GridDefinitionSection GridDefinitionSection { get; }
+    /// <summary>
+    /// Grid Definition Section.
+    /// </summary>
+    public GridDefinitionSection GridDefinitionSection { get; }
 
-		/// <summary>
-		/// Product Definition Section.
-		/// </summary>
-		public ProductDefinitionSection ProductDefinitionSection { get; }
+    /// <summary>
+    /// Product Definition Section.
+    /// </summary>
+    public ProductDefinitionSection ProductDefinitionSection { get; }
 
-		/// <summary>
-		/// Bitmap Section.
-		/// </summary>
-		public BitmapSection BitmapSection { get; }
+    /// <summary>
+    /// Bitmap Section.
+    /// </summary>
+    public BitmapSection BitmapSection { get; }
 
-		/// <summary>
-		/// Data Representation Section.
-		/// </summary>
-		public DataRepresentationSection DataRepresentationSection { get; }
+    /// <summary>
+    /// Data Representation Section.
+    /// </summary>
+    public DataRepresentationSection DataRepresentationSection { get; }
 
-		/// <summary>
-		/// Data Section.
-		/// </summary>
-		public DataSection DataSection { get; }
+    /// <summary>
+    /// Data Section.
+    /// </summary>
+    public DataSection DataSection { get; }
 
-		/// <summary>
-		/// Parameter defined in the Product Definition Section.
-		/// </summary>
-		public Parameter? Parameter => ProductDefinitionSection.ProductDefinition?.Parameter;
+    /// <summary>
+    /// Parameter defined in the Product Definition Section.
+    /// </summary>
+    public Parameter? Parameter => ProductDefinitionSection.ProductDefinition?.Parameter;
 
-		internal DataSet(
-			Message message,
-			LocalUseSection localUseSection,
-			GridDefinitionSection gridDefinitionSection,
-			ProductDefinitionSection productDefinitionSection,
-			DataRepresentationSection dataRepresentationSection,
-			BitmapSection bitmapSection,
-			DataSection dataSection)
-		{
-			Message = message;
-			GridDefinitionSection = gridDefinitionSection;
-			ProductDefinitionSection = productDefinitionSection;
-			DataRepresentationSection = dataRepresentationSection;
-			BitmapSection = bitmapSection;
-			DataSection = dataSection;
-			LocalUseSection = localUseSection;
-		}
+    internal DataSet(
+        Message message,
+        LocalUseSection localUseSection,
+        GridDefinitionSection gridDefinitionSection,
+        ProductDefinitionSection productDefinitionSection,
+        DataRepresentationSection dataRepresentationSection,
+        BitmapSection bitmapSection,
+        DataSection dataSection)
+    {
+        Message = message;
+        GridDefinitionSection = gridDefinitionSection;
+        ProductDefinitionSection = productDefinitionSection;
+        DataRepresentationSection = dataRepresentationSection;
+        BitmapSection = bitmapSection;
+        DataSection = dataSection;
+        LocalUseSection = localUseSection;
+    }
 
-		internal IEnumerable<KeyValuePair<Coordinate, float?>> GetData(BufferedBinaryReader reader)
-		{
-			return GridDefinitionSection.GridDefinition.EnumerateGridPoints()
-				.Zip(GetRawData(reader), (p, v) => new KeyValuePair<Coordinate, float?>(p, v));
-		}
+    internal IEnumerable<KeyValuePair<Coordinate, double?>> GetData(BufferedBinaryReader reader)
+    {
+        return GridDefinitionSection.GridDefinition.EnumerateGridPoints()
+            .Zip(GetRawData(reader), (p, v) => new KeyValuePair<Coordinate, double?>(p, v));
+    }
 
-		internal IEnumerable<float?> GetRawData(BufferedBinaryReader reader)
-		{
-			if (DataRepresentationSection.DataRepresentation == null)
-			{
-				throw new NotSupportedException($"Data Representation Template {DataRepresentationSection.TemplateNumber} is not supported.");
-			}
+    internal IEnumerable<double?> GetRawData(BufferedBinaryReader reader)
+    {
+        if (DataRepresentationSection.DataRepresentation == null)
+        {
+            throw new NotSupportedException($"Data Representation Template {DataRepresentationSection.TemplateNumber} is not supported.");
+        }
 
-			var bitmap = BitmapSection.GetBitmap(reader);
+        var bitmap = BitmapSection.GetBitmap(reader);
 
-			using var valuesEnumerator = DataRepresentationSection.DataRepresentation
-				.EnumerateDataValues(reader, DataSection, DataRepresentationSection.DataPointsNumber)
-				.GetEnumerator();
+        using var valuesEnumerator = DataRepresentationSection.DataRepresentation
+            .EnumerateDataValues(reader, DataSection, DataRepresentationSection.DataPointsNumber)
+            .GetEnumerator();
 
-			foreach (var isValueDefined in bitmap)
-			{
-				var v = isValueDefined && valuesEnumerator.MoveNext() ? valuesEnumerator.Current : (float?) null;
-				yield return v;
-			}
-		}
-	}
+        foreach (var isValueDefined in bitmap)
+        {
+            var v = isValueDefined && valuesEnumerator.MoveNext() ? valuesEnumerator.Current : (double?)null;
+            yield return v;
+        }
+    }
 }

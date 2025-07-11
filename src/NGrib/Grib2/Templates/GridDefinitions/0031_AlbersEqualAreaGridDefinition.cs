@@ -24,12 +24,11 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace NGrib.Grib2.Templates.GridDefinitions
+namespace NGrib.Grib2.Templates.GridDefinitions;
+
+public class AlbersEqualAreaGridDefinition : LambertConformalGridDefinition
 {
-    public class AlbersEqualAreaGridDefinition : LambertConformalGridDefinition
+    internal AlbersEqualAreaGridDefinition(BufferedBinaryReader reader) : base(reader)
     {
-        internal AlbersEqualAreaGridDefinition(BufferedBinaryReader reader) : base(reader)
-        {
-        }
     }
 }

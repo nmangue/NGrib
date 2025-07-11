@@ -18,19 +18,16 @@
  */
 
 using NGrib.Grib2.Sections;
-using System.Collections.Generic;
-using System.IO;
 
-namespace NGrib.Grib2.Templates.DataRepresentations
+namespace NGrib.Grib2.Templates.DataRepresentations;
+
+public abstract class DataRepresentation
 {
-	public abstract class DataRepresentation
-	{
-		internal IEnumerable<float> EnumerateDataValues(BufferedBinaryReader reader, DataSection dataSection, long dataPointsNumber)
-		{
-			reader.Seek(dataSection.DataOffset, SeekOrigin.Begin);
-			return DoEnumerateDataValues(reader, dataSection, dataPointsNumber);
-		}
+    internal IEnumerable<double> EnumerateDataValues(BufferedBinaryReader reader, DataSection dataSection, long dataPointsNumber)
+    {
+        reader.Seek(dataSection.DataOffset, SeekOrigin.Begin);
+        return DoEnumerateDataValues(reader, dataSection, dataPointsNumber);
+    }
 
-		private protected abstract IEnumerable<float> DoEnumerateDataValues(BufferedBinaryReader reader, DataSection dataSection, long dataPointsNumber);
-	}
+    private protected abstract IEnumerable<double> DoEnumerateDataValues(BufferedBinaryReader reader, DataSection dataSection, long dataPointsNumber);
 }

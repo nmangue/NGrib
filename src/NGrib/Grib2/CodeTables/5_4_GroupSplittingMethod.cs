@@ -17,26 +17,25 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace NGrib.Grib2.CodeTables
+namespace NGrib.Grib2.CodeTables;
+
+/// <summary>
+/// Code Table 5.4: Group Splitting Method
+/// </summary>
+public enum GroupSplittingMethod
 {
-	/// <summary>
-	/// Code Table 5.4: Group Splitting Method
-	/// </summary>
-	public enum GroupSplittingMethod
-	{
-		/// <summary>
-		/// Row by row splitting
-		/// </summary>
-		RowByRow,
+    /// <summary>
+    /// Row by row splitting
+    /// </summary>
+    RowByRow,
 
-		/// <summary>
-		/// General group splitting
-		/// </summary>
-		GeneralGroup,
+    /// <summary>
+    /// General group splitting
+    /// </summary>
+    GeneralGroup,
 
-		/// <summary>
-		/// Missing
-		/// </summary>
-		Missing,
-	}
+    /// <summary>
+    /// Missing
+    /// </summary>
+    Missing,
 }

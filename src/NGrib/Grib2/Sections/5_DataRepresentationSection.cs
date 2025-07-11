@@ -26,92 +26,90 @@
 
 using NGrib.Grib2.Templates;
 using NGrib.Grib2.Templates.DataRepresentations;
-using System.IO;
 
-namespace NGrib.Grib2.Sections
+namespace NGrib.Grib2.Sections;
+
+/// <summary>
+/// Section 5 - Data Representation Section
+/// </summary>
+public sealed class DataRepresentationSection
 {
-	/// <summary>
-	/// Section 5 - Data Representation Section
-	/// </summary>
-	public sealed class DataRepresentationSection
-	{
-		/// <summary>
-		/// Length of section in octets.
-		/// </summary>
-		public long Length { get; }
+    /// <summary>
+    /// Length of section in octets.
+    /// </summary>
+    public long Length { get; }
 
-		/// <summary>
-		/// Number of section.
-		/// </summary>
-		public int Section { get; }
+    /// <summary>
+    /// Number of section.
+    /// </summary>
+    public int Section { get; }
 
-		/// <summary>
-		/// Number of data points where one or more values are specified in Section 7
-		/// when a bit map is present, total number of data points when a bit map is absent.
-		/// </summary>
-		public long DataPointsNumber { get; }
+    /// <summary>
+    /// Number of data points where one or more values are specified in Section 7
+    /// when a bit map is present, total number of data points when a bit map is absent.
+    /// </summary>
+    public long DataPointsNumber { get; }
 
-		/// <summary>
-		/// Data Representation Template Number.
-		/// </summary>
-		public int TemplateNumber { get; }
+    /// <summary>
+    /// Data Representation Template Number.
+    /// </summary>
+    public int TemplateNumber { get; }
 
-		/// <summary>
-		/// Data Representation Template.
-		/// </summary>
-		public DataRepresentation DataRepresentation { get; }
+    /// <summary>
+    /// Data Representation Template.
+    /// </summary>
+    public DataRepresentation DataRepresentation { get; }
 
-		private DataRepresentationSection(
-			long length,
-			int section,
-			long dataPointsNumber,
-			int templateNumber,
-			DataRepresentation dataRepresentation)
-		{
-			Section = section;
-			Length = length;
-			DataPointsNumber = dataPointsNumber;
-			TemplateNumber = templateNumber;
-			DataRepresentation = dataRepresentation;
-		}
+    private DataRepresentationSection(
+        long length,
+        int section,
+        long dataPointsNumber,
+        int templateNumber,
+        DataRepresentation dataRepresentation)
+    {
+        Section = section;
+        Length = length;
+        DataPointsNumber = dataPointsNumber;
+        TemplateNumber = templateNumber;
+        DataRepresentation = dataRepresentation;
+    }
 
-		internal static DataRepresentationSection BuildFrom(BufferedBinaryReader reader)
-		{
-			var sectionStartPosition = reader.Position;
+    internal static DataRepresentationSection BuildFrom(BufferedBinaryReader reader)
+    {
+        var sectionStartPosition = reader.Position;
 
-			// octets 1-4 (Length of DRS)
-			var length = reader.ReadUInt32();
+        // octets 1-4 (Length of DRS)
+        var length = reader.ReadUInt32();
 
-			var section = reader.ReadUInt8();
-			if (section != (int) SectionCode.DataRepresentationSection)
-			{
-				throw new UnexpectedGribSectionException(
-					SectionCode.DataRepresentationSection,
-					section
-					);
-			}
+        var section = reader.ReadUInt8();
+        if (section != (int) SectionCode.DataRepresentationSection)
+        {
+            throw new UnexpectedGribSectionException(
+                SectionCode.DataRepresentationSection,
+                section
+            );
+        }
 
-			var dataPoints = reader.ReadUInt32();
+        var dataPoints = reader.ReadUInt32();
 
-			var dataTemplateNumber = reader.ReadUInt16();
+        var dataTemplateNumber = reader.ReadUInt16();
 
-			var dataRepresentation = DataRepresentationFactory.Build(reader, dataTemplateNumber);
+        var dataRepresentation = DataRepresentationFactory.Build(reader, dataTemplateNumber);
 
-			// Prevent from over-reading the stream
-			reader.Seek(sectionStartPosition + length, SeekOrigin.Begin);
+        // Prevent from over-reading the stream
+        reader.Seek(sectionStartPosition + length, SeekOrigin.Begin);
 
-			return new DataRepresentationSection(length, section, dataPoints, dataTemplateNumber, dataRepresentation);
-		}
+        return new DataRepresentationSection(length, section, dataPoints, dataTemplateNumber, dataRepresentation);
+    }
 
-		private static readonly TemplateFactory<DataRepresentation> DataRepresentationFactory =
-			new TemplateFactory<DataRepresentation>
-			{
-				{ 0, r => new GridPointDataSimplePacking(r) },
-				{ 2, r => new GridPointDataComplexPacking(r) },
-				{ 3, r => new GridPointDataComplexPackingAndSpatialDifferencing(r) },
-				{ 40, r => new GridPointDataJpeg2000CodeStream(r) },
-				{ 40000, r => new GridPointDataJpeg2000CodeStream(r) },
-				{ 50002, r => new GridPointDataEcmwfSecondOrderPacking(r) },
-			};
-	}
+    private static readonly TemplateFactory<DataRepresentation> DataRepresentationFactory =
+        new TemplateFactory<DataRepresentation>
+        {
+            { 0, r => new GridPointDataSimplePacking(r) },
+            { 2, r => new GridPointDataComplexPacking(r) },
+            { 3, r => new GridPointDataComplexPackingAndSpatialDifferencing(r) },
+            { 40, r => new GridPointDataJpeg2000CodeStream(r) },
+            { 40000, r => new GridPointDataJpeg2000CodeStream(r) },
+            { 50002, r => new GridPointDataEcmwfSecondOrderPacking(r) },
+        };
 }

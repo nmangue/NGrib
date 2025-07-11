@@ -17,15 +17,12 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System;
+namespace NGrib.Grib2.CodeTables;
 
-namespace NGrib.Grib2.CodeTables
+[Flags]
+public enum ResolutionAndComponent
 {
-	[Flags]
-	public enum ResolutionAndComponent
-	{
-		IDirectionIncrementGiven = 32,
-		JDirectionIncrementGiven = 16,
-		RelativeDefinedGrid = 8
-	}
+    IDirectionIncrementGiven = 32,
+    JDirectionIncrementGiven = 16,
+    RelativeDefinedGrid = 8
 }

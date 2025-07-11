@@ -24,23 +24,20 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System;
+namespace NGrib;
 
-namespace NGrib
+/// <summary>
+/// The exception that is thrown when the read stream does not
+/// respect the GRIB 2 data format.
+/// </summary>
+public class BadGribFormatException : Exception
 {
-	/// <summary>
-	/// The exception that is thrown when the read stream does not
-	/// respect the GRIB 2 data format.
-	/// </summary>
-	public class BadGribFormatException : Exception
-	{
     /// <summary>
     /// Initializes a new instance of the <see cref="BadGribFormatException"/> class
     /// with a specified error message.
     /// </summary>
     /// <param name="message">The message that describes the error.</param>
     public BadGribFormatException(string message) : base(message)
-		{
-		}
-	}
+    {
+    }
 }

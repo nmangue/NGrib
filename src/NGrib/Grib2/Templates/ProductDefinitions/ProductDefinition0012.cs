@@ -18,101 +18,99 @@
  */
 
 using NGrib.Grib2.CodeTables;
-using System;
 
-namespace NGrib.Grib2.Templates.ProductDefinitions
+namespace NGrib.Grib2.Templates.ProductDefinitions;
+
+/// <summary>
+/// Product definition template 4.12: Derived forecasts based on all ensemble members at a horizontal level 
+/// or in a horizontal layer in a continuous or non-continuous time interval.
+/// </summary>
+public class ProductDefinition0012 : ProductDefinition0002
 {
-	/// <summary>
-	/// Product definition template 4.12: Derived forecasts based on all ensemble members at a horizontal level 
-	/// or in a horizontal layer in a continuous or non-continuous time interval.
-	/// </summary>
-	public class ProductDefinition0012 : ProductDefinition0002
-	{
-		/// <summary>
-		/// Time of end of overall time interval
-		/// </summary>
-		public DateTime OverallTimeIntervalEnd { get; }
+    /// <summary>
+    /// Time of end of overall time interval
+    /// </summary>
+    public DateTime OverallTimeIntervalEnd { get; }
 
-		/// <summary>
-		/// Number of time range specifications describing the time intervals used to calculate the statistically processed field.
-		/// </summary>
-		public int TimeRangeNumber { get; }
+    /// <summary>
+    /// Number of time range specifications describing the time intervals used to calculate the statistically processed field.
+    /// </summary>
+    public int TimeRangeNumber { get; }
 
-		/// <summary>
-		/// Total number of data values missing in statistical process.
-		/// </summary>
-		public long MissingDataValuesTotalNumber { get; }
+    /// <summary>
+    /// Total number of data values missing in statistical process.
+    /// </summary>
+    public long MissingDataValuesTotalNumber { get; }
 
-		/// <summary>
-		/// Statistical process used to calculate the processed field from the field at each time increment during the time range.
-		/// </summary>
-		public int StatisticalProcess { get; }
+    /// <summary>
+    /// Statistical process used to calculate the processed field from the field at each time increment during the time range.
+    /// </summary>
+    public int StatisticalProcess { get; }
 
-		/// <summary>
-		/// Type of time increment between successive fields used in the statistical processing.
-		/// </summary>
-		public long StatisticalProcessingTimeIncrementType { get; }
+    /// <summary>
+    /// Type of time increment between successive fields used in the statistical processing.
+    /// </summary>
+    public long StatisticalProcessingTimeIncrementType { get; }
 
-		/// <summary>
-		/// Indicator of unit of time for time range over which statistical processing is done.
-		/// </summary>
-		public TimeRangeUnit StatisticalProcessingTimeRangeUnit { get; }
+    /// <summary>
+    /// Indicator of unit of time for time range over which statistical processing is done.
+    /// </summary>
+    public TimeRangeUnitGrib2 StatisticalProcessingTimeRangeUnitGrib2 { get; }
 
-		/// <summary>
-		///  Length of the time range over which statistical processing is done, in units defined by <c>StatisticalProcessingTimeRangeUnit</c>.
-		/// </summary>
-		public long StatisticalProcessingTimeRangeLength { get; }
+    /// <summary>
+    ///  Length of the time range over which statistical processing is done, in units defined by <c>StatisticalProcessingTimeRangeUnit</c>.
+    /// </summary>
+    public long StatisticalProcessingTimeRangeLength { get; }
 
-		/// <summary>
-		/// Indicator of unit of time for the increment between the successive fields used.
-		/// </summary>
-		public TimeRangeUnit SuccessiveFieldsIncrementUnit { get; }
+    /// <summary>
+    /// Indicator of unit of time for the increment between the successive fields used.
+    /// </summary>
+    public TimeRangeUnitGrib2 SuccessiveFieldsIncrementRangeUnitGrib2 { get; }
 
-		/// <summary>
-		/// Time increment between successive fields, in units defined by <c>SuccessiveFieldsIncrementUnit</c>.
-		/// </summary>
-		public long SuccessiveFieldsTimeIncrement { get; }
+    /// <summary>
+    /// Time increment between successive fields, in units defined by <c>SuccessiveFieldsIncrementUnit</c>.
+    /// </summary>
+    public long SuccessiveFieldsTimeIncrement { get; }
 
-		internal ProductDefinition0012(BufferedBinaryReader reader, Discipline discipline) : base(reader, discipline)
-		{
-			OverallTimeIntervalEnd = reader.ReadDateTime();
-			RegisterContent(ProductDefinitionContent.OverallTimeIntervalEnd, () => OverallTimeIntervalEnd);
+    internal ProductDefinition0012(BufferedBinaryReader reader, Discipline discipline) : base(reader, discipline)
+    {
+        OverallTimeIntervalEnd = reader.ReadDateTime();
+        RegisterContent(ProductDefinitionContent.OverallTimeIntervalEnd, () => OverallTimeIntervalEnd);
 
-			// 42
-			TimeRangeNumber = reader.ReadUInt8();
+        // 42
+        TimeRangeNumber = reader.ReadUInt8();
 
-			// 43-46  
-			MissingDataValuesTotalNumber = reader.ReadUInt32();
+        // 43-46  
+        MissingDataValuesTotalNumber = reader.ReadUInt32();
 
-			//47
-			StatisticalProcess = reader.ReadUInt8();
+        //47
+        StatisticalProcess = reader.ReadUInt8();
 
-			//48
-			StatisticalProcessingTimeIncrementType = reader.ReadUInt8();
+        //48
+        StatisticalProcessingTimeIncrementType = reader.ReadUInt8();
 
-			//49
-			StatisticalProcessingTimeRangeUnit = (TimeRangeUnit)reader.ReadUInt8();
+        //49
+        StatisticalProcessingTimeRangeUnitGrib2 = (TimeRangeUnitGrib2)reader.ReadUInt8();
 
-			//50-53
-			StatisticalProcessingTimeRangeLength = reader.ReadUInt32();
+        //50-53
+        StatisticalProcessingTimeRangeLength = reader.ReadUInt32();
 
-			var timeRange = CalculateTimeRangeFrom(StatisticalProcessingTimeRangeUnit, StatisticalProcessingTimeRangeLength);
-			if (timeRange.HasValue)
-			{
-				RegisterContent(ProductDefinitionContent.StatisticalProcessingTimeRange, () => timeRange.Value);
-			}
+        var timeRange = CalculateTimeRangeFrom(StatisticalProcessingTimeRangeUnitGrib2, StatisticalProcessingTimeRangeLength);
+        if (timeRange.HasValue)
+        {
+            RegisterContent(ProductDefinitionContent.StatisticalProcessingTimeRange, () => timeRange.Value);
+        }
 
-			//54
-			SuccessiveFieldsIncrementUnit = (TimeRangeUnit)reader.ReadUInt8();
+        //54
+        SuccessiveFieldsIncrementRangeUnitGrib2 = (TimeRangeUnitGrib2)reader.ReadUInt8();
 
-			//55-58
-			SuccessiveFieldsTimeIncrement = reader.ReadUInt32();
+        //55-58
+        SuccessiveFieldsTimeIncrement = reader.ReadUInt32();
 
-			var successiveFieldsTimeIncrement = CalculateTimeRangeFrom(SuccessiveFieldsIncrementUnit, SuccessiveFieldsTimeIncrement);
-			if (successiveFieldsTimeIncrement.HasValue)
-			{
-				RegisterContent(ProductDefinitionContent.StatisticalProcessingTimeRange, () => successiveFieldsTimeIncrement.Value);
-			}
-		}
-	}
+        var successiveFieldsTimeIncrement = CalculateTimeRangeFrom(SuccessiveFieldsIncrementRangeUnitGrib2, SuccessiveFieldsTimeIncrement);
+        if (successiveFieldsTimeIncrement.HasValue)
+        {
+            RegisterContent(ProductDefinitionContent.StatisticalProcessingTimeRange, () => successiveFieldsTimeIncrement.Value);
+        }
+    }
 }

@@ -17,26 +17,25 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace NGrib.Grib2.CodeTables
+namespace NGrib.Grib2.CodeTables;
+
+/// <summary>
+/// Code Table 5.1: Type of original field values
+/// </summary>
+public enum OriginalFieldValuesType
 {
-	/// <summary>
-	/// Code Table 5.1: Type of original field values
-	/// </summary>
-	public enum OriginalFieldValuesType
-	{
-		/// <summary>
-		/// Floating point
-		/// </summary>
-		FloatingPoint,
+    /// <summary>
+    /// Floating point
+    /// </summary>
+    FloatingPoint,
 
-		/// <summary>
-		/// Integer
-		/// </summary>
-		Integer,
+    /// <summary>
+    /// Integer
+    /// </summary>
+    Integer,
 
-		/// <summary>
-		/// Missing
-		/// </summary>
-		Missing = 255
-	}
+    /// <summary>
+    /// Missing
+    /// </summary>
+    Missing = 255
 }

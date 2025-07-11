@@ -24,80 +24,79 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace NGrib.Grib1
+namespace NGrib.Grib1;
+
+/// <summary> A class that represents the EndSection of a GRIB1 product.
+/// 
+/// </summary>
+sealed class Grib1EndSection
 {
-	/// <summary> A class that represents the EndSection of a GRIB1 product.
-	/// 
-	/// </summary>
-	sealed class Grib1EndSection
-	{
-		/// <summary> Get ending flag for Grib record.
-		/// 
-		/// </summary>
-		/// <returns> true if  "7777" found
-		/// </returns>
-		public bool EndFound
-		{
-			get { return endFound; }
+    /// <summary> Get ending flag for Grib record.
+    /// 
+    /// </summary>
+    /// <returns> true if  "7777" found
+    /// </returns>
+    public bool EndFound
+    {
+        get { return endFound; }
 
-			// --Commented out by Inspection START (11/17/05 1:32 PM):
-			//   /**
-			//    * how long was the ending, should be 4 bytes.
-			//    * @return int
-			//   */
-			//   public static final int getLength()
-			//   {
-			//      return length;
-			//   }
-			// --Commented out by Inspection STOP (11/17/05 1:32 PM)
-		}
+        // --Commented out by Inspection START (11/17/05 1:32 PM):
+        //   /**
+        //    * how long was the ending, should be 4 bytes.
+        //    * @return int
+        //   */
+        //   public static final int getLength()
+        //   {
+        //      return length;
+        //   }
+        // --Commented out by Inspection STOP (11/17/05 1:32 PM)
+    }
 
-		/*
-		* was the grib endding 7777 found.
-		*/
-		private bool endFound;
+    /*
+    * was the grib endding 7777 found.
+    */
+    private bool endFound;
 
-		/*
-		* how long was the ending, should be 4 bytes.
-		*/
-		private int length;
+    /*
+    * how long was the ending, should be 4 bytes.
+    */
+    private int length;
 
-		// *** constructors *******************************************************
+    // *** constructors *******************************************************
 
-		/// <summary> Constructs a <tt>Grib1EndSection</tt> object from a byteBuffer.
-		/// 
-		/// </summary>
-		/// <param name="raf">RandomAccessFile with EndSection content
-		/// 
-		/// </param>
-		//UPGRADE_TODO: Class 'java.io.RandomAccessFile' was converted to 'System.IO.FileStream' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioRandomAccessFile'"
-		internal Grib1EndSection(System.IO.Stream raf)
-		{
-			int match = 0;
-			while (raf.Position < raf.Length)
-			{
-				// code must be "7" "7" "7" "7"
-				sbyte c = (sbyte) raf.ReadByte();
+    /// <summary> Constructs a <tt>Grib1EndSection</tt> object from a byteBuffer.
+    /// 
+    /// </summary>
+    /// <param name="raf">RandomAccessFile with EndSection content
+    /// 
+    /// </param>
+    //UPGRADE_TODO: Class 'java.io.RandomAccessFile' was converted to 'System.IO.FileStream' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioRandomAccessFile'"
+    internal Grib1EndSection(System.IO.Stream raf)
+    {
+        int match = 0;
+        while (raf.Position < raf.Length)
+        {
+            // code must be "7" "7" "7" "7"
+            sbyte c = (sbyte) raf.ReadByte();
 
-				length++;
-				if (c == '7')
-				{
-					match += 1;
+            length++;
+            if (c == '7')
+            {
+                match += 1;
 
-				}
-				else
-				{
+            }
+            else
+            {
 
-					match = 0; /* Needed to protect against bad ending case. */
-				}
+                match = 0; /* Needed to protect against bad ending case. */
+            }
 
-				if (match == 4)
-				{
-					endFound = true;
+            if (match == 4)
+            {
+                endFound = true;
 
-					break;
-				}
-			}
-		} // end Grib1EndSection
-	} // end Grib1EndSection
-}
+                break;
+            }
+        }
+    } // end Grib1EndSection
+} // end Grib1EndSection

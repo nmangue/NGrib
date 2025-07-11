@@ -1,7 +1,7 @@
 /*
  * This file is part of NGrib.
  *
- * Copyright © 2020 Nicolas Mangué
+ * Copyright ï¿½ 2020 Nicolas Manguï¿½
  * 
  * Copyright 2006-2010 Seaware AB, PO Box 1244, SE-131 28 
  * Nacka Strand, Sweden, info@seaware.se.
@@ -24,74 +24,48 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace NGrib.Grib1
+namespace NGrib.Grib1;
+
+/// <summary> A class used to extract data from a GRIB1 file. 
+/// see <a href="../../../IndexFormat.txt"> IndexFormat.txt</a>
+/// </summary>
+public sealed class Grib1Data
 {
-	/// <summary> A class used to extract data from a GRIB1 file. 
-	/// see <a href="../../../IndexFormat.txt"> IndexFormat.txt</a>
-	/// </summary>
-	public sealed class Grib1Data
-	{
-		/* 
-		*  used to hold open file descriptor
-		*/
-		//UPGRADE_TODO: Class 'java.io.RandomAccessFile' was converted to 'System.IO.FileStream' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioRandomAccessFile'"
-		private System.IO.Stream raf;
+    /* 
+    *  used to hold open file descriptor
+    */
+    //UPGRADE_TODO: Class 'java.io.RandomAccessFile' was converted to 'System.IO.FileStream' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioRandomAccessFile'"
+    private System.IO.Stream raf;
 
-		// *** constructors *******************************************************
+    private readonly Grib1File _grib1File;
 
-		/// <summary> Constructs a Grib2Data object from a stream.
-		/// 
-		/// </summary>
-		/// <param name="raf">ucar.unidata.io.RandomAccessFile with GRIB content.
-		/// 
-		/// </param>
-		//UPGRADE_TODO: Class 'java.io.RandomAccessFile' was converted to 'System.IO.FileStream' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioRandomAccessFile'"
-		public Grib1Data(System.IO.Stream raf)
-		{
-			this.raf = raf;
-		}
+    // *** constructors *******************************************************
 
-		public void setFilename(string filename)
-		{
-			raf = new System.IO.FileStream(filename, System.IO.FileMode.Open, System.IO.FileAccess.Read);
-		}
+    /// <summary> Constructs a Grib2Data object from a stream.
+    /// 
+    /// </summary>
+    /// <param name="raf">ucar.unidata.io.RandomAccessFile with GRIB content.
+    /// 
+    /// </param>
+    //UPGRADE_TODO: Class 'java.io.RandomAccessFile' was converted to 'System.IO.FileStream' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javaioRandomAccessFile'"
+    public Grib1Data(System.IO.Stream raf, Grib1File grib1File)
+    {
+        this.raf = raf;
+        _grib1File = grib1File;
+    }
 
-		public void closeFile()
-		{
-			raf.Close();
-		}
+    public void setFilename(string filename)
+    {
+        raf = new System.IO.FileStream(filename, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+    }
 
-		/// <summary> Reads the Grib data 
-		/// 
-		/// </summary>
-		/// <param name="offset"> offset into file.
-		/// </param>
-		/// <param name="DecimalScale">
-		/// </param>
-		/// <param name="bmsExists">
-		/// </param>
-		/// <throws>  NotSupportedException </throws>
-		/// <returns> float[]
-		/// </returns>
-		public float[] getData(long offset, int DecimalScale, bool bmsExists)
-		{
-			long start = (System.DateTime.Now.Ticks - 621355968000000000) / 10000;
+    public void closeFile()
+    {
+        raf.Close();
+    }
 
-			raf.Seek(offset, System.IO.SeekOrigin.Begin);
+    public double[] getData(long offset, int DecimalScale, bool bmsExists) =>
+        _grib1File.getData(raf, offset, DecimalScale, bmsExists);
 
-
-			// Need section 3 and 4 to read/interpet the data, section 5
-			// as a check that all data read and sections are correct
-
-			Grib1BitMapSection bms = null;
-			if (bmsExists)
-				// read Bit Mapped Section 3
-				bms = new Grib1BitMapSection(raf);
-
-			// read Binary Data Section 4
-			Grib1BinaryDataSection bds = new Grib1BinaryDataSection(raf, DecimalScale, bms);
-
-			return bds.Values;
-		} // end getData
-	} // end Grib1Data
-}
+    // end getData
+} // end Grib1Data

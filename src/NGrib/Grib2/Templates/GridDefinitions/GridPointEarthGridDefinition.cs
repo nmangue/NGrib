@@ -17,34 +17,33 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace NGrib.Grib2.Templates.GridDefinitions
+namespace NGrib.Grib2.Templates.GridDefinitions;
+
+public abstract class GridPointEarthGridDefinition : XyEarthGridDefinition
 {
-	public abstract class GridPointEarthGridDefinition : XyEarthGridDefinition
-	{
-		/// <summary> .</summary>
-		/// <returns> La1 as a float
-		/// 
-		/// </returns>
-		public double La1 { get; }
+    /// <summary> .</summary>
+    /// <returns> La1 as a float
+    /// 
+    /// </returns>
+    public double La1 { get; }
 
-		/// <summary> .</summary>
-		/// <returns> Lo1 as a float
-		/// 
-		/// </returns>
-		public double Lo1 { get; }
+    /// <summary> .</summary>
+    /// <returns> Lo1 as a float
+    /// 
+    /// </returns>
+    public double Lo1 { get; }
 
-		/// <summary> .</summary>
-		/// <returns> Resolution as a int
-		/// 
-		/// </returns>
-		public int Resolution { get; }
+    /// <summary> .</summary>
+    /// <returns> Resolution as a int
+    /// 
+    /// </returns>
+    public int Resolution { get; }
 
 
-		private protected GridPointEarthGridDefinition(BufferedBinaryReader reader) : base(reader)
-		{
-			La1 = reader.ReadInt32() * 1e-6;
-			Lo1 = reader.ReadUInt32() * 1e-6;
-			Resolution = reader.ReadUInt8();
-		}
-	}
+    private protected GridPointEarthGridDefinition(BufferedBinaryReader reader) : base(reader)
+    {
+        La1 = reader.ReadInt32() * 1e-6;
+        Lo1 = reader.ReadUInt32() * 1e-6;
+        Resolution = reader.ReadUInt8();
+    }
 }

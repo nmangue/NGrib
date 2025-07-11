@@ -24,111 +24,110 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace NGrib.Grib1
+namespace NGrib.Grib1;
+
+/// <summary> Title:        Grib1
+/// Description:  Class which has the necessary information about
+/// a product in a Grib1 File to extract the data for the product.
+/// </summary>
+/// <author>  Robb Kambic  
+/// </author>
+/// <version>  1.0
+/// </version>
+public sealed class Grib1Product
 {
-	/// <summary> Title:        Grib1
-	/// Description:  Class which has the necessary information about
-	/// a product in a Grib1 File to extract the data for the product.
-	/// </summary>
-	/// <author>  Robb Kambic  
-	/// </author>
-	/// <version>  1.0
-	/// </version>
-	public sealed class Grib1Product
-	{
-		/// <summary> get the discipline of product as int.</summary>
-		/// <returns> discipline
-		/// </returns>
-		public int Discipline
-		{
-			get { return discipline; }
-		}
+    /// <summary> get the discipline of product as int.</summary>
+    /// <returns> discipline
+    /// </returns>
+    public int Discipline
+    {
+        get { return discipline; }
+    }
 
-		/// <summary> get category of this product as int.</summary>
-		/// <returns> category as a int
-		/// </returns>
-		public int Category
-		{
-			get { return category; }
-		}
+    /// <summary> get category of this product as int.</summary>
+    /// <returns> category as a int
+    /// </returns>
+    public int Category
+    {
+        get { return category; }
+    }
 
-		//UPGRADE_NOTE: Respective javadoc comments were merged.  It should be changed in order to comply with .NET documentation conventions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1199'"
-		/// <summary> gets GDS key for this product.</summary>
-		/// <returns> gdsKey
-		/// </returns>
-		/// <summary> sets the GDS key for this product.</summary>
-		/// <param name="aGDSkey"> MD5 checksum as text
-		/// </param>
-		public System.String GDSkey
-		{
-			get { return gdsKey; }
+    //UPGRADE_NOTE: Respective javadoc comments were merged.  It should be changed in order to comply with .NET documentation conventions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1199'"
+    /// <summary> gets GDS key for this product.</summary>
+    /// <returns> gdsKey
+    /// </returns>
+    /// <summary> sets the GDS key for this product.</summary>
+    /// <param name="aGDSkey"> MD5 checksum as text
+    /// </param>
+    public System.String GDSkey
+    {
+        get { return gdsKey; }
 
-			set { gdsKey = value; }
-		}
+        set { gdsKey = value; }
+    }
 
-		/// <summary> get the PDS for this product.</summary>
-		/// <returns> pds
-		/// </returns>
-		public Grib1ProductDefinitionSection PDS
-		{
-			get { return pds; }
-		}
+    /// <summary> get the PDS for this product.</summary>
+    /// <returns> pds
+    /// </returns>
+    public Grib1ProductDefinitionSection PDS
+    {
+        get { return pds; }
+    }
 
-		/// <summary> offset to where to start reading data for this product.</summary>
-		/// <returns> dataOffset
-		/// </returns>
-		public long DataOffset
-		{
-			get { return dataOffset; }
-		}
+    /// <summary> offset to where to start reading data for this product.</summary>
+    /// <returns> dataOffset
+    /// </returns>
+    public long DataOffset
+    {
+        get { return dataOffset; }
+    }
 
-		/// <summary> where this record ends in the Grib File.</summary>
-		/// <returns> endRecordOffset
-		/// </returns>
-		public long EndRecordOffset
-		{
-			get { return endRecordOffset; }
-		}
+    /// <summary> where this record ends in the Grib File.</summary>
+    /// <returns> endRecordOffset
+    /// </returns>
+    public long EndRecordOffset
+    {
+        get { return endRecordOffset; }
+    }
 
-		//UPGRADE_NOTE: Final was removed from the declaration of 'header '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.String header;
+    //UPGRADE_NOTE: Final was removed from the declaration of 'header '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
+    private System.String header;
 
-		//UPGRADE_NOTE: Final was removed from the declaration of 'discipline '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private int discipline = 0;
+    //UPGRADE_NOTE: Final was removed from the declaration of 'discipline '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
+    private int discipline = 0;
 
-		//UPGRADE_NOTE: Final was removed from the declaration of 'category '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private int category = -1;
+    //UPGRADE_NOTE: Final was removed from the declaration of 'category '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
+    private int category = -1;
 
-		// --Commented out by Inspection (11/17/05 2:14 PM): protected Grib1IndicatorSection is = null;
-		private Grib1ProductDefinitionSection pds;
-		private System.String gdsKey;
-		private long dataOffset = -1;
-		private long endRecordOffset = -1;
+    // --Commented out by Inspection (11/17/05 2:14 PM): protected Grib1IndicatorSection is = null;
+    private Grib1ProductDefinitionSection pds;
+    private System.String gdsKey;
+    private long dataOffset = -1;
+    private long endRecordOffset = -1;
 
-		/// <summary> Constructor.</summary>
-		/// <param name="header">
-		/// </param>
-		/// <param name="pds">
-		/// </param>
-		/// <param name="gdsKey">
-		/// </param>
-		/// <param name="offset">
-		/// </param>
-		/// <param name="size">endRecordOffset in file
-		/// </param>
-		internal Grib1Product(System.String header, Grib1ProductDefinitionSection pds, System.String gdsKey, long offset, long size)
-		{
-			this.header = header;
-			this.gdsKey = gdsKey;
-			this.pds = pds;
-			dataOffset = offset;
-			endRecordOffset = size;
-		}
+    /// <summary> Constructor.</summary>
+    /// <param name="header">
+    /// </param>
+    /// <param name="pds">
+    /// </param>
+    /// <param name="gdsKey">
+    /// </param>
+    /// <param name="offset">
+    /// </param>
+    /// <param name="size">endRecordOffset in file
+    /// </param>
+    internal Grib1Product(System.String header, Grib1ProductDefinitionSection pds, System.String gdsKey, long offset, long size)
+    {
+        this.header = header;
+        this.gdsKey = gdsKey;
+        this.pds = pds;
+        dataOffset = offset;
+        endRecordOffset = size;
+    }
 
-		// --Commented out by Inspection START (11/17/05 2:15 PM):
-		//   public final String getHeader(){
-		//      return header;
-		//   }
-		// --Commented out by Inspection STOP (11/17/05 2:15 PM)
-	} // end Grib1Product
-}
+    // --Commented out by Inspection START (11/17/05 2:15 PM):
+    //   public final String getHeader(){
+    //      return header;
+    //   }
+    // --Commented out by Inspection STOP (11/17/05 2:15 PM)
+} // end Grib1Product

@@ -17,34 +17,31 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System.Collections.Generic;
+namespace NGrib.Grib2.Templates.GridDefinitions;
 
-namespace NGrib.Grib2.Templates.GridDefinitions
+/// <summary>
+/// Represents a GRIB2 Grid Definition
+/// </summary>
+public abstract class GridDefinition
 {
-	/// <summary>
-	/// Represents a GRIB2 Grid Definition
-	/// </summary>
-	public abstract class GridDefinition
-	{
-		/// <summary>
-		/// Grid Definition Offset.
-		/// </summary>
-		public long Offset { get; }
+    /// <summary>
+    /// Grid Definition Offset.
+    /// </summary>
+    public long Offset { get; }
 
-		private protected GridDefinition(BufferedBinaryReader reader)
-		{
-			Offset = reader.Position;
-		}
+    private protected GridDefinition(BufferedBinaryReader reader)
+    {
+        Offset = reader.Position;
+    }
 
-		/// <summary>
-		/// Enumerated the point coordinates within the current grid.
-		/// </summary>
-		/// <remarks>
-		/// The points are returned in the order defined by the grid (i.e. scanning mode).
-		/// </remarks>
-		/// <returns>
-		/// Grid points coordinates.
-		/// </returns>
-		public abstract IEnumerable<Coordinate> EnumerateGridPoints();
-	}
+    /// <summary>
+    /// Enumerated the point coordinates within the current grid.
+    /// </summary>
+    /// <remarks>
+    /// The points are returned in the order defined by the grid (i.e. scanning mode).
+    /// </remarks>
+    /// <returns>
+    /// Grid points coordinates.
+    /// </returns>
+    public abstract IEnumerable<Coordinate> EnumerateGridPoints();
 }

@@ -19,42 +19,41 @@
 
 using System.ComponentModel;
 
-namespace NGrib.Grib2.CodeTables
+namespace NGrib.Grib2.CodeTables;
+
+/// <summary>
+/// Code table 4.3: Type of generating process
+/// </summary>
+public enum GeneratingProcessType
 {
-	/// <summary>
-	/// Code table 4.3: Type of generating process
-	/// </summary>
-	public enum GeneratingProcessType
-	{
-		///<summary>Analysis</summary>
-		[Description("Analysis")] Analysis = 0,
+    ///<summary>Analysis</summary>
+    [Description("Analysis")] Analysis = 0,
 
-		///<summary>Initialization</summary>
-		[Description("Initialization")] Initialization = 1,
+    ///<summary>Initialization</summary>
+    [Description("Initialization")] Initialization = 1,
 
-		///<summary>Forecast</summary>
-		[Description("Forecast")] Forecast = 2,
+    ///<summary>Forecast</summary>
+    [Description("Forecast")] Forecast = 2,
 
-		///<summary>Bias corrected forecast</summary>
-		[Description("Bias corrected forecast")]
-		BiasCorrectedForecast = 3,
+    ///<summary>Bias corrected forecast</summary>
+    [Description("Bias corrected forecast")]
+    BiasCorrectedForecast = 3,
 
-		///<summary>Ensemble forecast</summary>
-		[Description("Ensemble forecast")] EnsembleForecast = 4,
+    ///<summary>Ensemble forecast</summary>
+    [Description("Ensemble forecast")] EnsembleForecast = 4,
 
-		///<summary>Probability forecast</summary>
-		[Description("Probability forecast")] ProbabilityForecast = 5,
+    ///<summary>Probability forecast</summary>
+    [Description("Probability forecast")] ProbabilityForecast = 5,
 
-		///<summary>Forecast error</summary>
-		[Description("Forecast error")] ForecastError = 6,
+    ///<summary>Forecast error</summary>
+    [Description("Forecast error")] ForecastError = 6,
 
-		///<summary>Analysis error</summary>
-		[Description("Analysis error")] AnalysisError = 7,
+    ///<summary>Analysis error</summary>
+    [Description("Analysis error")] AnalysisError = 7,
 
-		///<summary>Observation</summary>
-		[Description("Observation")] Observation = 8,
+    ///<summary>Observation</summary>
+    [Description("Observation")] Observation = 8,
 
-		///<summary>Missing</summary>
-		[Description("Missing")] Missing = 255,
-	}
+    ///<summary>Missing</summary>
+    [Description("Missing")] Missing = 255,
 }

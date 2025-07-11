@@ -27,91 +27,89 @@
 using NGrib.Grib2.CodeTables;
 using NGrib.Grib2.Templates;
 using NGrib.Grib2.Templates.ProductDefinitions;
-using System.IO;
-using System.Runtime.InteropServices;
 
-namespace NGrib.Grib2.Sections
+namespace NGrib.Grib2.Sections;
+
+/// <summary>
+/// Section 4 - Product Definition Section
+/// </summary>
+public sealed class ProductDefinitionSection
 {
-	/// <summary>
-	/// Section 4 - Product Definition Section
-	/// </summary>
-	public sealed class ProductDefinitionSection
-	{
-		/// <summary>
-		/// Length of section in octets.
-		/// </summary>
-		public long Length { get; }
+    /// <summary>
+    /// Length of section in octets.
+    /// </summary>
+    public long Length { get; }
 
-		/// <summary>
-		/// Number of section.
-		/// </summary>
-		public int Section { get; }
+    /// <summary>
+    /// Number of section.
+    /// </summary>
+    public int Section { get; }
 
-		/// <summary>
-		/// Number of coordinates values after Template.
-		/// </summary>
-		public int CoordinatesAfterTemplateNumber { get; }
+    /// <summary>
+    /// Number of coordinates values after Template.
+    /// </summary>
+    public int CoordinatesAfterTemplateNumber { get; }
 
-		/// <summary>
-		/// Product Definition Template Number
-		/// </summary>
-		public int ProductDefinitionTemplateNumber { get; }
+    /// <summary>
+    /// Product Definition Template Number
+    /// </summary>
+    public int ProductDefinitionTemplateNumber { get; }
 
-		/// <summary>
-		/// Product Definition Template.
-		/// </summary>
-		public ProductDefinition ProductDefinition { get; }
+    /// <summary>
+    /// Product Definition Template.
+    /// </summary>
+    public ProductDefinition ProductDefinition { get; }
 
-		private ProductDefinitionSection(
-			long length,
-			int section,
-			int coordinatesAfterTemplateNumber,
-			int productDefinitionTemplateNumber,
-			ProductDefinition productDefinition)
-		{
-			CoordinatesAfterTemplateNumber = coordinatesAfterTemplateNumber;
-			ProductDefinitionTemplateNumber = productDefinitionTemplateNumber;
-			ProductDefinition = productDefinition;
-			Length = length;
-			Section = section;
-		}
+    private ProductDefinitionSection(
+        long length,
+        int section,
+        int coordinatesAfterTemplateNumber,
+        int productDefinitionTemplateNumber,
+        ProductDefinition productDefinition)
+    {
+        CoordinatesAfterTemplateNumber = coordinatesAfterTemplateNumber;
+        ProductDefinitionTemplateNumber = productDefinitionTemplateNumber;
+        ProductDefinition = productDefinition;
+        Length = length;
+        Section = section;
+    }
 
-		internal static ProductDefinitionSection BuildFrom(BufferedBinaryReader reader, Discipline discipline)
-		{
-			var currentPosition = reader.Position;
+    internal static ProductDefinitionSection BuildFrom(BufferedBinaryReader reader, Discipline discipline)
+    {
+        var currentPosition = reader.Position;
 
-			// octets 1-4 (Length of PDS)
-			var length = reader.ReadUInt32();
+        // octets 1-4 (Length of PDS)
+        var length = reader.ReadUInt32();
 
-			// octet 5
-			var section = reader.ReadUInt8();
+        // octet 5
+        var section = reader.ReadUInt8();
 
-			// octet 6-7
-			var coordinates = reader.ReadUInt16();
+        // octet 6-7
+        var coordinates = reader.ReadUInt16();
 
-			// octet 8-9
-			var productDefinitionTemplateNumber = reader.ReadUInt16();
+        // octet 8-9
+        var productDefinitionTemplateNumber = reader.ReadUInt16();
 
-			var productDefinition = ProductDefinitionFactories.Build(reader, productDefinitionTemplateNumber, discipline);
+        var productDefinition = ProductDefinitionFactories.Build(reader, productDefinitionTemplateNumber, discipline);
 
-			// Prevent from over-reading the stream
-			reader.Seek(currentPosition + length, SeekOrigin.Begin);
+        // Prevent from over-reading the stream
+        reader.Seek(currentPosition + length, SeekOrigin.Begin);
 
-			return new ProductDefinitionSection(length, section, coordinates, productDefinitionTemplateNumber,
-				productDefinition);
-		}
+        return new ProductDefinitionSection(length, section, coordinates, productDefinitionTemplateNumber,
+            productDefinition);
+    }
 
-		public bool TryGet<T>(TemplateContent<T> content, out T value) => ProductDefinition.TryGet(content, out value);
+    public bool TryGet<T>(TemplateContent<T> content, out T value) => ProductDefinition.TryGet(content, out value);
 
-		private static readonly TemplateFactory<ProductDefinition> ProductDefinitionFactories =
-			new TemplateFactory<ProductDefinition>
-			{
-				{ 0, (r, args) => new ProductDefinition0000(r, (Discipline) args[0]) },
-				{ 1, (r, args) => new ProductDefinition0001(r, (Discipline) args[0]) },
-				{ 2, (r, args) => new ProductDefinition0002(r, (Discipline) args[0]) },
-				{ 8, (r, args) => new ProductDefinition0008(r, (Discipline) args[0]) },
-				{ 11, (r, args) => new ProductDefinition0011(r, (Discipline) args[0]) },
-				{ 12, (r, args) => new ProductDefinition0012(r, (Discipline) args[0]) }
-			};
-	}
+    private static readonly TemplateFactory<ProductDefinition> ProductDefinitionFactories =
+        new TemplateFactory<ProductDefinition>
+        {
+            {0, (r, args) => new ProductDefinition0000(r, (Discipline) args[0])},
+            {1, (r, args) => new ProductDefinition0001(r, (Discipline) args[0])},
+            {2, (r, args) => new ProductDefinition0002(r, (Discipline) args[0])},
+            {8, (r, args) => new ProductDefinition0008(r, (Discipline) args[0])},
+            {11, (r, args) => new ProductDefinition0011(r, (Discipline) args[0])},
+            {12, (r, args) => new ProductDefinition0012(r, (Discipline) args[0])},
+            {40, (r, args) => new ProductDefinition0040(r, (Discipline) args[0])}
+        };
 }

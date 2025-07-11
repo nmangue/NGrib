@@ -17,53 +17,51 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System;
 using NGrib.Grib2.CodeTables;
 
-namespace NGrib.Grib2.Templates.GridDefinitions
+namespace NGrib.Grib2.Templates.GridDefinitions;
+
+public abstract class Earth
 {
-	public abstract class Earth
-	{
-		public EarthShape Shape { get; }
+    public EarthShape Shape { get; }
 
-		protected Earth(int shapeCode)
-		{
-			Shape = shapeCode.As<EarthShape>() ?? throw new ArgumentException("Unknown shape code.", nameof(shapeCode));
-		}
-	}
+    protected Earth(int shapeCode)
+    {
+        Shape = shapeCode.As<EarthShape>() ?? throw new ArgumentException("Unknown shape code.", nameof(shapeCode));
+    }
+}
 
-	public class SphericalEarth : Earth
-	{
-		/// <summary> .</summary>
-		/// <returns> EarthRadius as a float
-		/// 
-		/// </returns>
-		public double Radius { get; }
+public class SphericalEarth : Earth
+{
+    /// <summary> .</summary>
+    /// <returns> EarthRadius as a float
+    /// 
+    /// </returns>
+    public double Radius { get; }
 
-		public SphericalEarth(int shapeCode, double radius) : base(shapeCode)
-		{
-			Radius = radius;
-		}
-	}
+    public SphericalEarth(int shapeCode, double radius) : base(shapeCode)
+    {
+        Radius = radius;
+    }
+}
 
-	public class OblateSpheroidEarth : Earth
-	{
-		/// <summary> .</summary>
-		/// <returns> MajorAxis as a float
-		/// 
-		/// </returns>
-		public double MajorAxis { get; }
+public class OblateSpheroidEarth : Earth
+{
+    /// <summary> .</summary>
+    /// <returns> MajorAxis as a float
+    /// 
+    /// </returns>
+    public double MajorAxis { get; }
 
-		/// <summary> .</summary>
-		/// <returns> MinorAxis as a float
-		/// 
-		/// </returns>
-		public double MinorAxis { get; }
+    /// <summary> .</summary>
+    /// <returns> MinorAxis as a float
+    /// 
+    /// </returns>
+    public double MinorAxis { get; }
 
-		public OblateSpheroidEarth(int shapeCode, double majorAxis, double minorAxis) : base(shapeCode)
-		{
-			MajorAxis = majorAxis;
-			MinorAxis = minorAxis;
-		}
-	}
+    public OblateSpheroidEarth(int shapeCode, double majorAxis, double minorAxis) : base(shapeCode)
+    {
+        MajorAxis = majorAxis;
+        MinorAxis = minorAxis;
+    }
 }

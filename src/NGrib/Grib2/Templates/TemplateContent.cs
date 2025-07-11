@@ -17,21 +17,20 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace NGrib.Grib2.Templates
+namespace NGrib.Grib2.Templates;
+
+public abstract class TemplateContent
 {
-	public abstract class TemplateContent
-	{
-		protected TemplateContent()
-		{
-		}
-	}
+    protected TemplateContent()
+    {
+    }
+}
 
 #pragma warning disable S2326 // Unused type parameters should be removed
-	public class TemplateContent<TValue> : TemplateContent
+public class TemplateContent<TValue> : TemplateContent
 #pragma warning restore S2326 // Unused type parameters should be removed
-	{
-		internal TemplateContent() : base()
-		{
-		}
-	}
+{
+    internal TemplateContent() : base()
+    {
+    }
 }

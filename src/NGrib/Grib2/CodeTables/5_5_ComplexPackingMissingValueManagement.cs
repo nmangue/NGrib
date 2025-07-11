@@ -17,31 +17,30 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace NGrib.Grib2.CodeTables
+namespace NGrib.Grib2.CodeTables;
+
+/// <summary>
+/// Code Table 5.5: Missing Value Management for Complex Packing
+/// </summary>
+public enum ComplexPackingMissingValueManagement
 {
-	/// <summary>
-	/// Code Table 5.5: Missing Value Management for Complex Packing
-	/// </summary>
-	public enum ComplexPackingMissingValueManagement
-	{
-		/// <summary>
-		/// No explicit missing values included within data values.
-		/// </summary>
-		None,
+    /// <summary>
+    /// No explicit missing values included within data values.
+    /// </summary>
+    None,
 
-		/// <summary>
-		/// Primary missing values included within data values.
-		/// </summary>
-		Primary,
+    /// <summary>
+    /// Primary missing values included within data values.
+    /// </summary>
+    Primary,
 
-		/// <summary>
-		/// Primary and secondary missing values included within data values.
-		/// </summary>
-		PrimaryAndSecondary,
+    /// <summary>
+    /// Primary and secondary missing values included within data values.
+    /// </summary>
+    PrimaryAndSecondary,
 
-		/// <summary>
-		/// Missing.
-		/// </summary>
-		Missing
-	}
+    /// <summary>
+    /// Missing.
+    /// </summary>
+    Missing
 }

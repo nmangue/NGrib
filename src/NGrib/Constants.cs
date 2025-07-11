@@ -1,7 +1,7 @@
 /*
  * This file is part of NGrib.
  *
- * Copyright © 2020 Nicolas Mangué
+ * Copyright Â© 2020 Nicolas ManguÐ¹
  * 
  * NGrib is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,27 +17,26 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace NGrib
+namespace NGrib;
+
+internal class Constants
 {
-	internal class Constants
-	{
-		public static byte[] GribFileStart = { 0x47, 0x52, 0x49, 0x42 };
+    public static byte[] GribFileStart = { 0x47, 0x52, 0x49, 0x42 };
 
-		/// <summary>
-		/// "GRIB" (coded according to the International Alphabet No. 5.)
-		/// converted to long.
-		/// </summary>
-		public static long GribFileStartCode = 1196575042;
+    /// <summary>
+    /// "GRIB" (coded according to the International Alphabet No. 5.)
+    /// converted to long.
+    /// </summary>
+    public static long GribFileStartCode = 1196575042;
 
-		public static byte[] GribFileEnd = { 0x37, 0x37, 0x37, 0x37 };
+    public static byte[] GribFileEnd = { 0x37, 0x37, 0x37, 0x37 };
 
-		/// <summary>
-		/// "7777" (coded according to the International Alphabet No. 5.)
-		/// converted to long.
-		/// </summary>
-		public static long GribFileEndCode = 926365495;
+    /// <summary>
+    /// "7777" (coded according to the International Alphabet No. 5.)
+    /// converted to long.
+    /// </summary>
+    public static long GribFileEndCode = 926365495;
 
-		public static long IndicatorSectionLength = 16;
-		public static long EndSectionLength = 16;
-	}
+    public static long IndicatorSectionLength = 16;
+    public static long EndSectionLength = 16;
 }

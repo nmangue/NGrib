@@ -24,33 +24,32 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace NGrib.Grib2.Templates.GridDefinitions
+namespace NGrib.Grib2.Templates.GridDefinitions;
+
+public class StretchedRotatedGaussianLatLonGridDefinition : RotatedGaussianLatLonGridDefinition
 {
-	public class StretchedRotatedGaussianLatLonGridDefinition : RotatedGaussianLatLonGridDefinition
-	{
-		/// <summary> .</summary>
-		/// <returns> PoleLat as a float
-		/// 
-		/// </returns>
-		public double PoleLat { get; }
+    /// <summary> .</summary>
+    /// <returns> PoleLat as a float
+    /// 
+    /// </returns>
+    public double PoleLat { get; }
 
-		/// <summary> .</summary>
-		/// <returns> PoleLon as a float
-		/// 
-		/// </returns>
-		public double PoleLon { get; }
+    /// <summary> .</summary>
+    /// <returns> PoleLon as a float
+    /// 
+    /// </returns>
+    public double PoleLon { get; }
 
-		/// <summary> .</summary>
-		/// <returns> Factor as a float
-		/// 
-		/// </returns>
-		public long Factor { get; }
+    /// <summary> .</summary>
+    /// <returns> Factor as a float
+    /// 
+    /// </returns>
+    public long Factor { get; }
 
-		internal StretchedRotatedGaussianLatLonGridDefinition(BufferedBinaryReader reader) : base(reader)
-		{
-			PoleLat = reader.ReadInt32() * Ratio;
-			PoleLon = reader.ReadUInt32() * Ratio;
-			Factor = reader.ReadUInt32();
-		}
-	}
+    internal StretchedRotatedGaussianLatLonGridDefinition(BufferedBinaryReader reader) : base(reader)
+    {
+        PoleLat = reader.ReadInt32() * Ratio;
+        PoleLon = reader.ReadUInt32() * Ratio;
+        Factor = reader.ReadUInt32();
+    }
 }

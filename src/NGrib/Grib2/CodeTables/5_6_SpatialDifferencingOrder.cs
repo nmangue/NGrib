@@ -17,26 +17,25 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace NGrib.Grib2.CodeTables
+namespace NGrib.Grib2.CodeTables;
+
+/// <summary>
+/// Code Table 5.6: Order of Spatial Differencing
+/// </summary>
+public enum SpatialDifferencingOrder
 {
-	/// <summary>
-	/// Code Table 5.6: Order of Spatial Differencing
-	/// </summary>
-	public enum SpatialDifferencingOrder
-	{
-		/// <summary>
-		/// First-order spatial differencing.
-		/// </summary>
-		FirstOrder = 1,
+    /// <summary>
+    /// First-order spatial differencing.
+    /// </summary>
+    FirstOrder = 1,
 
-		/// <summary>
-		/// Second-order spatial differencing.
-		/// </summary>
-		SecondOrder = 2,
+    /// <summary>
+    /// Second-order spatial differencing.
+    /// </summary>
+    SecondOrder = 2,
 
-		/// <summary>
-		/// Missing.
-		/// </summary>
-		Missing = 255,
-	}
+    /// <summary>
+    /// Missing.
+    /// </summary>
+    Missing = 255,
 }

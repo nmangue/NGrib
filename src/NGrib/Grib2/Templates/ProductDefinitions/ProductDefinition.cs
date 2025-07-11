@@ -19,58 +19,63 @@
 
 using NGrib.Grib2.CodeTables;
 
-namespace NGrib.Grib2.Templates.ProductDefinitions
+namespace NGrib.Grib2.Templates.ProductDefinitions;
+
+/// <summary>
+/// Represents a GRIB2 Product Definition.
+/// </summary>
+public abstract class ProductDefinition : Template
 {
-	/// <summary>
-	/// Represents a GRIB2 Product Definition.
-	/// </summary>
-	public abstract class ProductDefinition : Template
-	{
-		/// <summary>
-		/// Start position on the product definition.
-		/// </summary>
-		public long Offset { get; }
+    /// <summary>
+    /// Start position on the product definition.
+    /// </summary>
+    public long Offset { get; }
 
-		/// <summary>
-		/// Parameter category.
-		/// </summary>
-		public int ParameterCategory { get; }
+    /// <summary>
+    /// Parameter category.
+    /// </summary>
+    public int ParameterCategory { get; }
 
-		/// <summary>
-		/// Parameter number.
-		/// </summary>
-		public int ParameterNumber { get; }
+    /// <summary>
+    /// Parameter number.
+    /// </summary>
+    public int ParameterNumber { get; }
 
-		/// <summary>
-		/// Parameter informations.
-		/// </summary>
-		/// <remarks>
-		/// <c>null</c> if a unknown discipline/category/number is used.
-		/// </remarks>
-		public Parameter? Parameter { get; }
+    /// <summary>
+    /// Parameter informations.
+    /// </summary>
+    /// <remarks>
+    /// <c>null</c> if a unknown discipline/category/number is used.
+    /// </remarks>
+    public Parameter? Parameter { get; }
 
-		/// <summary>
-		/// Type of generating process.
-		/// </summary>
-		public GeneratingProcessType GeneratingProcessType { get; }
+    /// <summary>
+    /// Type of generating process.
+    /// </summary>
+    public GeneratingProcessType GeneratingProcessType { get; set; }
 
-		private protected ProductDefinition(BufferedBinaryReader reader, Discipline discipline)
-		{
-			Offset = reader.Position;
-			ParameterCategory = reader.ReadUInt8();
-			ParameterNumber = reader.ReadUInt8();
-			Parameter = CodeTables.Parameter.Get(discipline, ParameterCategory, ParameterNumber);
-			GeneratingProcessType = (GeneratingProcessType) reader.ReadUInt8();
-
-			RegisterContent(ProductDefinitionContent.ParameterCategory, () => ParameterCategory);
-			RegisterContent(ProductDefinitionContent.ParameterNumber, () => ParameterNumber);
-
-			if (Parameter.HasValue)
-			{
-				RegisterContent(ProductDefinitionContent.Parameter, () => Parameter.Value);
-			}
+    private protected ProductDefinition(BufferedBinaryReader reader, Discipline discipline)
+    {
+        Offset = reader.Position;
+        ParameterCategory = reader.ReadUInt8();
+        RegisterContent(ProductDefinitionContent.ParameterCategory, () => ParameterCategory);
 			
-			RegisterContent(ProductDefinitionContent.GeneratingProcessType, () => GeneratingProcessType);
-		}
-	}
+        ParameterNumber = reader.ReadUInt8();
+        RegisterContent(ProductDefinitionContent.ParameterNumber, () => ParameterNumber);
+			
+        Parameter = CodeTables.Parameter.Get(discipline, ParameterCategory, ParameterNumber);
+        if (Parameter.HasValue)
+        {
+            RegisterContent(ProductDefinitionContent.Parameter, () => Parameter.Value);
+        }
+			
+        InitGeneratingProcessType(reader);
+    }
+
+    //Todo: сделать красивее
+    protected virtual void InitGeneratingProcessType(BufferedBinaryReader reader)
+    {
+        GeneratingProcessType = (GeneratingProcessType) reader.ReadUInt8();
+        RegisterContent(ProductDefinitionContent.GeneratingProcessType, () => GeneratingProcessType);
+    }
 }

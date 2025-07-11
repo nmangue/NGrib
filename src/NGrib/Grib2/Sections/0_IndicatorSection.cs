@@ -24,76 +24,73 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System;
-using System.Linq;
 using System.Numerics;
 using NGrib.Grib2.CodeTables;
 
-namespace NGrib.Grib2.Sections
+namespace NGrib.Grib2.Sections;
+
+/// <summary>
+/// Section 0 - Indicator Section
+/// </summary>
+public sealed class IndicatorSection
 {
-	/// <summary>
-	/// Section 0 - Indicator Section
-	/// </summary>
-	public sealed class IndicatorSection
-	{
-		private const int INDICATOR_SECTION_LENGTH = 16;
+    private const int INDICATOR_SECTION_LENGTH = 16;
 
-		/// <summary>
-		/// Length of section in octets.
-		/// </summary>
-		public long Length { get; }
+    /// <summary>
+    /// Length of section in octets.
+    /// </summary>
+    public long Length { get; }
 
-		/// <summary>
-		/// Number of section.
-		/// </summary>
-		public int Section { get; }
+    /// <summary>
+    /// Number of section.
+    /// </summary>
+    public int Section { get; }
 
-		/// <summary>
-		/// Discipline from the GRIB Code Table 0.0.
-		/// </summary>
-		public Discipline Discipline { get; }
+    /// <summary>
+    /// Discipline from the GRIB Code Table 0.0.
+    /// </summary>
+    public Discipline Discipline { get; }
 
-		/// <summary>
-		/// GRIB Edition Number.
-		/// </summary>
-		public int GribEdition { get; }
+    /// <summary>
+    /// GRIB Edition Number.
+    /// </summary>
+    public int GribEdition { get; }
 
-		/// <summary>
-		/// Total length of GRIB message in octets (including Section 0).
-		/// </summary>
-		public BigInteger TotalLength { get; }
+    /// <summary>
+    /// Total length of GRIB message in octets (including Section 0).
+    /// </summary>
+    public BigInteger TotalLength { get; }
 
-		private IndicatorSection(int disciplineCode, int gribEdition, BigInteger totalLength)
-		{
-			Length = INDICATOR_SECTION_LENGTH;
-			Section = (int) SectionCode.IndicatorSection;
-			Discipline = (Discipline)disciplineCode;
+    private IndicatorSection(int disciplineCode, int gribEdition, BigInteger totalLength)
+    {
+        Length = INDICATOR_SECTION_LENGTH;
+        Section = (int) SectionCode.IndicatorSection;
+        Discipline = (Discipline)disciplineCode;
 
-			GribEdition = gribEdition;
-			TotalLength = totalLength;
-		}
+        GribEdition = gribEdition;
+        TotalLength = totalLength;
+    }
 
-		internal static IndicatorSection BuildFrom(BufferedBinaryReader reader)
-		{
-			var fileStart = reader.Read(Constants.GribFileStart.Length);
-			if (!Constants.GribFileStart.SequenceEqual(fileStart))
-			{
-				throw new BadGribFormatException("Invalid file start.");
-			}
+    internal static IndicatorSection BuildFrom(BufferedBinaryReader reader)
+    {
+        var fileStart = reader.Read(Constants.GribFileStart.Length);
+        if (!Constants.GribFileStart.SequenceEqual(fileStart))
+        {
+            throw new BadGribFormatException("Invalid file start.");
+        }
 
-			// Ignore the 2 reserved bytes
-			reader.Skip(2);
+        // Ignore the 2 reserved bytes
+        reader.Skip(2);
 
-			var disciplineNumber = reader.ReadUInt8();
-			var gribEdition = reader.ReadUInt8();
-			if (gribEdition != 2)
-			{
-				throw new NotSupportedException($"Only GRIB edition 2 is supported. GRIB edition {gribEdition} is not yet supported");
-			}
+        var disciplineNumber = reader.ReadUInt8();
+        var gribEdition = reader.ReadUInt8();
+        if (gribEdition != 2)
+        {
+            throw new NotSupportedException($"Only GRIB edition 2 is supported. GRIB edition {gribEdition} is not yet supported");
+        }
 
-			var totalLength = reader.ReadUInt64();
+        var totalLength = reader.ReadUInt64();
 
-			return new IndicatorSection(disciplineNumber, 2, totalLength);
-		}
-	}
+        return new IndicatorSection(disciplineNumber, 2, totalLength);
+    }
 }

@@ -17,74 +17,75 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System;
+namespace NGrib;
 
-namespace NGrib
+/// <summary>
+/// Represents a location on the Earth surface.
+/// </summary>
+public readonly struct Coordinate
 {
-	/// <summary>
-	/// Represents a location on the Earth surface.
-	/// </summary>
-	public readonly struct Coordinate
-	{
-		private const int CoordinateNbDecimals = 9; // 9 decimals means a 110 microns precision.
-		private const double CoordinatePrecision = 1e-9;
+    private const int CoordinateNbDecimals = 9; // 9 decimals means a 110 microns precision.
+    private const double CoordinatePrecision = 1e-9;
+		
+    private static double ConvertLongitude(double longitude) => longitude >= 180d ? longitude - 360d : longitude;
 
-		/// <summary>
-		/// Specifies the north–south position.
-		/// </summary>
-		public double Latitude { get; }
+    /// <summary>
+    /// Specifies the north–south position.
+    /// </summary>
+    public double Latitude { get; }
 
-		/// <summary>
-		/// Specifies the east–west position.
-		/// </summary>
-		public double Longitude { get; }
+    /// <summary>
+    /// Specifies the east–west position.
+    /// </summary>
+    public double Longitude { get; }
 
-		/// <summary>
-		/// Initializes a new instance of the <c>Coordinate</c> class
-		/// based on the specified file. 
-		/// </summary>
-		/// <param name="latitude">Latitude of the point.</param>
-		/// <param name="longitude">Longitude of the point.</param>
-		public Coordinate(double latitude, double longitude)
-		{
-			Latitude = Math.Round(Math.Max(Math.Min(latitude, 90d), -90d), CoordinateNbDecimals);
-			Longitude = Math.Round(-180d <= longitude && longitude <= 180d ? longitude : SimplifyLongitude(longitude), CoordinateNbDecimals);
-		}
+    /// <summary>
+    /// Initializes a new instance of the <c>Coordinate</c> class
+    /// based on the specified file. 
+    /// </summary>
+    /// <param name="latitude">Latitude of the point.</param>
+    /// <param name="longitude">Longitude of the point.</param>
+    public Coordinate(double latitude, double longitude)
+    {
+        Latitude = Math.Round(Math.Max(Math.Min(latitude, 90d), -90d), CoordinateNbDecimals);
+        var simplyConverted = ConvertLongitude(longitude); 
+        Longitude = Math.Round(simplyConverted is >= -180d and <= 180d ? simplyConverted : SimplifyLongitude(longitude), CoordinateNbDecimals);
+			
+    }
 
-		private bool IsOnSameLongitude(Coordinate other) => EqualsWithTolerance(Longitude, other.Longitude) || IsAntimeridian(Longitude) && IsAntimeridian(other.Longitude);
+    private bool IsOnSameLongitude(Coordinate other) => EqualsWithTolerance(Longitude, other.Longitude) || IsAntimeridian(Longitude) && IsAntimeridian(other.Longitude);
 
-		private static bool IsAntimeridian(double longitude) => EqualsWithTolerance(Math.Abs(longitude), 180);
+    private static bool IsAntimeridian(double longitude) => EqualsWithTolerance(Math.Abs(longitude), 180);
 
-		public bool Equals(Coordinate other) => EqualsWithTolerance(Latitude, other.Latitude) && IsOnSameLongitude(other);
+    public bool Equals(Coordinate other) => EqualsWithTolerance(Latitude, other.Latitude) && IsOnSameLongitude(other);
 
-		public override bool Equals(object obj) => obj is Coordinate other && Equals(other);
+    public override bool Equals(object obj) => obj is Coordinate other && Equals(other);
 
-		private static bool EqualsWithTolerance(double a, double b) => Math.Abs(a - b) <= CoordinatePrecision;
+    private static bool EqualsWithTolerance(double a, double b) => Math.Abs(a - b) <= CoordinatePrecision;
 
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				return (Latitude.GetHashCode() * 397) ^ Longitude.GetHashCode();
-			}
-		}
+    public override int GetHashCode()
+    {
+        unchecked
+        {
+            return (Latitude.GetHashCode() * 397) ^ Longitude.GetHashCode();
+        }
+    }
 
-		public Coordinate Add(double latitudeIncrement, double longitudeIncrement)
-		{
-			return new Coordinate(Latitude + latitudeIncrement, Longitude + longitudeIncrement);
-		}
+    public Coordinate Add(double latitudeIncrement, double longitudeIncrement)
+    {
+        return new Coordinate(Latitude + latitudeIncrement, Longitude + longitudeIncrement);
+    }
 
-		private static double SimplifyLongitude(double longitude)
-		{
-			var radians = longitude.ToRadians();
-			return Math.Atan2(Math.Sin(radians), Math.Cos(radians)).ToDegrees();
-		}
+    private static double SimplifyLongitude(double longitude)
+    {
+        var radians = longitude.ToRadians();
+        return Math.Atan2(Math.Sin(radians), Math.Cos(radians)).ToDegrees();
+    }
 
-		public static implicit operator Coordinate(ValueTuple<double, double> latLon) => new Coordinate(latLon.Item1, latLon.Item2);
+    public static implicit operator Coordinate(ValueTuple<double, double> latLon) => new Coordinate(latLon.Item1, latLon.Item2);
 
-		public override string ToString()
-		{
-			return $"{nameof(Latitude)}: {Latitude}, {nameof(Longitude)}: {Longitude}";
-		}
-	}
+    public override string ToString()
+    {
+        return $"{nameof(Latitude)}: {Latitude}, {nameof(Longitude)}: {Longitude}";
+    }
 }

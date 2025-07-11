@@ -17,61 +17,58 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System;
+namespace NGrib;
 
-namespace NGrib
+internal static class Extensions
 {
-	internal static class Extensions
-	{
-		/// <summary>
-		/// Convert to radians.
-		/// </summary>
-		/// <param name="val">The value to convert to radians</param>
-		/// <returns>The value in radians</returns>
-		public static double ToRadians(this double val) => Math.PI / 180d * val;
+    /// <summary>
+    /// Convert to radians.
+    /// </summary>
+    /// <param name="val">The value to convert to radians</param>
+    /// <returns>The value in radians</returns>
+    public static double ToRadians(this double val) => Math.PI / 180d * val;
 
-		/// <summary>
-		/// Convert to degrees.
-		/// </summary>
-		/// <param name="val">The value to convert to degrees</param>
-		/// <returns>The value in degrees</returns>
-		public static double ToDegrees(this double val) => 180d / Math.PI * val;
+    /// <summary>
+    /// Convert to degrees.
+    /// </summary>
+    /// <param name="val">The value to convert to degrees</param>
+    /// <returns>The value in degrees</returns>
+    public static double ToDegrees(this double val) => 180d / Math.PI * val;
 
-		public static T? As<T>(this int val) where T : struct, Enum, IConvertible
-		{
-			if (IsFlagEnum(typeof(T)))
-			{
+    public static T? As<T>(this int val) where T : struct, Enum, IConvertible
+    {
+        if (IsFlagEnum(typeof(T)))
+        {
 
-			}
-			return (T?) (Enum.IsDefined(typeof(T), val) ? Enum.ToObject(typeof(T), val) : null);
-		}
+        }
+        return (T?) (Enum.IsDefined(typeof(T), val) ? Enum.ToObject(typeof(T), val) : null);
+    }
 
-		public static bool IsFlagEnum(Type t) => t.IsEnum && !Attribute.IsDefined(t, typeof(FlagsAttribute));
+    public static bool IsFlagEnum(Type t) => t.IsEnum && !Attribute.IsDefined(t, typeof(FlagsAttribute));
 				
-		public static int AsSignedInt(this int value, int nbBit)
-		{
-			if (value.GetBit(nbBit))
-			{
-				// The sign bit is on => it's negative!
-				// Reset leading bit
-				value = value.SetBit(nbBit, false);
-				// build 2's-complement
-				value = ~value;
-				value += 1;
-			}
+    public static int AsSignedInt(this int value, int nbBit)
+    {
+        if (value.GetBit(nbBit))
+        {
+            // The sign bit is on => it's negative!
+            // Reset leading bit
+            value = value.SetBit(nbBit, false);
+            // build 2's-complement
+            value = ~value;
+            value += 1;
+        }
 
-			return value;
-		}
+        return value;
+    }
 
-		public static bool GetBit(this int value, int index)
-		{
-			var mask = 1 << (index -1);
-			return (value & mask) > 0;
-		}
+    public static bool GetBit(this int value, int index)
+    {
+        var mask = 1 << (index -1);
+        return (value & mask) > 0;
+    }
 
-		public static int SetBit(this int value, int index, bool bitValue)
-		{
-			return bitValue ? value | (1 << (index - 1)) : value & ~(1 << (index - 1));
-		}
-	}
+    public static int SetBit(this int value, int index, bool bitValue)
+    {
+        return bitValue ? value | (1 << (index - 1)) : value & ~(1 << (index - 1));
+    }
 }

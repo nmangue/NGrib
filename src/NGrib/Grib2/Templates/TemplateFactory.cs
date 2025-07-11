@@ -17,56 +17,53 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 
-namespace NGrib.Grib2.Templates
+namespace NGrib.Grib2.Templates;
+
+internal class TemplateFactory<T> : IEnumerable<KeyValuePair<int, Func<BufferedBinaryReader, object[], T>>>
 {
-	internal class TemplateFactory<T> : IEnumerable<KeyValuePair<int, Func<BufferedBinaryReader, object[], T>>>
-	{
-		/// <summary>
-		/// Methods available to build T from a templateNumber.
-		/// </summary>
-		/// <remarks>
-		/// We use Stack instead of List (or even Dictionary) to provide an easy way to override or extend
-		/// the default factories.
-		/// </remarks>
-		private readonly Dictionary<int, Func<BufferedBinaryReader, object[], T>> factories;
+    /// <summary>
+    /// Methods available to build T from a templateNumber.
+    /// </summary>
+    /// <remarks>
+    /// We use Stack instead of List (or even Dictionary) to provide an easy way to override or extend
+    /// the default factories.
+    /// </remarks>
+    private readonly Dictionary<int, Func<BufferedBinaryReader, object[], T>> factories;
 
-		public TemplateFactory()
-		{
-			factories = new Dictionary<int, Func<BufferedBinaryReader, object[], T>>();
-		}
+    public TemplateFactory()
+    {
+        factories = new Dictionary<int, Func<BufferedBinaryReader, object[], T>>();
+    }
 
-		/// <summary>
-		/// Add a new factory method.
-		/// </summary>
-		internal void Add(int templateNumber, Func<BufferedBinaryReader, T> factoryMethod)
-		{
-			if (factoryMethod == null) throw new ArgumentNullException(nameof(factoryMethod));
+    /// <summary>
+    /// Add a new factory method.
+    /// </summary>
+    internal void Add(int templateNumber, Func<BufferedBinaryReader, T> factoryMethod)
+    {
+        if (factoryMethod == null) throw new ArgumentNullException(nameof(factoryMethod));
 
-			factories[templateNumber] = (reader, objects) => factoryMethod(reader);
-		}
+        factories[templateNumber] = (reader, objects) => factoryMethod(reader);
+    }
 
-		/// <summary>
-		/// Add a new factory method.
-		/// </summary>
-		internal void Add(int templateNumber, Func<BufferedBinaryReader, object[], T> factoryMethod)
-		{
-			factories[templateNumber] = factoryMethod ?? throw new ArgumentNullException(nameof(factoryMethod));
-		}
+    /// <summary>
+    /// Add a new factory method.
+    /// </summary>
+    internal void Add(int templateNumber, Func<BufferedBinaryReader, object[], T> factoryMethod)
+    {
+        factories[templateNumber] = factoryMethod ?? throw new ArgumentNullException(nameof(factoryMethod));
+    }
 
-		internal T Build(BufferedBinaryReader reader, int templateNumber, params object[] args)
-		{
-			return factories.TryGetValue(templateNumber, out var factory)
-				? factory(reader, args)
-				: default;
-		}
+    internal T Build(BufferedBinaryReader reader, int templateNumber, params object[] args)
+    {
+        return factories.TryGetValue(templateNumber, out var factory)
+            ? factory(reader, args)
+            : default;
+    }
 
-		public IEnumerator<KeyValuePair<int, Func<BufferedBinaryReader, object[], T>>> GetEnumerator() =>
-			factories.GetEnumerator();
+    public IEnumerator<KeyValuePair<int, Func<BufferedBinaryReader, object[], T>>> GetEnumerator() =>
+        factories.GetEnumerator();
 
-		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-	}
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }

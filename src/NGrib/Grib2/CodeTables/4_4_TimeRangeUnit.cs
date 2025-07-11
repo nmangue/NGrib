@@ -19,50 +19,49 @@
 
 using System.ComponentModel;
 
-namespace NGrib.Grib2.CodeTables
+namespace NGrib.Grib2.CodeTables;
+
+/// <summary>
+/// Code Table 4.4: Indicator of unit of time range
+/// </summary>
+public enum TimeRangeUnitGrib2
 {
-	/// <summary>
-	/// Code Table 4.4: Indicator of unit of time range
-	/// </summary>
-	public enum TimeRangeUnit
-	{
-		///<summary>Minute</summary>
-		[Description("Minute")] Minute = 0,
+    ///<summary>Minute</summary>
+    [Description("Minute")] Minute = 0,
 
-		///<summary>Hour</summary>
-		[Description("Hour")] Hour = 1,
+    ///<summary>Hour</summary>
+    [Description("Hour")] Hour = 1,
 
-		///<summary>Day</summary>
-		[Description("Day")] Day = 2,
+    ///<summary>Day</summary>
+    [Description("Day")] Day = 2,
 
-		///<summary>Month</summary>
-		[Description("Month")] Month = 3,
+    ///<summary>Month</summary>
+    [Description("Month")] Month = 3,
 
-		///<summary>Year</summary>
-		[Description("Year")] Year = 4,
+    ///<summary>Year</summary>
+    [Description("Year")] Year = 4,
 
-		///<summary>Decade (10 years)</summary>
-		[Description("Decade (10 years)")] Decade = 5,
+    ///<summary>Decade (10 years)</summary>
+    [Description("Decade (10 years)")] Decade = 5,
 
-		///<summary>Normal (30 years)</summary>
-		[Description("Normal (30 years)")] Normal = 6,
+    ///<summary>Normal (30 years)</summary>
+    [Description("Normal (30 years)")] Normal = 6,
 
-		///<summary>Century (100 years)</summary>
-		[Description("Century (100 years)")] Century = 7,
+    ///<summary>Century (100 years)</summary>
+    [Description("Century (100 years)")] Century = 7,
 
-		///<summary>3 hours</summary>
-		[Description("3 hours")] Hours3 = 10,
+    ///<summary>3 hours</summary>
+    [Description("3 hours")] Hours3 = 10,
 
-		///<summary>6 hours</summary>
-		[Description("6 hours")] Hours6 = 11,
+    ///<summary>6 hours</summary>
+    [Description("6 hours")] Hours6 = 11,
 
-		///<summary>12 hours</summary>
-		[Description("12 hours")] Hours12 = 12,
+    ///<summary>12 hours</summary>
+    [Description("12 hours")] Hours12 = 12,
 
-		///<summary>Second</summary>
-		[Description("Second")] Second = 13,
+    ///<summary>Second</summary>
+    [Description("Second")] Second = 13,
 
-		///<summary>Missing</summary>
-		[Description("Missing")] Missing = 255,
-	}
+    ///<summary>Missing</summary>
+    [Description("Missing")] Missing = 255,
 }

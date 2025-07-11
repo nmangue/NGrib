@@ -17,36 +17,35 @@
  * along with NGrib.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace NGrib.Grib2.CodeTables
+namespace NGrib.Grib2.CodeTables;
+
+/// <summary>
+/// Code Table 1.2: Significance of Reference Time
+/// </summary>
+public enum ReferenceTimeSignificance
 {
-	/// <summary>
-	/// Code Table 1.2: Significance of Reference Time
-	/// </summary>
-	public enum ReferenceTimeSignificance
-	{
-		/// <summary>
-		/// Analysis.
-		/// </summary>
-		Analysis = 0,
+    /// <summary>
+    /// Analysis.
+    /// </summary>
+    Analysis = 0,
 
-		/// <summary>
-		/// Start of forecast.
-		/// </summary>
-		ForecastStart = 1,
+    /// <summary>
+    /// Start of forecast.
+    /// </summary>
+    ForecastStart = 1,
 
-		/// <summary>
-		/// Verifying time of forecast.
-		/// </summary>
-		ForecastVerifyingTime = 2,
+    /// <summary>
+    /// Verifying time of forecast.
+    /// </summary>
+    ForecastVerifyingTime = 2,
 
-		/// <summary>
-		/// Observation time.
-		/// </summary>
-		ObservationTime = 3,
+    /// <summary>
+    /// Observation time.
+    /// </summary>
+    ObservationTime = 3,
 
-		/// <summary>
-		/// Missing.
-		/// </summary>
-		Missing = 255
-	}
+    /// <summary>
+    /// Missing.
+    /// </summary>
+    Missing = 255
 }

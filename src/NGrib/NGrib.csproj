@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>0.8.0</Version>
@@ -21,6 +21,8 @@
   <PropertyGroup>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
 
@@ -31,6 +33,7 @@
 
   <ItemGroup>
     <Folder Include="Grib1\" />
+    <Folder Include="obj\Debug\net6.0\" />
   </ItemGroup>
 
 </Project>

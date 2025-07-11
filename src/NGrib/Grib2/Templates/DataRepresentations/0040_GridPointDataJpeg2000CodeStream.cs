@@ -26,42 +26,40 @@
 
 using CSJ2K;
 using NGrib.Grib2.Sections;
-using System.Collections.Generic;
 
-namespace NGrib.Grib2.Templates.DataRepresentations
+namespace NGrib.Grib2.Templates.DataRepresentations;
+
+public class GridPointDataJpeg2000CodeStream : GridPointDataSimplePacking
 {
-	public class GridPointDataJpeg2000CodeStream : GridPointDataSimplePacking
-	{
-		/// <summary> Type compression method used (see Code Table 5.40000).</summary>
-		/// <returns> CompressionMethod
-		/// </returns>
-		public int CompressionMethod { get; }
+    /// <summary> Type compression method used (see Code Table 5.40000).</summary>
+    /// <returns> CompressionMethod
+    /// </returns>
+    public int CompressionMethod { get; }
 
-		/// <summary> Compression ratio used .</summary>
-		/// <returns> CompressionRatio
-		/// </returns>
-		public int CompressionRatio { get; }
+    /// <summary> Compression ratio used .</summary>
+    /// <returns> CompressionRatio
+    /// </returns>
+    public int CompressionRatio { get; }
 
-		internal GridPointDataJpeg2000CodeStream(BufferedBinaryReader reader) : base(reader)
-		{
-			CompressionMethod = reader.ReadUInt8();
+    internal GridPointDataJpeg2000CodeStream(BufferedBinaryReader reader) : base(reader)
+    {
+        CompressionMethod = reader.ReadUInt8();
 
-			CompressionRatio = reader.ReadUInt8();
-		}
+        CompressionRatio = reader.ReadUInt8();
+    }
 
-		private protected override IEnumerable<float> DoEnumerateDataValues(BufferedBinaryReader reader, DataSection dataSection, long dataPointsNumber)
-		{
-			var data = reader.Read((int) dataSection.DataLength);
-			var img = J2kImage.FromBytes(data);
+    private protected override IEnumerable<double> DoEnumerateDataValues(BufferedBinaryReader reader, DataSection dataSection, long dataPointsNumber)
+    {
+        var data = reader.Read((int) dataSection.DataLength);
+        var img = J2kImage.FromBytes(data);
 
-			if (img.NumberOfComponents <= 0)
-			{
-				return new float[0];
-			}
+        if (img.NumberOfComponents <= 0)
+        {
+            return new double[0];
+        }
 
-			var values = img.GetComponent(0);
+        var values = img.GetComponent(0);
 
-			return Unpack(values);
-		}
-	}
+        return Unpack(values);
+    }
 }

@@ -19,31 +19,30 @@
 
 using NGrib.Grib2.CodeTables;
 
-namespace NGrib.Grib2.Templates.ProductDefinitions
+namespace NGrib.Grib2.Templates.ProductDefinitions;
+
+/// <summary>
+/// Product Definition Template 4.2: Derived forecast based on all ensemble members at a horizontal level 
+/// or in a horizontal layer at a point in time.
+/// </summary>
+public class ProductDefinition0002 : ProductDefinition0000
 {
-	/// <summary>
-	/// Product Definition Template 4.2: Derived forecast based on all ensemble members at a horizontal level 
-	/// or in a horizontal layer at a point in time.
-	/// </summary>
-	public class ProductDefinition0002 : ProductDefinition0000
-	{
-		/// <summary>
-		/// Derived forecast (see Code Table 4.7)
-		/// </summary>
-		public int DerivedForecast { get; }
+    /// <summary>
+    /// Derived forecast (see Code Table 4.7)
+    /// </summary>
+    public int DerivedForecast { get; }
 
-		/// <summary>
-		/// Number of forecasts in ensemble
-		/// </summary>
-		public int EnsembleForecastsNumber { get; }
+    /// <summary>
+    /// Number of forecasts in ensemble
+    /// </summary>
+    public int EnsembleForecastsNumber { get; }
 
-		internal ProductDefinition0002(BufferedBinaryReader reader, Discipline discipline) : base(reader, discipline)
-		{
-			DerivedForecast = reader.ReadByte();
-			EnsembleForecastsNumber = reader.ReadByte();
+    internal ProductDefinition0002(BufferedBinaryReader reader, Discipline discipline) : base(reader, discipline)
+    {
+        DerivedForecast = reader.ReadByte();
+        EnsembleForecastsNumber = reader.ReadByte();
 
-			RegisterContent(ProductDefinitionContent.DerivedForecast, () => DerivedForecast);
-			RegisterContent(ProductDefinitionContent.EnsembleForecastsNumber, () => EnsembleForecastsNumber);
-		}
-	}
+        RegisterContent(ProductDefinitionContent.DerivedForecast, () => DerivedForecast);
+        RegisterContent(ProductDefinitionContent.EnsembleForecastsNumber, () => EnsembleForecastsNumber);
+    }
 }
